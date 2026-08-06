@@ -1,0 +1,1038 @@
+﻿.messages-screen,
+.messages-thread-screen {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    color: rgb(24 24 27);
+    position: relative;
+}
+
+.messages-fab {
+    position: absolute;
+    bottom: 1.25rem;
+    right: 1.25rem;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 0;
+    border-radius: 9999px;
+    background: rgb(244 63 94);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgb(244 63 94 / 0.4);
+    z-index: 10;
+}
+
+.messages-fab-icon {
+    width: 1rem;
+    height: 1rem;
+}
+
+.messages-top,
+.messages-thread-header {
+    padding: 3rem 1.25rem 0.75rem;
+    border-bottom: 1px solid rgb(228 228 231);
+}
+
+.messages-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.messages-nav-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: inherit;
+    background: transparent;
+    border: none;
+    padding: 0;
+}
+
+.messages-eyebrow {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: rgb(113 113 122);
+}
+
+.messages-view-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+.messages-search-wrap {
+    margin-top: 1rem;
+    position: relative;
+}
+
+.messages-search-icon {
+    position: absolute;
+    top: 50%;
+    left: 0.85rem;
+    width: 1rem;
+    height: 1rem;
+    color: rgb(113 113 122);
+    transform: translateY(-50%);
+}
+
+.messages-search-input {
+    width: 100%;
+    border: 1px solid rgb(228 228 231);
+    border-radius: 9999px;
+    background: rgb(244 244 245);
+    color: rgb(24 24 27);
+    outline: none;
+}
+
+.messages-composer-input {
+    color: rgb(24 24 27);
+    outline: none;
+}
+
+.messages-search-input {
+    padding: 0.8rem 1rem 0.8rem 2.5rem;
+    font-size: 0.875rem;
+}
+
+.messages-list,
+.messages-thread-body {
+    min-height: 0;
+    flex: 1;
+    overflow: auto;
+    padding: 1rem 1.25rem;
+}
+
+.messages-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.messages-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.messages-row-main {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    border-radius: 1.25rem;
+    background: rgb(244 244 245);
+    padding: 0.9rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-align: left;
+    cursor: pointer;
+    color: inherit;
+}
+
+.messages-delete-button {
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 0;
+    border-radius: 9999px;
+    background: rgb(255 228 230);
+    color: rgb(225 29 72);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex: 0 0 auto;
+    align-self: center;
+}
+
+.messages-delete-icon {
+    width: 1rem;
+    height: 1rem;
+}
+
+.messages-avatar {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 9999px;
+    background: rgb(226 232 240);
+    color: rgb(51 65 85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    flex: 0 0 auto;
+    overflow: hidden;
+}
+
+.messages-avatar-image {
+    background: rgb(228 228 231);
+}
+
+.messages-avatar-image-tag {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.messages-row-copy {
+    min-width: 0;
+    flex: 1;
+}
+
+.messages-row-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.messages-row-name {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: rgb(24 24 27);
+}
+
+.messages-row-time,
+.messages-row-preview,
+.messages-thread-contact-subtitle,
+.message-bubble-time {
+    font-size: 0.75rem;
+    color: rgb(113 113 122);
+}
+
+.messages-row-preview {
+    margin-top: 0.25rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.messages-thread-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.messages-thread-header-left {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.messages-thread-contact-copy {
+    min-width: 0;
+}
+
+.messages-thread-contact-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: rgb(24 24 27);
+}
+
+.messages-thread-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.messages-header-action {
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 0;
+    border-radius: 9999px;
+    background: rgb(244 244 245);
+    color: rgb(63 63 70);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex: 0 0 auto;
+}
+
+.messages-header-action-icon,
+.messages-send-icon {
+    width: 1rem;
+    height: 1rem;
+}
+
+.messages-thread-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.message-bubble-row {
+    display: flex;
+    justify-content: flex-start;
+    max-height: fit-content;
+}
+
+.message-bubble-row-me {
+    justify-content: flex-end;
+}
+
+.message-bubble {
+    max-width: 78%;
+    max-height: fit-content;
+    border-radius: 1.25rem;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.875rem;
+    line-height: 1.35;
+}
+
+.message-bubble-them {
+    background: rgb(244 244 245);
+    color: rgb(24 24 27);
+    border-bottom-left-radius: 0.5rem;
+}
+
+.message-bubble-me {
+    background: rgb(59 130 246);
+    color: white;
+    border-bottom-right-radius: 0.5rem;
+}
+
+.message-bubble-me .message-bubble-time {
+    color: rgb(255 255 255 / 0.82);
+}
+
+.message-bubble-time {
+    margin-top: 0.35rem;
+}
+
+.messages-audio-error {
+    background: rgb(254 226 226);
+    color: rgb(185 28 28);
+    font-size: 0.75rem;
+    text-align: center;
+    padding: 0.35rem 1rem;
+    border-top: 1px solid rgb(252 165 165);
+}
+
+/* ── Voice recording bar ────────────────────────────────────── */
+
+.voice-cancel-btn {
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 0;
+    border-radius: 9999px;
+    background: rgb(254 226 226);
+    color: rgb(220 38 38);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex: 0 0 auto;
+}
+
+.voice-rec-live {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0 0.5rem;
+}
+
+.voice-rec-dot {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 9999px;
+    background: rgb(239 68 68);
+    animation: pulse-dot 1s ease-in-out infinite;
+    flex: 0 0 auto;
+}
+
+.voice-rec-label {
+    font-size: 0.875rem;
+    color: rgb(239 68 68);
+    font-weight: 500;
+    flex: 1;
+}
+
+.voice-rec-timer {
+    font-size: 0.875rem;
+    font-variant-numeric: tabular-nums;
+    color: rgb(239 68 68);
+    font-weight: 600;
+    min-width: 2.6rem;
+    text-align: right;
+}
+
+/* ── Voice message player bubble ────────────────────────────── */
+
+.voice-player {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 160px;
+    padding: 0.1rem 0;
+}
+
+.voice-play-btn {
+    width: 2rem;
+    height: 2rem;
+    border: 0;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex: 0 0 auto;
+}
+
+.voice-player-me .voice-play-btn {
+    background: rgba(255, 255, 255, 0.25);
+    color: white;
+}
+
+.voice-player-them .voice-play-btn {
+    background: rgba(59, 130, 246, 0.15);
+    color: rgb(59 130 246);
+}
+
+.voice-player-waveform {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.voice-player-bar {
+    width: 3px;
+    border-radius: 9999px;
+    transition: opacity 0.15s;
+    flex: 0 0 auto;
+}
+
+.voice-player-me .voice-player-bar {
+    background: white;
+}
+
+.voice-player-them .voice-player-bar {
+    background: rgb(59 130 246);
+}
+
+.voice-player-time {
+    font-size: 0.7rem;
+    font-variant-numeric: tabular-nums;
+    flex: 0 0 auto;
+    min-width: 1.8rem;
+    text-align: right;
+}
+
+.voice-player-me .voice-player-time {
+    color: rgba(255, 255, 255, 0.82);
+}
+
+.voice-player-them .voice-player-time {
+    color: rgb(113 113 122);
+}
+
+.messages-mic-button {
+    background: rgb(99 102 241);
+}
+
+.messages-mic-stop {
+    background: rgb(239 68 68);
+}
+
+.messages-send-spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.messages-recording-indicator {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 0.75rem;
+}
+
+.messages-recording-dot {
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 9999px;
+    background: rgb(239 68 68);
+    animation: pulse-dot 1s ease-in-out infinite;
+    flex: 0 0 auto;
+}
+
+@keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+.messages-recording-time {
+    font-size: 0.875rem;
+    font-variant-numeric: tabular-nums;
+    color: rgb(239 68 68);
+    font-weight: 500;
+}
+
+.message-bubble-image {
+    display: block;
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: 0.75rem;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+.image-lightbox {
+    position: absolute;
+    inset: 0;
+    background: rgb(0 0 0 / 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    cursor: pointer;
+}
+
+.image-lightbox-img {
+    max-width: 90%;
+    max-height: 80%;
+    border-radius: 0.75rem;
+    object-fit: contain;
+    cursor: default;
+}
+
+.messages-composer {
+    border-top: 1px solid rgb(228 228 231);
+    background: rgb(255 255 255 / 0.96);
+    padding: 0.6rem 0.75rem 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+
+.messages-composer-pill {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    background: rgb(244 244 245);
+    border-radius: 9999px;
+    border: 1px solid rgb(228 228 231);
+    padding: 0 0.25rem 0 0.25rem;
+    gap: 0;
+    min-width: 0;
+}
+
+.messages-composer-input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    background: transparent;
+    padding: 0.6rem 0.5rem;
+    font-size: 0.875rem;
+    outline: none;
+}
+
+.messages-composer-icon-btn {
+    width: 2rem;
+    height: 2rem;
+    border: 0;
+    background: transparent;
+    color: rgb(113 113 122);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 9999px;
+    flex: 0 0 auto;
+}
+
+.messages-composer-icon-btn:hover {
+    background: rgb(228 228 231);
+}
+
+.messages-composer-icon-btn-active {
+    color: rgb(99 102 241);
+    background: rgb(238 238 255);
+}
+
+.emoji-picker-backdrop {
+    position: absolute;
+    inset: 0;
+    z-index: 49;
+}
+
+.emoji-picker {
+    position: absolute;
+    bottom: 3.5rem;
+    left: 0.75rem;
+    right: 0.75rem;
+    background: rgb(255 255 255);
+    border: 1px solid rgb(228 228 231);
+    border-radius: 1rem;
+    box-shadow: 0 -4px 24px rgb(0 0 0 / 0.1);
+    z-index: 50;
+    overflow: hidden;
+}
+
+.emoji-picker-tabs {
+    display: flex;
+    border-bottom: 1px solid rgb(228 228 231);
+    padding: 0.25rem 0.25rem 0;
+    gap: 0.1rem;
+}
+
+.emoji-tab {
+    flex: 1;
+    border: 0;
+    background: transparent;
+    font-size: 1.1rem;
+    padding: 0.35rem 0;
+    border-radius: 0.5rem 0.5rem 0 0;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.1s;
+}
+
+.emoji-tab:hover {
+    opacity: 0.8;
+}
+
+.emoji-tab-active {
+    opacity: 1;
+    background: rgb(238 238 255);
+}
+
+.emoji-picker-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 0;
+    padding: 0.4rem;
+    max-height: 180px;
+    overflow-y: auto;
+}
+
+.emoji-btn {
+    border: 0;
+    background: transparent;
+    font-size: 1.35rem;
+    padding: 0.3rem;
+    border-radius: 0.4rem;
+    cursor: pointer;
+    line-height: 1;
+    text-align: center;
+}
+
+.emoji-btn:hover {
+    background: rgb(238 238 255);
+}
+
+.gif-picker-search-wrap {
+    position: relative;
+    padding: 0.5rem;
+    border-bottom: 1px solid rgb(228 228 231);
+}
+
+.gif-picker-search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0.9rem;
+    height: 0.9rem;
+    color: rgb(113 113 122);
+    pointer-events: none;
+}
+
+.gif-picker-search-input {
+    width: 100%;
+    border: 1px solid rgb(228 228 231);
+    border-radius: 9999px;
+    background: rgb(244 244 245);
+    padding: 0.4rem 0.75rem 0.4rem 2rem;
+    font-size: 0.8rem;
+    outline: none;
+    box-sizing: border-box;
+    color: rgb(24 24 27);
+}
+
+.gif-picker-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.25rem;
+    padding: 0.5rem;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.gif-picker-tile {
+    border: 0;
+    border-radius: 0.4rem;
+    cursor: pointer;
+    padding: 0;
+    overflow: hidden;
+    background: rgb(228 228 231);
+}
+
+.gif-picker-tile:hover {
+    opacity: 0.85;
+}
+
+.gif-picker-img {
+    width: 100%;
+    height: 80px;
+    object-fit: cover;
+    display: block;
+}
+
+.gallery-picker-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.25rem;
+    padding: 0.5rem;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.gallery-picker-tile {
+    aspect-ratio: 1;
+    border: 0;
+    border-radius: 0.4rem;
+    cursor: pointer;
+    background-size: cover;
+    background-position: center;
+}
+
+.gallery-picker-tile:hover {
+    opacity: 0.85;
+}
+
+.gallery-picker-empty {
+    padding: 1.25rem 1rem;
+    font-size: 0.8rem;
+    color: rgb(113 113 122);
+    text-align: center;
+}
+
+.messages-composer-gif-btn {
+    width: auto;
+    padding: 0 0.4rem;
+}
+
+.messages-composer-gif-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: rgb(99 102 241);
+}
+
+.messages-send-button {
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 0;
+    border-radius: 9999px;
+    background: rgb(59 130 246);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex: 0 0 auto;
+}
+
+.messages-send-icon {
+    width: 1rem;
+    height: 1rem;
+}
+
+/* â”€â”€ Dark mode â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+
+.dark .messages-screen,
+.dark .messages-thread-screen {
+    background: rgb(18 18 22);
+    color: rgb(244 244 245);
+}
+
+.dark .messages-top,
+.dark .messages-thread-header {
+    border-bottom-color: rgb(55 55 63);
+}
+
+.dark .messages-search-input,
+.dark .messages-composer-input {
+    background: rgb(39 39 45);
+    border-color: rgb(55 55 63);
+    color: rgb(244 244 245);
+}
+
+.dark .messages-row-main {
+    background: rgb(39 39 45);
+    color: rgb(244 244 245);
+}
+
+.dark .messages-row-name {
+    color: rgb(244 244 245);
+}
+
+.dark .messages-row-time,
+.dark .messages-row-preview {
+    color: rgb(161 161 170);
+}
+
+.dark .messages-avatar {
+    background: rgb(50 62 84);
+    color: rgb(186 200 220);
+}
+
+.dark .messages-thread-contact-name {
+    color: rgb(244 244 245);
+}
+
+.dark .messages-header-action {
+    background: rgb(39 39 45);
+    color: rgb(212 212 216);
+}
+
+.dark .messages-composer {
+    background: rgb(18 18 22 / 0.97);
+    border-top-color: rgb(55 55 63);
+}
+
+.dark .messages-composer-pill {
+    background: rgb(39 39 45);
+    border-color: rgb(55 55 63);
+}
+
+.dark .messages-composer-input {
+    color: rgb(244 244 245);
+}
+
+.dark .messages-composer-icon-btn {
+    color: rgb(161 161 170);
+}
+
+.dark .messages-composer-icon-btn:hover {
+    background: rgb(55 55 63);
+}
+
+.dark .messages-composer-gif-label {
+    color: rgb(129 140 248);
+}
+
+.dark .gif-picker-search-wrap {
+    border-bottom-color: rgb(55 55 63);
+}
+
+.dark .gif-picker-search-input {
+    background: rgb(39 39 45);
+    border-color: rgb(55 55 63);
+    color: rgb(244 244 245);
+}
+
+.dark .gif-picker-tile {
+    background: rgb(39 39 45);
+}
+
+.dark .emoji-picker {
+    background: rgb(28 28 34);
+    border-color: rgb(55 55 63);
+}
+
+.dark .emoji-picker-tabs {
+    border-bottom-color: rgb(55 55 63);
+}
+
+.dark .emoji-tab-active {
+    background: rgb(39 39 55);
+}
+
+.dark .emoji-btn:hover {
+    background: rgb(39 39 55);
+}
+
+.dark .messages-composer-icon-btn-active {
+    background: rgb(39 39 55);
+    color: rgb(129 140 248);
+}
+
+.dark .message-bubble-them {
+    background: rgb(39 39 45);
+    color: rgb(244 244 245);
+}
+
+.dark .messages-avatar-image {
+    background: rgb(50 62 84);
+}
+
+.dark .messages-eyebrow {
+    color: rgb(161 161 170);
+}
+
+.dark .voice-cancel-btn {
+    background: rgb(69 10 10);
+    color: rgb(248 113 113);
+}
+
+.dark .voice-player-them .voice-play-btn {
+    background: rgba(59, 130, 246, 0.2);
+}
+
+.dark .voice-player-them .voice-player-bar {
+    background: rgb(96 165 250);
+}
+
+.dark .voice-player-them .voice-player-time {
+    color: rgb(161 161 170);
+}
+
+/* ── Money picker ────────────────────────────────────────────── */
+
+.money-picker {
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.money-picker-title {
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-align: center;
+    color: rgb(63 63 70);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.money-picker-input-wrap {
+    display: flex;
+    align-items: center;
+    background: rgb(244 244 245);
+    border: 1px solid rgb(228 228 231);
+    border-radius: 0.75rem;
+    padding: 0.45rem 0.75rem;
+    gap: 0.2rem;
+}
+
+.money-picker-currency {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: rgb(22 163 74);
+    line-height: 1;
+}
+
+.money-picker-input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    background: transparent;
+    font-size: 1.15rem;
+    font-weight: 600;
+    outline: none;
+    color: rgb(24 24 27);
+}
+
+.money-picker-input::-webkit-inner-spin-button,
+.money-picker-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+}
+
+.money-picker-input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.money-picker-error {
+    font-size: 0.75rem;
+    color: rgb(220 38 38);
+    text-align: center;
+}
+
+.money-picker-send-btn {
+    width: 100%;
+    border: 0;
+    border-radius: 0.6rem;
+    background: rgb(22 163 74);
+    color: white;
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: 0.5rem;
+    cursor: pointer;
+}
+
+.money-picker-send-btn:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+/* ── $ composer button ───────────────────────────────────────── */
+
+.messages-composer-money-btn {
+    width: auto;
+    padding: 0 0.4rem;
+}
+
+.messages-composer-money-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: rgb(22 163 74);
+}
+
+/* ── Payment bubble ──────────────────────────────────────────── */
+
+.payment-bubble-card {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.1rem 0;
+}
+
+.payment-bubble-icon {
+    font-size: 1.25rem;
+    line-height: 1;
+    flex: 0 0 auto;
+}
+
+.payment-bubble-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.payment-bubble-amount {
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.payment-bubble-label {
+    font-size: 0.7rem;
+    opacity: 0.72;
+}
+
+/* ── Dark mode additions ─────────────────────────────────────── */
+
+.dark .money-picker-title {
+    color: rgb(212 212 216);
+}
+
+.dark .money-picker-input-wrap {
+    background: rgb(39 39 45);
+    border-color: rgb(55 55 63);
+}
+
+.dark .money-picker-input {
+    color: rgb(244 244 245);
+}
+
+.dark .messages-composer-money-label {
+    color: rgb(74 222 128);
+}

@@ -1,0 +1,12 @@
+{
+    "shared": [
+        "config.lua"
+    ],
+    "client": [
+        "client/main.lua"
+    ],
+    "server": [
+        "server/Job.lua",
+        "server/main.lua"
+    ]
+}

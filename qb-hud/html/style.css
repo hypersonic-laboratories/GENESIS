@@ -1,0 +1,202 @@
+:root {
+    --font-primary: "Barlow", sans-serif;
+    --font-weight-regular: 400;
+    --font-weight-medium: 500;
+
+    --surface: rgba(18, 18, 20, 0.92);
+    --surface-border: rgba(255, 255, 255, 0.07);
+    --surface-divider: rgba(255, 255, 255, 0.06);
+
+    --text-muted: rgba(255, 255, 255, 0.7);
+    --text-dim: rgba(255, 255, 255, 0.22);
+
+    /* HELIX palette */
+    --helix-yellow: #f5d90a;
+    --helix-green: #00fa7b;
+    --helix-blue: #0090ff;
+    --helix-red: #e5484d;
+    --helix-purple: #b048e5;
+    --helix-pink: #e548ca;
+    --helix-orange: #fa9600;
+
+    --color-warn: var(--helix-red);
+    --color-voice: var(--helix-yellow);
+    --color-radio: var(--helix-green);
+
+    /* Scalable size units — calibrated to 1440p (1vmin = 14.4px) */
+    --sz-xs: 0.1vmin; /*  ~1.5px  */
+    --sz-sm: 0.55vmin; /*  ~8px    */
+    --sz-base: 0.85vmin; /*  ~12px   */
+    --sz-icon: 1.4vmin; /*  ~20px   */
+    --sz-pad-v: 0.5vmin; /*  ~7px    */
+    --sz-pad-h: 0.5vmin; /*  ~7px    */
+    --sz-gap: 0.25vmin; /*  ~4px    */
+    --sz-r: 0.4vmin; /*  ~6px    */
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-primary);
+    font-weight: var(--font-weight-regular);
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: transparent;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+/* ── Minimap wrapper ──────────────────────────────────── */
+
+#minimap-wrapper {
+    position: fixed;
+    bottom: 13.25vh;
+    left: 2.03vw;
+    width: 26.2vh;
+    height: 26.25vh;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* ── Cash ─────────────────────────────────────────────── */
+
+#hud-cash {
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    margin-bottom: -1px;
+    display: flex;
+    align-items: center;
+    gap: var(--sz-gap);
+    padding: var(--sz-pad-v) var(--sz-pad-h);
+    background: var(--surface);
+    border: 0.5px solid var(--surface-border);
+    border-bottom: none;
+    border-radius: var(--sz-r) var(--sz-r) 0 0;
+    white-space: nowrap;
+}
+
+/* ── Minimap frame ────────────────────────────────────── */
+
+#minimap-frame {
+    position: absolute;
+    inset: 0;
+    border: 0.35vmin solid var(--surface);
+    border-radius: var(--sz-r) var(--sz-r) 0 0;
+}
+
+/* ── HUD pill ─────────────────────────────────────────── */
+
+#hud-pill {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    background: var(--surface);
+    border: 0.5px solid var(--surface-border);
+    border-top: none;
+    border-radius: 0 0 var(--sz-r) var(--sz-r);
+    white-space: nowrap;
+}
+
+/* ── Segments ─────────────────────────────────────────── */
+
+.seg {
+    display: flex;
+    align-items: center;
+    gap: var(--sz-gap);
+    padding: var(--sz-pad-v) var(--sz-pad-h);
+    border-right: 0.5px solid var(--surface-divider);
+}
+
+.seg:last-child {
+    border-right: none;
+}
+
+.seg-divider {
+    width: 0.5px;
+    background: var(--surface-divider);
+    align-self: stretch;
+}
+
+/* ── Voice ────────────────────────────────────────────── */
+
+.voice-ico {
+    width: var(--sz-icon);
+    height: var(--sz-icon);
+    flex-shrink: 0;
+    transition: stroke 0.15s ease;
+}
+
+.pvbars {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--sz-xs);
+    height: var(--sz-icon);
+}
+
+.pvb {
+    width: 0.17vmin;
+    border-radius: 0.07vmin;
+    background: rgba(255, 255, 255, 0.12);
+    transition: background 0.1s ease;
+}
+
+.pvb.lit {
+    background: rgba(255, 255, 255, 0.45);
+}
+.pvb.lit.talking {
+    background: var(--color-voice);
+}
+.pvb.lit.radio {
+    background: var(--color-radio);
+}
+
+/* ── Stats ────────────────────────────────────────────── */
+
+.stat-ico {
+    width: var(--sz-icon);
+    height: var(--sz-icon);
+    flex-shrink: 0;
+    opacity: 0.7;
+}
+
+.stat-num {
+    font-size: var(--sz-base);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-muted);
+    min-width: 1vmin;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    transition: color 0.3s ease;
+}
+
+.stat-num.warn {
+    color: var(--color-warn);
+}
+
+/* ── Cash ─────────────────────────────────────────────── */
+
+.cash-ico {
+    width: var(--sz-icon);
+    height: var(--sz-icon);
+    flex-shrink: 0;
+}
+
+.cash-val {
+    font-size: var(--sz-base);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+}

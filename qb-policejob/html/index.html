@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Police Job UI</title>
+        <style>
+            html,
+            body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                overflow: hidden;
+                background: rgba(0, 0, 0, 0);
+                font-family: Consolas, "Courier New", monospace;
+            }
+
+            #helicontainer {
+                display: none;
+                position: relative;
+                height: 100vh;
+                width: 100vw;
+                background-color: transparent !important;
+                color: #ffffff;
+                text-transform: uppercase;
+            }
+
+            .vehicleinfo {
+                display: none;
+            }
+
+            .heli-model {
+                position: absolute;
+                left: 50%;
+                top: 35%;
+                transform: translate(-50%, -50%);
+                text-shadow:
+                    -1px -1px 0 #000,
+                    1px -1px 0 #000,
+                    -1px 1px 0 #000,
+                    1px 1px 0 #000;
+            }
+
+            .heli-plate {
+                position: absolute;
+                left: 50%;
+                bottom: 30%;
+                transform: translate(-50%, -50%);
+                text-shadow:
+                    -1px -1px 0 #000,
+                    1px -1px 0 #000,
+                    -1px 1px 0 #000,
+                    1px 1px 0 #000;
+            }
+
+            .heli-street {
+                position: absolute;
+                left: 70%;
+                top: 50.7%;
+                transform: translate(-50%, -50%);
+                text-shadow:
+                    -1px -1px 0 #000,
+                    1px -1px 0 #000,
+                    -1px 1px 0 #000,
+                    1px 1px 0 #000;
+            }
+
+            .heli-speed {
+                position: absolute;
+                left: 35%;
+                top: 35%;
+                font-size: 22px;
+                text-shadow:
+                    -1px -1px 0 #000,
+                    1px -1px 0 #000,
+                    -1px 1px 0 #000,
+                    1px 1px 0 #000;
+            }
+
+            .heli-rectangle {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                width: 70px;
+                height: 70px;
+                background: transparent;
+                border: 1px solid #ab0c0c;
+                transform: translate(-50%, -50%);
+            }
+
+            .scan {
+                position: absolute;
+                left: 37%;
+                bottom: 39%;
+                width: 1vw;
+                height: 20vh;
+                border: 2px solid #cccccc;
+                background: rgba(155, 155, 155, 0);
+            }
+
+            .scanBar {
+                height: 0%;
+                background: #cccccc;
+            }
+
+            #camcontainer {
+                display: none;
+                position: relative;
+                height: 100vh;
+                background-color: transparent !important;
+            }
+
+            #camlabel,
+            #camtimelabel,
+            #camdatelabel,
+            #iplabel,
+            #connectedlabel {
+                position: absolute;
+                font-size: 20px;
+                color: white;
+                background: rgba(0, 0, 0, 0.9);
+                padding: 0.3vw;
+            }
+
+            #camlabel {
+                left: 50%;
+                bottom: 10%;
+                transform: translate(-50%, -50%);
+                text-align: center;
+                text-transform: uppercase;
+            }
+
+            #camtimelabel {
+                right: 10%;
+                top: 10%;
+            }
+
+            #camdatelabel {
+                left: 10%;
+                top: 10%;
+            }
+
+            #iplabel {
+                right: 10%;
+                bottom: 15%;
+                transform: translate(0, -50%);
+            }
+
+            #connectedlabel {
+                right: 10%;
+                bottom: 10%;
+                transform: translate(0, -50%);
+            }
+
+            .connected {
+                color: #3cc71a !important;
+            }
+
+            .disconnect {
+                color: #ba1e1e !important;
+            }
+
+            #blockscreen {
+                position: absolute;
+                top: 0;
+                left: 0;
+                z-index: -99;
+                display: none;
+                width: 100vw;
+                height: 100vh;
+                background: rgba(25, 25, 25, 1);
+            }
+
+            .fingerprint-container {
+                display: none;
+                position: relative;
+                top: 10vh;
+                width: 60vh;
+                margin: 0 auto;
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 150ms ease;
+            }
+
+            .fingerprint-container.is-visible {
+                opacity: 1;
+                pointer-events: auto;
+            }
+
+            .fingerprint-frame {
+                width: 60vh;
+            }
+
+            .take-fingerprint {
+                position: absolute;
+                right: 0;
+                bottom: 15vh;
+                left: 0;
+                width: 10vh;
+                height: 12.5vh;
+                margin: 0 auto;
+                background: rgba(250, 250, 250, 0.45);
+                transition: background 100ms ease;
+            }
+
+            .take-fingerprint:hover {
+                background: rgba(250, 250, 250, 0.65);
+            }
+
+            .fingerprint-id {
+                position: absolute;
+                right: 0;
+                left: 0;
+                top: 23vh;
+                width: 22vh;
+                height: 13vh;
+                margin: 0 auto;
+                padding-top: 2vh;
+                text-align: center;
+                font-weight: bold;
+            }
+
+            .fingerprint-id > p {
+                padding-top: 2vh;
+                margin: 0;
+                font-weight: lighter;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="camcontainer">
+            <div id="camlabel">:)</div>
+            <div id="camdatelabel">04/09/1999</div>
+            <div id="camtimelabel">16:27:49</div>
+            <div id="iplabel">192.168.0.1</div>
+            <div id="connectedlabel" class="connected">CONNECTED</div>
+            <div id="blockscreen"></div>
+        </div>
+
+        <div id="fingerprint">
+            <div class="fingerprint-container">
+                <img src="./fingerprint.png" alt="fingerprint" class="fingerprint-frame" />
+                <div class="fingerprint-id">
+                    Fingerprint ID
+                    <p>No result</p>
+                </div>
+                <div class="take-fingerprint"></div>
+            </div>
+        </div>
+
+        <div id="helicontainer">
+            <div class="vehicleinfo">
+                <div class="heli-model">
+                    <p>MODEL: COSAGNETTI</p>
+                </div>
+                <div class="heli-street">
+                    <p>Spanish Ave | Lagunas Pl</p>
+                </div>
+                <div class="heli-plate">
+                    <p>PLATE: 01AGB123</p>
+                </div>
+                <div class="heli-speed">
+                    <p>420 KM/U</p>
+                </div>
+                <div class="heli-rectangle"></div>
+            </div>
+            <div class="scan">
+                <div class="scanBar"></div>
+            </div>
+        </div>
+
+        <script src="script.js"></script>
+    </body>
+</html>

@@ -1,0 +1,139 @@
+@import url("https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&display=swap");
+
+:root {
+    --g5-scale: 1;
+
+    --meter-base-width: 22vh;
+    --meter-base-height: 11vh;
+
+    --meter-size-width: calc(var(--meter-base-width) * var(--g5-scale));
+    --meter-size-height: calc(var(--meter-base-height) * var(--g5-scale));
+
+    --meter-pos-bottom: 5vh;
+    --meter-pos-right: 40vh;
+
+    --panel-padding: calc(var(--meter-size-height) * 0.09);
+    --panel-gap: calc(var(--meter-size-height) * 0.06);
+    --panel-radius: calc(var(--meter-size-height) * 0.09);
+    --box-radius: calc(var(--meter-size-height) * 0.06);
+    --box-padding: calc(var(--meter-size-height) * 0.04);
+
+    --font-scale: 1;
+
+    --font-xs: calc(var(--meter-size-width) * 0.035 * var(--font-scale));
+    --font-sm: calc(var(--meter-size-width) * 0.045 * var(--font-scale));
+    --font-lg: calc(var(--meter-size-width) * 0.075 * var(--font-scale));
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "Exo 2", sans-serif;
+    box-sizing: border-box;
+}
+
+.container {
+    height: 100vh;
+    display: none;
+}
+
+.g5-meter {
+    position: absolute;
+    bottom: var(--meter-pos-bottom);
+    right: var(--meter-pos-right);
+    width: var(--meter-size-width);
+    height: var(--meter-size-height);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.panel {
+    width: 100%;
+    height: 100%;
+    background: #1c1b1f;
+    border-radius: var(--panel-radius);
+    padding: var(--panel-padding);
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--panel-gap);
+    overflow: hidden;
+}
+
+.box {
+    background: #36343b;
+    border-radius: var(--box-radius);
+    padding: var(--box-padding);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 0;
+}
+
+.box span {
+    font-size: var(--font-xs);
+    color: rgba(255, 255, 255, 0.85);
+    text-align: center;
+}
+
+.bottom-row {
+    grid-column: 1 / 3;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--panel-gap);
+    min-height: 0;
+}
+
+#total-price,
+#total-price-per-100m,
+#total-distance {
+    font-size: var(--font-lg);
+    font-weight: bold;
+    line-height: 1;
+    text-align: center;
+}
+
+#total-price {
+    color: rgb(64, 160, 64);
+}
+
+#total-price-per-100m {
+    color: rgb(56, 143, 243);
+}
+
+#total-distance {
+    color: rgb(255, 153, 57);
+}
+
+#total-price-label,
+#total-price-per-100m-label,
+#total-distance-label {
+    font-size: var(--font-xs);
+    margin-top: 0.1vh;
+    color: rgba(255, 255, 255, 0.75);
+    text-align: center;
+}
+
+.toggle-meter-btn {
+    width: 100%;
+    height: 100%;
+    background: rgba(46, 46, 46, 0.534);
+    border-radius: var(--box-radius);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background 0.1s linear;
+    cursor: pointer;
+}
+
+.toggle-meter-btn p {
+    font-size: var(--font-sm);
+    font-weight: bold;
+    color: rgb(231, 30, 37);
+}
+
+.toggle-meter-btn:hover {
+    background: rgba(66, 66, 66, 0.657);
+}

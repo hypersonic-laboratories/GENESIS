@@ -1,0 +1,124 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>QBCore - Spawnlocation</title>
+        <link rel="stylesheet" type="text/css" href="style.css" />
+    </head>
+    <body>
+        <div id="app">
+            <div class="container">
+                <div class="noselect">
+                    <div class="spawn-locations hidden" id="spawn-panel">
+                        <div class="spawn_locations-header">
+                            <p id="header-text"></p>
+                        </div>
+                        <div id="location-list"></div>
+                        <button class="submit-spawn" id="submit-btn" style="display: none"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            (function () {
+                const state = {
+                    positions: { normal: [], appartment: [], house: [] },
+                    selectedValue: { type: "", name: "" },
+                    newChar: false,
+                    translations: {},
+                };
+
+                const panel = document.getElementById("spawn-panel");
+                const list = document.getElementById("location-list");
+                const submitBtn = document.getElementById("submit-btn");
+                const headerText = document.getElementById("header-text");
+
+                function t(phrase) {
+                    return state.translations[phrase] || phrase;
+                }
+
+                function makeBtn(label, onClick) {
+                    const btn = document.createElement("button");
+                    btn.className = "location";
+                    btn.textContent = label;
+                    btn.addEventListener("click", onClick);
+                    return btn;
+                }
+
+                function clickLocation(type, name) {
+                    if (type === "normal" || type === "current") {
+                        hEvent("qb-spawn:setCam", { posname: name, type });
+                    }
+                    state.selectedValue = { type, name };
+                    render();
+                }
+
+                function render() {
+                    list.innerHTML = "";
+
+                    if (!state.newChar) {
+                        const btn = makeBtn(t("last_location"), () => clickLocation("current", "current"));
+                        if (state.selectedValue.type === "current") btn.classList.add("selected");
+                        list.appendChild(btn);
+                    }
+
+                    for (const [groupKey, locations] of Object.entries(state.positions)) {
+                        for (const [idx, location] of Object.entries(locations)) {
+                            const name = groupKey === "house" ? location.house : idx;
+                            const btn = makeBtn(location.label, () => clickLocation(groupKey, name));
+                            if (state.selectedValue.type === groupKey && state.selectedValue.name === name) {
+                                btn.classList.add("selected");
+                            }
+                            list.appendChild(btn);
+                        }
+                    }
+
+                    submitBtn.style.display = state.selectedValue.type && state.selectedValue.name ? "block" : "none";
+                }
+
+                submitBtn.addEventListener("click", () => {
+                    panel.classList.add("hidden");
+                    const { type, name } = state.selectedValue;
+                    if (type !== "appartment") {
+                        hEvent("qb-spawn:spawnplayer", { spawnloc: name, typeLoc: type });
+                    } else {
+                        hEvent("qb-spawn:chooseAppa", { appType: name });
+                    }
+                });
+
+                function showUi(status, translations) {
+                    state.translations = translations;
+                    headerText.textContent = t("where_would_you_like_to_start");
+                    submitBtn.textContent = t("confirm");
+                    panel.classList.toggle("hidden", !status);
+                }
+
+                function setupLocations(locations, houses, isNew) {
+                    state.positions = { normal: locations, appartment: [], house: houses };
+                    state.selectedValue = { type: "", name: "" };
+                    state.newChar = isNew;
+                    render();
+                }
+
+                function setupApartments(locations, isNew) {
+                    state.positions = { normal: [], appartment: locations, house: [] };
+                    state.selectedValue = { type: "", name: "" };
+                    state.newChar = isNew;
+                    render();
+                }
+
+                window.showUi = showUi;
+                window.setupLocations = setupLocations;
+                window.setupApartments = setupApartments;
+
+                window.addEventListener("message", (e) => {
+                    if (!e.data?.name) return;
+                    const handlers = { showUi, setupLocations, setupApartments };
+                    handlers[e.data.name]?.(...e.data.args);
+                });
+            })();
+        </script>
+    </body>
+</html>

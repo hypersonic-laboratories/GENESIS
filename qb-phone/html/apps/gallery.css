@@ -1,0 +1,416 @@
+﻿.gallery-screen {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    color: rgb(24 24 27);
+    overflow: hidden;
+}
+
+/* â”€â”€ Header â”€â”€ */
+.gallery-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 3rem 1.25rem 0.75rem;
+    flex-shrink: 0;
+    border-bottom: 1px solid rgb(228 228 231);
+}
+
+.gallery-icon-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: inherit;
+    background: transparent;
+    border: none;
+    padding: 0;
+}
+
+.gallery-eyebrow {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: rgb(113 113 122);
+}
+
+.gallery-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+/* â”€â”€ Grid â”€â”€ */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    overflow-y: auto;
+    flex: 1;
+    padding: 2px;
+    align-content: start;
+}
+
+.gallery-tile {
+    aspect-ratio: 1;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    background-size: cover;
+    background-position: center;
+    transition:
+        opacity 0.15s,
+        transform 0.15s;
+}
+
+.gallery-tile:hover {
+    opacity: 0.85;
+}
+
+.gallery-tile:active {
+    transform: scale(0.96);
+}
+
+/* â”€â”€ Detail view â”€â”€ */
+.gallery-detail {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.gallery-detail-photo {
+    position: relative;
+    flex: 1;
+    background-size: cover;
+    background-position: center;
+}
+
+.gallery-detail-back {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.45);
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.gallery-detail-back:hover {
+    background: rgba(0, 0, 0, 0.65);
+}
+
+.gallery-detail-back-icon {
+    width: 18px;
+    height: 18px;
+}
+
+.gallery-detail-timestamp {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    font-size: 11px;
+    font-family: "Tomorrow", sans-serif;
+    color: rgba(255, 255, 255, 0.7);
+    background: rgba(0, 0, 0, 0.4);
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+
+/* â”€â”€ Action bar â”€â”€ */
+.gallery-detail-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    padding: 18px 20px 24px;
+    background: rgba(10, 10, 12, 0.92);
+    flex-shrink: 0;
+}
+
+.gallery-action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 14px 28px;
+    cursor: pointer;
+    font-size: 12px;
+    font-family: "Tomorrow", sans-serif;
+    color: rgba(255, 255, 255, 0.8);
+    transition:
+        background 0.15s,
+        color 0.15s;
+}
+
+.gallery-action-btn:hover {
+    background: rgba(255, 255, 255, 0.14);
+    color: #fff;
+}
+
+.gallery-action-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.gallery-action-delete {
+    color: #f87171;
+    border-color: rgba(248, 113, 113, 0.25);
+    background: rgba(248, 113, 113, 0.08);
+}
+
+.gallery-action-delete:hover {
+    background: rgba(248, 113, 113, 0.18);
+    color: #fca5a5;
+}
+
+.gallery-action-wallpaper {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.gallery-action-wallpaper-active {
+    color: rgb(244 63 94);
+    border-color: rgba(244, 63, 94, 0.3);
+    background: rgba(244, 63, 94, 0.1);
+}
+
+/* â”€â”€ Share sheet â”€â”€ */
+.gallery-sheet-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    display: flex;
+    align-items: flex-end;
+    z-index: 20;
+}
+
+.gallery-sheet {
+    width: 100%;
+    background: #1c1c1e;
+    border-radius: 20px 20px 0 0;
+    padding: 8px 0 12px;
+    max-height: 70%;
+    display: flex;
+    flex-direction: column;
+}
+
+.gallery-sheet-handle {
+    width: 36px;
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.2);
+    margin: 0 auto 12px;
+}
+
+.gallery-sheet-title {
+    font-size: 13px;
+    font-family: "Tomorrow", sans-serif;
+    color: rgba(255, 255, 255, 0.45);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0 20px 10px;
+    flex-shrink: 0;
+}
+
+.gallery-sheet-list {
+    overflow-y: auto;
+    flex: 1;
+}
+
+.gallery-sheet-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 10px 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.12s;
+}
+
+.gallery-sheet-row:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.gallery-sheet-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Tomorrow", sans-serif;
+    font-size: 14px;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.gallery-sheet-contact-copy {
+    flex: 1;
+    min-width: 0;
+}
+
+.gallery-sheet-contact-name {
+    font-size: 14px;
+    font-family: "Tomorrow", sans-serif;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.gallery-sheet-contact-number {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+    margin-top: 1px;
+}
+
+.gallery-sheet-chevron {
+    width: 16px;
+    height: 16px;
+    color: rgba(255, 255, 255, 0.25);
+    flex-shrink: 0;
+}
+
+.gallery-sheet-empty {
+    padding: 20px;
+    font-size: 13px;
+    font-family: "Tomorrow", sans-serif;
+    color: rgba(255, 255, 255, 0.35);
+    text-align: center;
+}
+
+.gallery-sheet-cancel {
+    margin: 10px 16px 0;
+    padding: 13px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    font-family: "Tomorrow", sans-serif;
+    cursor: pointer;
+    transition: background 0.15s;
+    flex-shrink: 0;
+}
+
+.gallery-sheet-cancel:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+/* ── FAB ── */
+.gallery-fab {
+    position: absolute;
+    bottom: 1.25rem;
+    right: 1.25rem;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 0;
+    border-radius: 9999px;
+    background: rgb(244 63 94);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(244, 63, 94, 0.4);
+    transition: opacity 0.15s;
+}
+
+.gallery-fab:hover {
+    opacity: 0.88;
+}
+
+.gallery-fab-icon {
+    width: 1rem;
+    height: 1rem;
+}
+
+/* ── URL input sheet ── */
+.gallery-url-input-wrap {
+    padding: 0 16px 12px;
+}
+
+.gallery-url-input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    padding: 10px 14px;
+    color: #fff;
+    font-size: 13px;
+    font-family: “Tomorrow”, sans-serif;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.15s;
+}
+
+.gallery-url-input:focus {
+    border-color: rgba(244, 63, 94, 0.6);
+}
+
+.gallery-url-input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.gallery-url-actions {
+    display: flex;
+    gap: 8px;
+    padding: 0 16px 12px;
+}
+
+.gallery-url-actions .gallery-sheet-cancel {
+    margin: 0;
+    flex: 1;
+}
+
+.gallery-url-confirm {
+    flex: 1;
+    padding: 13px;
+    background: rgb(244 63 94);
+    border: none;
+    border-radius: 12px;
+    color: #fff;
+    font-size: 14px;
+    font-family: “Tomorrow”, sans-serif;
+    cursor: pointer;
+    transition: opacity 0.15s;
+}
+
+.gallery-url-confirm:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+.gallery-url-confirm:not(:disabled):hover {
+    opacity: 0.88;
+}
+
+/* â”€â”€ Dark mode â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+
+.dark .gallery-screen {
+    background: rgb(18 18 22);
+    color: rgb(244 244 245);
+}
+
+.dark .gallery-header {
+    border-bottom-color: rgb(55 55 63);
+}
+
+.dark .gallery-eyebrow {
+    color: rgb(161 161 170);
+}
