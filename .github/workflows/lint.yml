@@ -1,0 +1,171 @@
+name: Lint
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  stylua:
+    name: StyLua
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check Lua formatting
+        uses: JohnnyMorganz/stylua-action@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: latest
+          args: --check .
+
+  config:
+    name: Package manifests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate config.json and package manifests
+        run: |
+          set -euo pipefail
+
+          # config.json must be valid JSON and every listed package must exist
+          # with a package.json of its own.
+          python3 - <<'PY'
+          import json, sys, pathlib
+
+          root = pathlib.Path('.')
+          errors = []
+
+          config = json.loads((root / 'config.json').read_text())
+          packages = config['packages']
+
+          if packages[0] != 'qb-core':
+              errors.append('qb-core must be the first entry in config.json')
+
+          seen = set()
+          for name in packages:
+              if name in seen:
+                  errors.append(f'{name} listed more than once in config.json')
+              seen.add(name)
+
+              directory = root / name
+              if not directory.is_dir():
+                  errors.append(f'{name} is in config.json but has no directory')
+                  continue
+
+              manifest = directory / 'package.json'
+              if not manifest.is_file():
+                  errors.append(f'{name} has no package.json')
+                  continue
+
+              try:
+                  json.loads(manifest.read_text())
+              except json.JSONDecodeError as exc:
+                  errors.append(f'{name}/package.json is not valid JSON: {exc}')
+
+          # Any qb-* directory that never got registered never loads. Warn rather
+          # than fail — qb-diving and qb-mdt are already in this state.
+          for directory in sorted(root.glob('qb-*')):
+              if directory.is_dir() and directory.name not in seen:
+                  print(f'::warning::{directory.name} exists but is not in config.json, so it never loads')
+
+          if errors:
+              print('\n'.join(f'::error::{e}' for e in errors))
+              sys.exit(1)
+
+          print(f'{len(packages)} packages validated')
+          PY
+
+  naming:
+    name: Naming convention
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check package and event prefixes
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import pathlib, re, sys
+
+          root = pathlib.Path('.')
+          errors, warnings = [], []
+
+          # Package directories: qb- (inherited) or gns- (ours). hl- is dead code from
+          # the Helix Life project. Anything else is a naming violation.
+          for directory in sorted(p for p in root.iterdir() if p.is_dir()):
+              name = directory.name
+              if name.startswith('.') or name in {'docs'}:
+                  continue
+              if name.startswith('hl-'):
+                  errors.append(f'{name}: hl- is dead Helix Life code and must not be added')
+              elif not re.fullmatch(r'(qb|gns)-[a-z0-9]+(-[a-z0-9]+)*', name):
+                  errors.append(f'{name}: must be qb-<name> or gns-<name>, lowercase and hyphenated')
+
+          # Our packages must not register events in an inherited or dead namespace,
+          # and must namespace their own events under the package name.
+          register = re.compile(r"""(RegisterNetEvent|TriggerServerEvent|TriggerClientEvent)\(\s*['"]([^'"]+)['"]""")
+          for directory in sorted(root.glob('gns-*')):
+              if not directory.is_dir():
+                  continue
+              for lua in directory.rglob('*.lua'):
+                  for lineno, line in enumerate(lua.read_text(encoding='utf-8', errors='ignore').splitlines(), 1):
+                      for _, event in register.findall(line):
+                          if event.startswith('QBCore:'):
+                              errors.append(f'{lua}:{lineno}: never register events under QBCore:')
+                          elif event.startswith('hl-'):
+                              errors.append(f'{lua}:{lineno}: hl- is dead Helix Life code, do not reference it')
+                          elif not event.startswith(('gns-', 'qb-')):
+                              warnings.append(f'{lua}:{lineno}: event "{event}" should start with the owning package name')
+
+          # No new hl- references anywhere. The seven surviving ones in qb-houses are
+          # tracked in UPSTREAM.md and grandfathered until that cleanup lands.
+          hl_ref = re.compile(r"""['"]hl-[a-z0-9-]+""")
+          allowed = 7
+          found = []
+          for lua in sorted(root.rglob('*.lua')):
+              for lineno, line in enumerate(lua.read_text(encoding='utf-8', errors='ignore').splitlines(), 1):
+                  if hl_ref.search(line):
+                      found.append(f'{lua}:{lineno}')
+          if len(found) > allowed:
+              for site in found:
+                  errors.append(f'{site}: new hl- reference. hl- is dead Helix Life code.')
+          elif len(found) < allowed:
+              print(f'::notice::hl- references down to {len(found)} from {allowed}. Lower `allowed` in this workflow.')
+
+          for warning in warnings:
+              print(f'::warning::{warning}')
+          if errors:
+              print('\n'.join(f'::error::{e}' for e in errors))
+              sys.exit(1)
+          print('Naming OK')
+          PY
+
+  secrets:
+    name: Secret placeholders
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Look for committed credentials
+        run: |
+          set -uo pipefail
+
+          # Catch obvious live values. Placeholders like put_api_key_here are fine.
+          if grep -rInE "(api[_-]?key|password|secret|token)\s*=\s*['\"][A-Za-z0-9_\-]{16,}['\"]" \
+               --include='*.lua' --include='*.json' . \
+             | grep -viE "put_|your_|example|placeholder|changeme|xxx"; then
+            echo "::error::Possible credential committed. Use a placeholder instead."
+            exit 1
+          fi
+
+          if grep -rIn "discord.com/api/webhooks/" --include='*.lua' --include='*.json' .; then
+            echo "::error::Discord webhook URL committed."
+            exit 1
+          fi
+
+          echo "No credentials found"

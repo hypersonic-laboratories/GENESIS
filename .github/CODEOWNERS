@@ -1,0 +1,7 @@
+# Every file in GENESIS is owned by HELIX, represented by both maintainer accounts.
+# Multiple owners on one line means ANY of them can approve, not all of them.
+#
+# Both accounts must have write access to this repository, otherwise GitHub
+# silently ignores the rule and no review is ever required.
+
+* @Hyper-Kali @1kaliel

@@ -1,0 +1,31 @@
+# OS
+Thumbs.db
+ehthumbs.db
+desktop.ini
+.DS_Store
+
+# Editors
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.code-workspace
+
+# Secrets — never commit real keys. Keep config.lua values as placeholders.
+.env
+.env.*
+*.key
+*.pem
+secrets.lua
+**/secrets/
+
+# Local scratch
+*.log
+*.bak
+*.tmp
+*.orig
+*~
+
+# Lua build/tooling
+.luarc.json
+luacov.*.out
