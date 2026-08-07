@@ -1,21 +1,21 @@
 Config = {
     Locations = {
         ['palmera_medical'] = {
-            label                 = 'Palmera Medical Center',
-            checking              = { Vector(559879, 432795, 4545) },
-            duty                  = { Vector(559348, 432941, 4545) },
-            stash                 = { Vector(557885, 434102, 4545) },
-            vehicle               = { Vector(564197, 441202, 4537) },
-            helicopter            = { Vector(0, 0, 0) },
-            vehicleSpawn          = { coords = Vector(0, 0, 0), heading = 0 },
-            helicopterSpawn       = { coords = Vector(0, 0, 0), heading = 0 },
-            authorizedVehicles    = {
-                [0] = { ['bp_ambulance'] = 'Ambulance' }
+            label = 'Palmera Medical Center',
+            checking = { Vector(559879, 432795, 4545) },
+            duty = { Vector(559348, 432941, 4545) },
+            stash = { Vector(557885, 434102, 4545) },
+            vehicle = { Vector(564197, 441202, 4537) },
+            helicopter = { Vector(0, 0, 0) },
+            vehicleSpawn = { coords = Vector(0, 0, 0), heading = 0 },
+            helicopterSpawn = { coords = Vector(0, 0, 0), heading = 0 },
+            authorizedVehicles = {
+                [0] = { ['bp_ambulance'] = 'Ambulance' },
             },
             authorizedHelicopters = {
-                [0] = { ['bp_aheli'] = 'EMS Heli' }
+                [0] = { ['bp_aheli'] = 'EMS Heli' },
             },
-            beds                  = {
+            beds = {
                 { coords = Vector(558823, 436869, 4608), heading = 121, taken = false },
                 { coords = Vector(558218, 436507, 4608), heading = 121, taken = false },
                 { coords = Vector(557995, 436288, 4608), heading = 125, taken = false },
@@ -27,28 +27,28 @@ Config = {
             },
         },
         ['palmera_trauma'] = {
-            label                 = 'Palmera Trauma Center',
-            checking              = { Vector(555776, 438849, 4545) },
-            duty                  = { Vector(555388, 439094, 4545) },
-            stash                 = { Vector(552647, 438625, 4545) },
-            vehicle               = { Vector(560783, 446224, 4537) },
-            helicopter            = { Vector(0, 0, 0) },
-            vehicleSpawn          = { coords = Vector(0, 0, 0), heading = 0 },
-            helicopterSpawn       = { coords = Vector(0, 0, 0), heading = 0 },
-            authorizedVehicles    = {
-                [0] = { ['bp_ambulance'] = 'Ambulance' }
+            label = 'Palmera Trauma Center',
+            checking = { Vector(555776, 438849, 4545) },
+            duty = { Vector(555388, 439094, 4545) },
+            stash = { Vector(552647, 438625, 4545) },
+            vehicle = { Vector(560783, 446224, 4537) },
+            helicopter = { Vector(0, 0, 0) },
+            vehicleSpawn = { coords = Vector(0, 0, 0), heading = 0 },
+            helicopterSpawn = { coords = Vector(0, 0, 0), heading = 0 },
+            authorizedVehicles = {
+                [0] = { ['bp_ambulance'] = 'Ambulance' },
             },
             authorizedHelicopters = {
-                [0] = { ['bp_aheli'] = 'EMS Heli' }
+                [0] = { ['bp_aheli'] = 'EMS Heli' },
             },
-            beds                  = {
+            beds = {
                 { coords = Vector(553985, 440255, 4608), heading = 215, taken = false },
                 { coords = Vector(553789, 440580, 4608), heading = 212, taken = false },
                 { coords = Vector(553570, 440881, 4608), heading = 211, taken = false },
                 { coords = Vector(553342, 441202, 4608), heading = 215, taken = false },
-                { coords = Vector(554402, 441520, 4608), heading = 31,  taken = false },
-                { coords = Vector(554191, 441828, 4608), heading = 33,  taken = false },
-                { coords = Vector(553971, 442140, 4608), heading = 37,  taken = false },
+                { coords = Vector(554402, 441520, 4608), heading = 31, taken = false },
+                { coords = Vector(554191, 441828, 4608), heading = 33, taken = false },
+                { coords = Vector(553971, 442140, 4608), heading = 37, taken = false },
             },
         },
     },
@@ -136,6 +136,6 @@ Config = {
         ['IK_hand_r'] = 'ik_hand_r',
         ['IK_foot_root'] = 'ik_foot_root',
         ['IK_foot_l'] = 'ik_foot_l',
-        ['IK_foot_r'] = 'ik_foot_r'
-    }
+        ['IK_foot_r'] = 'ik_foot_r',
+    },
 }

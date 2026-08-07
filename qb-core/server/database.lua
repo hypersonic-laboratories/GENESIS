@@ -516,7 +516,9 @@ success = Database.Execute([[
 ]])
 
 function DatabaseAction(ActionType, ...)
-    if not ActionType then return end
+    if not ActionType then
+        return
+    end
 
     local _, result = pcall(function(...)
         return Database[ActionType](...)

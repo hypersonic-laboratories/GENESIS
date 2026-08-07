@@ -41,7 +41,9 @@ end
 local function GetSpawnPoint(garageIndex)
     local location = nil
     local garage = Config.Garages[garageIndex]
-    if not garage then return end
+    if not garage then
+        return
+    end
     if #garage.spawnPoint > 1 then
         local maxTries = #garage.spawnPoint
         for _ = 1, maxTries do
@@ -73,7 +75,9 @@ end) ]]
 
 RegisterCallback('server.GetGarageVehicles', function(source, garage)
     local Player = exports['qb-core']:GetPlayer(source)
-    if not Player then return end
+    if not Player then
+        return
+    end
     local citizenId = Player.PlayerData.citizenid
 
     local vehicles
@@ -101,7 +105,9 @@ end)
 
 local function GetVehicleTypeByModel(model)
     local vehicleData = SharedVehicles[model]
-    if not vehicleData then return 'automobile' end
+    if not vehicleData then
+        return 'automobile'
+    end
     local category = vehicleData.category
     local vehicleType = vehicleTypes[category]
     return vehicleType or 'automobile'
@@ -122,11 +128,10 @@ RegisterServerEvent('qb-garages:server:SpawnVehicle', function(source, plate, in
 
     -- @TODO Amend to support vehicle mods
     local Player = exports['qb-core']:GetPlayer(source)
-    local results = exports['qb-core']:DatabaseAction('Select',
-        'SELECT citizenid, fuel FROM player_vehicles WHERE plate = ? and citizenid = ? LIMIT 1',
-        { plate, Player.PlayerData.citizenid }
-    )
-    if not results or #results <= 0 then return end
+    local results = exports['qb-core']:DatabaseAction('Select', 'SELECT citizenid, fuel FROM player_vehicles WHERE plate = ? and citizenid = ? LIMIT 1', { plate, Player.PlayerData.citizenid })
+    if not results or #results <= 0 then
+        return
+    end
 
     -- @TODO Set Vehicle Mods, Plate
     local vehicle = HVehicle(SpawnPoint.coords, Rotator(0, SpawnPoint.heading, 0), SharedVehicles[vehicleName].asset_name)
@@ -169,16 +174,24 @@ end)
 
 RegisterServerEvent('qb-garages:server:DepositVehicle', function(source, garage)
     local playerVehicle = GetVehiclePedIsIn(GetPlayerPawn(source))
-    if not playerVehicle then return end
+    if not playerVehicle then
+        return
+    end
 
     local Player = exports['qb-core']:GetPlayer(source)
     local plate = playerVehicle:GetPlate()
     local results = exports['qb-core']:DatabaseAction('Select', 'SELECT citizenid, plate, state FROM player_vehicles WHERE plate = ? LIMIT 1', { plate })
-    if not results or #results <= 0 then return end
+    if not results or #results <= 0 then
+        return
+    end
 
     local vehResult = results[1]
-    if vehResult.citizenid ~= Player.PlayerData.citizenid then return end
-    if state == 1 then return end
+    if vehResult.citizenid ~= Player.PlayerData.citizenid then
+        return
+    end
+    if state == 1 then
+        return
+    end
 
     if Config.Garages[garage].type == 'house' and not exports['qb-houses']:hasKey(Player.PlayerData.license, Player.PlayerData.citizenid, Config.Garages[garage].houseName) then
         return
@@ -200,13 +213,12 @@ RegisterServerEvent('qb-garages:server:DepositVehicle', function(source, garage)
     end
 
     local success = DeleteVehicle(playerVehicle)
-    if not success then return end
+    if not success then
+        return
+    end
 
     OutsideVehicles[plate] = nil
-    exports['qb-core']:DatabaseAction('Execute',
-        'UPDATE player_vehicles SET fuel = ?, engine = ?, body = ?, state = ?, garage = ? WHERE plate = ? and citizenid = ?',
-        { fuel, engine, body, 1, garage, plate, Player.PlayerData.citizenid }
-    )
+    exports['qb-core']:DatabaseAction('Execute', 'UPDATE player_vehicles SET fuel = ?, engine = ?, body = ?, state = ?, garage = ? WHERE plate = ? and citizenid = ?', { fuel, engine, body, 1, garage, plate, Player.PlayerData.citizenid })
 end)
 
 -- Events
@@ -220,7 +232,9 @@ end)]]
 
 RegisterServerEvent('qb-garages:server:updateVehicleState', function(source, state, plate)
     local Player = exports['qb-core']:GetPlayer(source)
-    if not Player then return end
+    if not Player then
+        return
+    end
     updateVehicleState(state, plate, Player.PlayerData.citizenid)
 end)
 
@@ -251,7 +265,9 @@ RegisterServerEvent('qb-garages:server:PayDepotPrice', function(source, data)
         end
 
         local success = Player.RemoveMoney(moneyType, depotPrice, 'paid-depot')
-        if not success then return end
+        if not success then
+            return
+        end
         TriggerLocalServerEvent('qb-garages:server:SpawnVehicle', source, data.plate, data.index, data.vehicle, data.stats.fuel)
     end
 end)
@@ -307,7 +323,7 @@ RegisterCallback('GetPlayerVehicles', function(source)
                     state = stateTranslation,
                     fuel = v.fuel,
                     engine = v.engine,
-                    body = v.body
+                    body = v.body,
                 }
             end
             return Vehicles
@@ -331,7 +347,7 @@ local function getAllGarages()
             blipName = v.blipName,
             blipNumber = v.blipNumber,
             blipColor = v.blipColor,
-            vehicle = v.vehicle
+            vehicle = v.vehicle,
         }
     end
     return garages

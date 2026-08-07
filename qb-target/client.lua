@@ -584,11 +584,7 @@ local function AddBoxZone(name, center, length, width, zoneOptions, targetoption
             if meshComp then
                 meshComp:SetStaticMesh(meshAsset)
                 meshComp:SetCollisionEnabled(UE.ECollisionEnabled.NoCollision)
-                half = Vector(
-                    math.max(half.X, bounds.BoxExtent.X),
-                    math.max(half.Y, bounds.BoxExtent.Y),
-                    math.max(half.Z, bounds.BoxExtent.Z)
-                )
+                half = Vector(math.max(half.X, bounds.BoxExtent.X), math.max(half.Y, bounds.BoxExtent.Y), math.max(half.Z, bounds.BoxExtent.Z))
             else
                 print('[Xray] Zone mesh setup failed: ' .. meshPath)
             end

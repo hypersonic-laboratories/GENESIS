@@ -1,9 +1,13 @@
 -- qb-mdt search: global search, citizen profiles, vehicle lookup
 
 local function safeParse(text, fallback)
-    if type(text) ~= 'string' or text == '' then return fallback end
+    if type(text) ~= 'string' or text == '' then
+        return fallback
+    end
     local ok, result = pcall(JSON.parse, text)
-    if ok and result ~= nil then return result end
+    if ok and result ~= nil then
+        return result
+    end
     return fallback
 end
 
@@ -25,19 +29,20 @@ end
 
 MDT.RegisterRpc('search', function(source, data)
     local Player, role = MDT.GetContext(source)
-    if not Player then return { ok = false } end
+    if not Player then
+        return { ok = false }
+    end
 
     local query = type(data) == 'table' and tostring(data.query or '') or ''
     query = query:gsub('^%s+', ''):gsub('%s+$', '')
-    if #query < 2 then return { ok = true, citizens = {}, vehicles = {} } end
+    if #query < 2 then
+        return { ok = true, citizens = {}, vehicles = {} }
+    end
 
     local like = '%' .. query .. '%'
     local limit = Config.MaxSearchResults
 
-    local citizenRows = MDT.Select(
-        'SELECT citizenid, name, charinfo, job FROM players WHERE citizenid LIKE ? OR name LIKE ? OR charinfo LIKE ? LIMIT ?',
-        { like, like, like, limit }
-    ) or {}
+    local citizenRows = MDT.Select('SELECT citizenid, name, charinfo, job FROM players WHERE citizenid LIKE ? OR name LIKE ? OR charinfo LIKE ? LIMIT ?', { like, like, like, limit }) or {}
 
     local citizens = {}
     for i = 1, #citizenRows do
@@ -46,10 +51,7 @@ MDT.RegisterRpc('search', function(source, data)
 
     local vehicles = {}
     if role == 'police' then
-        local vehicleRows = MDT.Select(
-            'SELECT plate, fakeplate, vehicle, citizenid FROM player_vehicles WHERE plate LIKE ? OR fakeplate LIKE ? LIMIT ?',
-            { like, like, limit }
-        ) or {}
+        local vehicleRows = MDT.Select('SELECT plate, fakeplate, vehicle, citizenid FROM player_vehicles WHERE plate LIKE ? OR fakeplate LIKE ? LIMIT ?', { like, like, limit }) or {}
         for i = 1, #vehicleRows do
             local v = vehicleRows[i]
             vehicles[#vehicles + 1] = {
@@ -67,14 +69,20 @@ end)
 
 MDT.RegisterRpc('getProfile', function(source, data)
     local Player, role = MDT.GetContext(source)
-    if not Player then return { ok = false } end
+    if not Player then
+        return { ok = false }
+    end
 
     local citizenid = type(data) == 'table' and tostring(data.citizenid or '') or ''
-    if citizenid == '' then return { ok = false } end
+    if citizenid == '' then
+        return { ok = false }
+    end
 
     local rows = MDT.Select('SELECT * FROM players WHERE citizenid = ?', { citizenid })
     local row = rows and rows[1]
-    if not row then return { ok = false, message = 'Citizen not found' } end
+    if not row then
+        return { ok = false, message = 'Citizen not found' }
+    end
 
     local charinfo = safeParse(row.charinfo, {})
     local job = safeParse(row.job, {})
@@ -104,26 +112,17 @@ MDT.RegisterRpc('getProfile', function(source, data)
         online = MDT.GetOnlineByCitizenId(citizenid) ~= nil,
     }
 
-    profile.vehicles = MDT.Select(
-        'SELECT plate, fakeplate, vehicle, garage, state FROM player_vehicles WHERE citizenid = ?',
-        { citizenid }
-    ) or {}
+    profile.vehicles = MDT.Select('SELECT plate, fakeplate, vehicle, garage, state FROM player_vehicles WHERE citizenid = ?', { citizenid }) or {}
 
     if role == 'police' then
-        local convictions = MDT.Select(
-            'SELECT * FROM mdt_convictions WHERE citizenid = ? ORDER BY created DESC LIMIT 50',
-            { citizenid }
-        ) or {}
+        local convictions = MDT.Select('SELECT * FROM mdt_convictions WHERE citizenid = ? ORDER BY created DESC LIMIT 50', { citizenid }) or {}
         for i = 1, #convictions do
             convictions[i].charges = safeParse(convictions[i].charges, {})
         end
         profile.convictions = convictions
 
         MDT.ExpireWarrants()
-        profile.warrants = MDT.Select(
-            'SELECT * FROM mdt_warrants WHERE citizenid = ? ORDER BY created DESC LIMIT 25',
-            { citizenid }
-        ) or {}
+        profile.warrants = MDT.Select('SELECT * FROM mdt_warrants WHERE citizenid = ? ORDER BY created DESC LIMIT 25', { citizenid }) or {}
 
         profile.incidents = MDT.Select(
             [[SELECT i.id, i.title, i.author_name, i.created FROM mdt_incidents i
@@ -135,10 +134,7 @@ MDT.RegisterRpc('getProfile', function(source, data)
     end
 
     if role == 'ems' then
-        local medical = MDT.Select(
-            'SELECT * FROM mdt_medical WHERE citizenid = ? ORDER BY created DESC LIMIT 50',
-            { citizenid }
-        ) or {}
+        local medical = MDT.Select('SELECT * FROM mdt_medical WHERE citizenid = ? ORDER BY created DESC LIMIT 50', { citizenid }) or {}
         for i = 1, #medical do
             medical[i].injuries = safeParse(medical[i].injuries, {})
             medical[i].flags = safeParse(medical[i].flags, {})
@@ -151,8 +147,12 @@ end)
 
 MDT.RegisterRpc('saveProfile', function(source, data)
     local Player, role = MDT.GetContext(source)
-    if not Player then return { ok = false } end
-    if type(data) ~= 'table' or type(data.citizenid) ~= 'string' or data.citizenid == '' then return { ok = false } end
+    if not Player then
+        return { ok = false }
+    end
+    if type(data) ~= 'table' or type(data.citizenid) ~= 'string' or data.citizenid == '' then
+        return { ok = false }
+    end
 
     local notes = tostring(data.notes or '')
     local flags = JSON.stringify(type(data.flags) == 'table' and data.flags or {})
@@ -172,17 +172,20 @@ end)
 
 MDT.RegisterRpc('getVehicle', function(source, data)
     local Player, role = MDT.GetContext(source)
-    if not Player or role ~= 'police' then return { ok = false } end
+    if not Player or role ~= 'police' then
+        return { ok = false }
+    end
 
     local plate = type(data) == 'table' and tostring(data.plate or ''):upper() or ''
-    if plate == '' then return { ok = false } end
+    if plate == '' then
+        return { ok = false }
+    end
 
-    local rows = MDT.Select(
-        'SELECT * FROM player_vehicles WHERE UPPER(plate) = ? OR UPPER(fakeplate) = ? LIMIT 1',
-        { plate, plate }
-    )
+    local rows = MDT.Select('SELECT * FROM player_vehicles WHERE UPPER(plate) = ? OR UPPER(fakeplate) = ? LIMIT 1', { plate, plate })
     local vehicle = rows and rows[1]
-    if not vehicle then return { ok = false, message = 'No registered vehicle with that plate' } end
+    if not vehicle then
+        return { ok = false, message = 'No registered vehicle with that plate' }
+    end
 
     local owner = nil
     if vehicle.citizenid then
@@ -192,10 +195,7 @@ MDT.RegisterRpc('getVehicle', function(source, data)
         end
     end
 
-    local bolos = MDT.Select(
-        "SELECT * FROM mdt_bolos WHERE status = 'active' AND bolo_type = 'vehicle' AND UPPER(identifier) = ?",
-        { plate }
-    ) or {}
+    local bolos = MDT.Select('SELECT * FROM mdt_bolos WHERE status = \'active\' AND bolo_type = \'vehicle\' AND UPPER(identifier) = ?', { plate }) or {}
 
     return {
         ok = true,
@@ -211,4 +211,3 @@ MDT.RegisterRpc('getVehicle', function(source, data)
         bolos = bolos,
     }
 end)
-

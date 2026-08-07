@@ -1,24 +1,24 @@
 local Translations = {
     error = {
-        not_online                  = 'Player not online',
-        wrong_format                = 'Incorrect format',
-        missing_args                = 'Not every argument has been entered (x, y, z)',
-        missing_args2               = 'All arguments must be filled out!',
-        no_access                   = 'No access to this command',
-        company_too_poor            = 'Your employer is broke',
-        item_not_exist              = 'Item does not exist',
-        too_heavy                   = 'Inventory too full',
-        location_not_exist          = 'Location does not exist',
-        duplicate_license           = '[QBCORE] - Duplicate Rockstar License Found',
-        no_valid_license            = '[QBCORE] - No Valid Rockstar License Found',
-        not_whitelisted             = '[QBCORE] - You\'re not whitelisted for this server',
-        server_already_open         = 'The server is already open',
-        server_already_closed       = 'The server is already closed',
-        no_permission               = 'You don\'t have permissions for this..',
-        no_waypoint                 = 'No Waypoint Set.',
-        tp_error                    = 'Error While Teleporting.',
-        ban_table_not_found         = '[QBCORE] - Unable to find the bans table in the database. Please ensure you have imported the SQL file correctly.',
-        connecting_database_error   = '[QBCORE] - An error occurred while connecting to the database. Ensure that the SQL server is running and that the details in the server.cfg file are correct.',
+        not_online = 'Player not online',
+        wrong_format = 'Incorrect format',
+        missing_args = 'Not every argument has been entered (x, y, z)',
+        missing_args2 = 'All arguments must be filled out!',
+        no_access = 'No access to this command',
+        company_too_poor = 'Your employer is broke',
+        item_not_exist = 'Item does not exist',
+        too_heavy = 'Inventory too full',
+        location_not_exist = 'Location does not exist',
+        duplicate_license = '[QBCORE] - Duplicate Rockstar License Found',
+        no_valid_license = '[QBCORE] - No Valid Rockstar License Found',
+        not_whitelisted = '[QBCORE] - You\'re not whitelisted for this server',
+        server_already_open = 'The server is already open',
+        server_already_closed = 'The server is already closed',
+        no_permission = 'You don\'t have permissions for this..',
+        no_waypoint = 'No Waypoint Set.',
+        tp_error = 'Error While Teleporting.',
+        ban_table_not_found = '[QBCORE] - Unable to find the bans table in the database. Please ensure you have imported the SQL file correctly.',
+        connecting_database_error = '[QBCORE] - An error occurred while connecting to the database. Ensure that the SQL server is running and that the details in the server.cfg file are correct.',
         connecting_database_timeout = '[QBCORE] - The database connection has timed out. Ensure that the SQL server is running and that the details in the server.cfg file are correct.',
     },
     success = {
@@ -118,7 +118,7 @@ local Translations = {
         me = {
             help = 'Show local message',
             params = {
-                message = { name = 'message', help = 'Message to send' }
+                message = { name = 'message', help = 'Message to send' },
             },
         },
     },
@@ -126,7 +126,7 @@ local Translations = {
 
 Lang = Lang or Locale:new({
     phrases = Translations,
-    warnOnMissing = true
+    warnOnMissing = true,
 })
 
 return Lang

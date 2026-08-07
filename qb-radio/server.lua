@@ -5,7 +5,9 @@ local function dumpChannels(source)
 end
 
 RegisterServerEvent('qb-radio:server:JoinVoiceChannel', function(source, channel)
-    if source:IsInVoiceChannel(channel) then return end
+    if source:IsInVoiceChannel(channel) then
+        return
+    end
     dumpChannels(source)
     print('--- BEFORE JOIN ----')
     source:JoinVoiceChannel(channel)
@@ -14,7 +16,9 @@ RegisterServerEvent('qb-radio:server:JoinVoiceChannel', function(source, channel
 end)
 
 RegisterServerEvent('qb-radio:server:LeaveVoiceChannel', function(source, channel)
-    if not source:IsInVoiceChannel(channel) then return end
+    if not source:IsInVoiceChannel(channel) then
+        return
+    end
     dumpChannels(source)
     print('--- BEFORE LEAVE ----')
     source:LeaveVoiceChannel(channel)
@@ -23,7 +27,9 @@ RegisterServerEvent('qb-radio:server:LeaveVoiceChannel', function(source, channe
 end)
 
 RegisterCallback('JoinVoiceChannel', function(source, channel)
-    if source:IsInVoiceChannel(channel) then return false end
+    if source:IsInVoiceChannel(channel) then
+        return false
+    end
     dumpChannels(source)
     print('--- BEFORE JOIN ----')
     source:JoinVoiceChannel(channel)
@@ -33,7 +39,9 @@ RegisterCallback('JoinVoiceChannel', function(source, channel)
 end)
 
 RegisterCallback('LeaveVoiceChannel', function(source, channel)
-    if not source:IsInVoiceChannel(channel) then return false end
+    if not source:IsInVoiceChannel(channel) then
+        return false
+    end
     dumpChannels(source)
     print('--- BEFORE LEAVE ----')
     source:LeaveVoiceChannel(channel)

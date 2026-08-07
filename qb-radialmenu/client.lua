@@ -26,8 +26,12 @@ local function deepcopy(orig)
                     copy[deepcopy(orig_key)] = deepcopy(orig_value)
                 end
             end
-            for i = 1, #toRemove do table.remove(copy, i) end
-            if copy and next(copy) then setmetatable(copy, deepcopy(getmetatable(orig))) end
+            for i = 1, #toRemove do
+                table.remove(copy, i)
+            end
+            if copy and next(copy) then
+                setmetatable(copy, deepcopy(getmetatable(orig)))
+            end
         end
     elseif orig_type ~= 'function' then
         copy = orig
@@ -39,7 +43,9 @@ local function selectOption(t, t2)
     for _, v in pairs(t) do
         if v.items then
             local found, hasAction, val = selectOption(v.items, t2)
-            if found then return true, hasAction, val end
+            if found then
+                return true, hasAction, val
+            end
         else
             if v.id == t2.id and ((v.event and v.event == t2.event) or v.action) and (not v.canOpen or v.canOpen()) then
                 return true, v
@@ -62,12 +68,14 @@ end
 
 local function SetupJobMenu()
     local JobInteractionCheck = PlayerData.job.name
-    if PlayerData.job.type == 'leo' then JobInteractionCheck = 'police' end
+    if PlayerData.job.type == 'leo' then
+        JobInteractionCheck = 'police'
+    end
     local JobMenu = {
         id = 'jobinteractions',
         title = 'Work',
         icon = 'briefcase',
-        items = {}
+        items = {},
     }
     if Config.JobInteractions[JobInteractionCheck] and next(Config.JobInteractions[JobInteractionCheck]) then
         JobMenu.items = Config.JobInteractions[JobInteractionCheck]
@@ -87,7 +95,7 @@ local function SetupVehicleMenu()
         id = 'vehicle',
         title = 'Vehicle',
         icon = 'car',
-        items = {}
+        items = {},
     }
 
     -- local vehicle = GetVehiclePedIsIn(GetPlayerPawn())
@@ -176,23 +184,31 @@ local function SetupRadialMenu()
 end
 
 local function openRadial()
-    if not my_webui then return end
-    if inRadialMenu then return end
+    if not my_webui then
+        return
+    end
+    if inRadialMenu then
+        return
+    end
     SetupRadialMenu()
     my_webui:SendEvent('ui', {
         radial = true,
-        items = FinalMenuItems
+        items = FinalMenuItems,
     })
     inRadialMenu = true
     my_webui:SetInputMode(1) -- fire key released
 end
 
 local function closeRadial()
-    if not my_webui then return end
-    if not inRadialMenu then return end
+    if not my_webui then
+        return
+    end
+    if not inRadialMenu then
+        return
+    end
     my_webui:SendEvent('ui', {
         radial = false,
-        items = FinalMenuItems
+        items = FinalMenuItems,
     })
     inRadialMenu = false
     my_webui:SetInputMode(0)
@@ -239,9 +255,13 @@ end)
 -- Inputs
 
 Input.BindKey(Config.Keybind, function()
-    if not isLoggedIn then return end
+    if not isLoggedIn then
+        return
+    end
 
-    if HPlayer:GetInputMode() == 1 and not inRadialMenu then return end
+    if HPlayer:GetInputMode() == 1 and not inRadialMenu then
+        return
+    end
 
     if inRadialMenu then
         closeRadial()
