@@ -12,7 +12,16 @@ export interface SGItemActivateDetail {
 }
 
 export interface SGDismissDetail {
-    reason: "dismiss-button";
+    reason: "dismiss-button" | "timeout";
+}
+
+export interface SGCloseDetail {
+    reason: "close-button" | "escape" | "scrim";
+}
+
+export interface SGSelectionChangeDetail {
+    value: string;
+    previousValue: string;
 }
 
 export interface SGValueDetail {
@@ -77,6 +86,28 @@ export class SGSlider extends HTMLElement {
     focus(options?: FocusOptions): void;
 }
 
+export class SGTabs extends HTMLElement {
+    value: string;
+}
+
+export class SGSegmented extends HTMLElement {
+    value: string;
+}
+
+export class SGModal extends HTMLElement {
+    open: boolean;
+}
+
+export class SGDrawer extends HTMLElement {
+    open: boolean;
+}
+
+export class SGTooltip extends HTMLElement {}
+
+export class SGToast extends HTMLElement {
+    show(): void;
+}
+
 export class SGStat extends HTMLElement {}
 export class SGItemSlot extends HTMLElement {}
 export class SGAlert extends HTMLElement {}
@@ -92,16 +123,22 @@ declare global {
         "sg-button": SGButton;
         "sg-card": HTMLElement;
         "sg-divider": HTMLElement;
+        "sg-drawer": SGDrawer;
         "sg-icon": SGIcon;
         "sg-icon-button": SGIconButton;
         "sg-input": SGInput;
         "sg-item-slot": SGItemSlot;
         "sg-keybind": SGKeybind;
+        "sg-modal": SGModal;
         "sg-panel": HTMLElement;
+        "sg-segmented": SGSegmented;
         "sg-select": SGSelect;
         "sg-slider": SGSlider;
         "sg-stat": SGStat;
+        "sg-tabs": SGTabs;
+        "sg-toast": SGToast;
         "sg-toggle": SGToggle;
+        "sg-tooltip": SGTooltip;
     }
 
     interface HTMLElementEventMap {
@@ -109,7 +146,8 @@ declare global {
         "sg-item-activate": CustomEvent<SGItemActivateDetail>;
         "sg-dismiss": CustomEvent<SGDismissDetail>;
         "sg-input": CustomEvent<SGValueDetail | SGSelectDetail>;
-        "sg-change": CustomEvent<SGValueDetail | SGSelectDetail | SGToggleChangeDetail>;
+        "sg-change": CustomEvent<SGValueDetail | SGSelectDetail | SGToggleChangeDetail | SGSelectionChangeDetail>;
+        "sg-close": CustomEvent<SGCloseDetail>;
     }
 
     interface Window {

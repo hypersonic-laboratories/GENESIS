@@ -18,8 +18,14 @@ test("manifest exposes a framework-neutral zero-dependency contract", async () =
     assert.ok(manifest.components.includes("sg-select"));
     assert.ok(manifest.components.includes("sg-toggle"));
     assert.ok(manifest.components.includes("sg-slider"));
+    assert.ok(manifest.components.includes("sg-tabs"));
+    assert.ok(manifest.components.includes("sg-segmented"));
+    assert.ok(manifest.components.includes("sg-modal"));
+    assert.ok(manifest.components.includes("sg-drawer"));
+    assert.ok(manifest.components.includes("sg-tooltip"));
+    assert.ok(manifest.components.includes("sg-toast"));
     assert.ok(manifest.components.includes("sg-item-slot"));
-    assert.equal(manifest.components.length, 15);
+    assert.equal(manifest.components.length, 21);
 });
 
 test("minimal consumer loads only local distribution files", async () => {
@@ -48,12 +54,13 @@ test("catalogue exposes the complete public registry and truthful integration to
     assert.doesNotMatch(html, /Runtime ready|Stable contract/);
 
     const publicRecords = script.match(/id:\s*"sg-[a-z-]+"/g) || [];
-    assert.equal(publicRecords.length, 15);
+    assert.equal(publicRecords.length, 21);
     assert.match(script, /#?components\/sg-button/);
     assert.match(script, /execCommand\("copy"\)/);
     assert.match(script, /sg-item-activate/);
     assert.match(script, /sg-input/);
     assert.match(script, /sg-change/);
+    assert.match(script, /sg-close/);
     assert.match(script, /dataset\.eventExpanded/);
 });
 
@@ -92,6 +99,12 @@ test("HELIX harness is emitted as a package-local classic-script fixture", async
     assert.match(html, /<sg-toggle/);
     assert.match(html, /<sg-slider/);
     assert.match(html, /<sg-icon-button/);
+    assert.match(html, /<sg-tabs/);
+    assert.match(html, /<sg-segmented/);
+    assert.match(html, /<sg-modal/);
+    assert.match(html, /<sg-drawer/);
+    assert.match(html, /<sg-tooltip/);
+    assert.match(html, /<sg-toast/);
     assert.match(script, /addEventListener\("sg-input"/);
     assert.match(script, /addEventListener\("sg-change"/);
 });
@@ -112,4 +125,26 @@ test("production controls preserve native Chromium behavior and framework-neutra
     assert.match(controls, /"sg-change"/);
     assert.match(iconButton, /"sg-activate"/);
     assert.doesNotMatch(controls, /ElementInternals|formAssociated/);
+});
+
+test("navigation and overlays preserve keyboard and lifecycle contracts", async () => {
+    const tabs = await readFile(path.join(root, "src", "elements", "tabs.ts"), "utf8");
+    const segmented = await readFile(path.join(root, "src", "elements", "segmented.ts"), "utf8");
+    const modal = await readFile(path.join(root, "src", "elements", "modal.ts"), "utf8");
+    const drawer = await readFile(path.join(root, "src", "elements", "drawer.ts"), "utf8");
+    const tooltip = await readFile(path.join(root, "src", "elements", "tooltip.ts"), "utf8");
+    const toast = await readFile(path.join(root, "src", "elements", "toast.ts"), "utf8");
+    const focus = await readFile(path.join(root, "src", "internal", "focus.ts"), "utf8");
+    const styles = await readFile(path.join(root, "src", "styles", "components.css"), "utf8");
+
+    assert.match(tabs, /role", "tablist"/);
+    assert.match(tabs, /"ArrowLeft"/);
+    assert.match(segmented, /role", "radiogroup"/);
+    assert.match(modal, /"sg-close"/);
+    assert.match(drawer, /"sg-close"/);
+    assert.match(focus, /trapTab/);
+    assert.match(focus, /restoreFocus/);
+    assert.match(tooltip, /aria-describedby/);
+    assert.match(toast, /"timeout"/);
+    assert.doesNotMatch(styles, /backdrop-filter:\s*(?!none)/);
 });

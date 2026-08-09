@@ -14,16 +14,22 @@ const components = [
     "sg-button",
     "sg-card",
     "sg-divider",
+    "sg-drawer",
     "sg-icon",
     "sg-icon-button",
     "sg-input",
     "sg-item-slot",
     "sg-keybind",
+    "sg-modal",
     "sg-panel",
+    "sg-segmented",
     "sg-select",
     "sg-slider",
     "sg-stat",
+    "sg-tabs",
+    "sg-toast",
     "sg-toggle",
+    "sg-tooltip",
 ];
 
 await rm(dist, { recursive: true, force: true });

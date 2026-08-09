@@ -105,6 +105,8 @@ Shadow Glass uses a hybrid of tonal layering, fine borders, soft dark shadows, a
 
 The shadow vocabulary is flat at rest and overlay when interruption requires lift. The implemented overlay shadow is `0 18px 64px rgb(0 0 0 / 52%)`. The cyan focus ring uses a dark separation ring followed by a two-pixel cyan ring; the optional state glow is `0 0 24px rgb(0 212 255 / 22%)`. Generated reference-board values remain directional rather than production proof.
 
+Transient surfaces follow a fixed layer scale: general overlays `1200`, modals and drawers `1300`, popovers `1400`, toast regions `1500`, and tooltips `1600`. Consumers must not improvise competing local layer values inside the same WebUI document.
+
 Backdrop blur is reserved for large transient overlays, drawers, and modals. The working range is `16–24px` with restrained saturation and texture. Persistent HUD surfaces use opaque or near-opaque blue-black fills so idle compositing cost remains bounded.
 
 **The Flat-at-Rest Rule.** Ordinary cards rest quietly. Hover may lift the border and shadow; focus may add a cyan ring; selection may add tint and a state marker.

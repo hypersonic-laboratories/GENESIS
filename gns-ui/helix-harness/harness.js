@@ -9,6 +9,11 @@ function describeEvent(event) {
 
 function setVisible(visible) {
     document.body.classList.toggle("is-visible", visible);
+    if (!visible) {
+        document.querySelectorAll("sg-modal[open], sg-drawer[open]").forEach((overlay) => {
+            overlay.open = false;
+        });
+    }
 }
 
 function requestClose() {
@@ -26,7 +31,8 @@ window.addEventListener("message", (event) => {
 });
 
 window.addEventListener("keydown", (event) => {
-    if (event.key !== "Escape") return;
+    if (event.key !== "Escape" || event.defaultPrevented) return;
+    if (document.querySelector("sg-modal[open], sg-drawer[open]")) return;
     event.preventDefault();
     requestClose();
 });
@@ -53,6 +59,14 @@ if (!window.customElements) {
             output.textContent = describeEvent(event);
         });
 
+        document.addEventListener("sg-close", (event) => {
+            output.textContent = describeEvent(event);
+        });
+
+        document.addEventListener("sg-dismiss", (event) => {
+            output.textContent = describeEvent(event);
+        });
+
         document.querySelector("#emit-test").addEventListener("sg-activate", (event) => {
             output.textContent = `sg-activate delivered - source: ${event.detail.source}`;
         });
@@ -69,6 +83,22 @@ if (!window.customElements) {
 
         document.querySelector("#settings-action").addEventListener("sg-activate", (event) => {
             output.textContent = describeEvent(event);
+        });
+
+        document.querySelector("#open-modal").addEventListener("sg-activate", () => {
+            document.querySelector("#harness-modal").open = true;
+        });
+
+        document.querySelector("#open-drawer").addEventListener("sg-activate", () => {
+            document.querySelector("#harness-drawer").open = true;
+        });
+
+        document.querySelector("#show-toast").addEventListener("sg-activate", () => {
+            document.querySelector("#harness-toast").show();
+        });
+
+        document.querySelector("#modal-done").addEventListener("sg-activate", () => {
+            document.querySelector("#harness-modal").open = false;
         });
     });
 }

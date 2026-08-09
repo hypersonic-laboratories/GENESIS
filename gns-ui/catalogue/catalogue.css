@@ -625,6 +625,21 @@ kbd {
     gap: 12px;
 }
 
+.tooltip-stage {
+    display: grid;
+    min-height: 150px;
+    place-items: center;
+}
+
+.toast-stage {
+    justify-items: center;
+}
+
+.toast-stage .sg-toast-stack {
+    position: static;
+    width: min(100%, 380px);
+}
+
 .stage-row {
     display: flex;
     flex-wrap: wrap;

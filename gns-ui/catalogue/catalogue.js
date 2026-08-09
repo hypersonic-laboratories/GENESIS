@@ -189,6 +189,161 @@
             markup: sliderMarkup
         },
         {
+            id: "sg-tabs",
+            name: "Tabs",
+            icon: "layers",
+            category: "Navigation",
+            summary: "A native-button tablist with caller-owned panels, automatic keyboard selection, and one state-change event.",
+            description: "Section navigation primitive",
+            keywords: "tabs tablist panels navigation orientation keyboard value sg-change",
+            stageNote: "Arrow keys move and select; the consuming script owns panel content",
+            defaults: { value: "inventory", orientation: "horizontal" },
+            controls: [
+                { key: "value", label: "Selected tab", type: "choice", options: [["overview", "Overview"], ["inventory", "Inventory"], ["settings", "Settings"]] },
+                { key: "orientation", label: "Orientation", type: "choice", options: [["horizontal", "Horizontal"], ["vertical", "Vertical"]] }
+            ],
+            attributes: [
+                ["value", "string", "Selected caller-owned tab value."],
+                ["orientation", "horizontal | vertical", "Changes layout and the relevant arrow-key axis."],
+                ["data-sg-tab / value", "button hooks", "Marks each native tab button and its stable value."],
+                ["data-sg-panel / value", "panel hooks", "Associates caller-owned content with the matching tab value."]
+            ],
+            events: [["sg-change", "{ value: string, previousValue: string }", "Bubbles when pointer or keyboard interaction selects another tab."]],
+            a11y: ["Uses native buttons with tab, tablist, and tabpanel semantics.", "Arrow keys, Home, and End move focus and selection without trapping Tab navigation.", "Disabled tabs are skipped and every panel is programmatically associated with its tab."],
+            render: renderTabs,
+            markup: tabsMarkup
+        },
+        {
+            id: "sg-segmented",
+            name: "Segmented control",
+            icon: "columns-3",
+            category: "Navigation",
+            summary: "A compact single-choice control for view, time-range, and mode switches that take effect immediately.",
+            description: "Immediate mode primitive",
+            keywords: "segmented radio group view mode size full width disabled keyboard sg-change",
+            stageNote: "Use for closely related modes, not unrelated actions",
+            defaults: { value: "grid", size: "md", fullWidth: false, disabled: false },
+            controls: [
+                { key: "value", label: "View mode", type: "choice", options: [["list", "List"], ["grid", "Grid"], ["tiles", "Tiles"]] },
+                { key: "size", label: "Size", type: "choice", options: [["sm", "Small"], ["md", "Medium"], ["lg", "Large"]] },
+                { key: "fullWidth", label: "Full width", type: "boolean" },
+                { key: "disabled", label: "Disabled", type: "boolean" }
+            ],
+            attributes: [
+                ["value", "string", "Selected caller-owned option value."],
+                ["label", "string", "Accessible name for the option group."],
+                ["size", "sm | md | lg", "Shared control-height scale."],
+                ["full-width / disabled", "boolean", "Equal-width layout and explicit unavailable state."]
+            ],
+            events: [["sg-change", "{ value: string, previousValue: string }", "Bubbles when the selected mode changes."]],
+            a11y: ["Uses a named radiogroup with native buttons and programmatic checked state.", "All arrow keys, Home, and End move focus and selection.", "The control communicates selection through position, fill, and aria-checked rather than color alone."],
+            render: renderSegmented,
+            markup: segmentedMarkup
+        },
+        {
+            id: "sg-modal",
+            name: "Modal",
+            icon: "square-stack",
+            category: "Overlays",
+            summary: "A protected dialog shell with cancelable dismissal, focus trapping, Escape handling, and focus restoration.",
+            description: "Blocking task shell",
+            keywords: "modal dialog overlay open dismissible size close escape focus trap scrim sg-close",
+            stageNote: "Open the specimen, then test Tab, Shift+Tab, Escape, and restored focus",
+            defaults: { size: "md", dismissible: true },
+            controls: [
+                { key: "size", label: "Size", type: "choice", options: [["sm", "Small"], ["md", "Medium"], ["lg", "Large"]] },
+                { key: "dismissible", label: "Dismissible", type: "boolean" }
+            ],
+            attributes: [
+                ["open", "boolean", "Displays the dialog and activates protected focus behavior."],
+                ["label", "string", "Visible dialog title and accessible name."],
+                ["size", "sm | md | lg", "Constrains the dialog surface width."],
+                ["dismissible", "boolean", "Enables close button, Escape, and scrim dismissal."]
+            ],
+            events: [["sg-close", "{ reason: 'close-button' | 'escape' | 'scrim' }", "Cancelable. Default behavior removes open and restores prior focus."]],
+            a11y: ["Uses role=dialog and aria-modal with a visible programmatic title.", "Tab remains inside the open dialog and focus returns to the opener after closure.", "Non-dismissible dialogs require an explicit caller-owned resolution action inside their content."],
+            render: renderModal,
+            markup: modalMarkup
+        },
+        {
+            id: "sg-drawer",
+            name: "Drawer",
+            icon: "panel-right",
+            category: "Overlays",
+            summary: "A left or right secondary-workflow shell with cancelable dismissal and the same focus guarantees as a modal.",
+            description: "Secondary workflow shell",
+            keywords: "drawer panel overlay open side size dismissible close focus escape scrim sg-close",
+            stageNote: "Drawers preserve the underlying screen while containing one secondary workflow",
+            defaults: { side: "right", size: "md", dismissible: true },
+            controls: [
+                { key: "side", label: "Side", type: "choice", options: [["right", "Right"], ["left", "Left"]] },
+                { key: "size", label: "Size", type: "choice", options: [["sm", "Small"], ["md", "Medium"], ["lg", "Large"]] },
+                { key: "dismissible", label: "Dismissible", type: "boolean" }
+            ],
+            attributes: [
+                ["open", "boolean", "Displays the drawer and activates protected focus behavior."],
+                ["label", "string", "Visible drawer title and accessible name."],
+                ["side", "left | right", "Physical edge from which the drawer enters."],
+                ["size", "sm | md | lg", "Constrains drawer width."],
+                ["dismissible", "boolean", "Enables close button, Escape, and scrim dismissal."]
+            ],
+            events: [["sg-close", "{ reason: 'close-button' | 'escape' | 'scrim' }", "Cancelable. Default behavior removes open and restores prior focus."]],
+            a11y: ["Uses dialog semantics because the open drawer temporarily owns keyboard focus.", "Tab and Shift+Tab remain inside until the workflow closes.", "The side changes placement only; reading and focus order remain logical."],
+            render: renderDrawer,
+            markup: drawerMarkup
+        },
+        {
+            id: "sg-tooltip",
+            name: "Tooltip",
+            icon: "message-square",
+            category: "Overlays",
+            summary: "A concise hover-and-focus clarification attached to a caller-owned interactive trigger.",
+            description: "Control clarification primitive",
+            keywords: "tooltip hover focus content placement top bottom left right disabled aria describedby",
+            stageNote: "Hover or focus the icon; tooltips never contain actions",
+            defaults: { placement: "top", disabled: false },
+            controls: [
+                { key: "placement", label: "Placement", type: "choice", options: [["top", "Top"], ["right", "Right"], ["bottom", "Bottom"], ["left", "Left"]] },
+                { key: "disabled", label: "Disabled", type: "boolean" }
+            ],
+            attributes: [
+                ["content", "string", "Short clarification associated with the trigger through aria-describedby."],
+                ["placement", "top | right | bottom | left", "Preferred position relative to the trigger."],
+                ["disabled", "boolean", "Suppresses display and the described-by relationship."]
+            ],
+            events: [],
+            a11y: ["Appears for both hover and keyboard focus.", "The content supplements rather than replaces the trigger's accessible name.", "Structured information or actions belong in a popover or drawer, never inside a tooltip."],
+            render: renderTooltip,
+            markup: tooltipMarkup
+        },
+        {
+            id: "sg-toast",
+            name: "Toast",
+            icon: "bell",
+            category: "Feedback",
+            summary: "Compact transient feedback with semantic tone, optional timeout, pause-on-interaction, and cancelable dismissal.",
+            description: "Transient feedback primitive",
+            keywords: "toast notification transient duration timeout dismissible urgent tone stack sg-dismiss",
+            stageNote: "Dismiss the specimen or use Show toast to replay it",
+            defaults: { tone: "success", duration: "0", dismissible: true, urgent: false },
+            controls: [
+                { key: "tone", label: "Tone", type: "choice", options: [["info", "Information"], ["success", "Success"], ["warning", "Warning"], ["danger", "Danger"]] },
+                { key: "duration", label: "Duration", type: "choice", options: [["0", "Persistent demo"], ["5000", "5 seconds"]] },
+                { key: "dismissible", label: "Dismissible", type: "boolean" },
+                { key: "urgent", label: "Urgent announcement", type: "boolean" }
+            ],
+            attributes: [
+                ["tone", "info | success | warning | danger", "Semantic visual treatment."],
+                ["title", "string", "Optional heading; a tone-aware default is supplied."],
+                ["duration", "milliseconds", "Positive values auto-dismiss; zero leaves lifecycle to the script."],
+                ["dismissible / urgent", "boolean", "Adds manual dismissal and opt-in role=alert announcement."]
+            ],
+            events: [["sg-dismiss", "{ reason: 'dismiss-button' | 'timeout' }", "Cancelable. Default behavior hides the toast."]],
+            a11y: ["Defaults to role=status; urgent is reserved for genuinely time-sensitive feedback.", "Hover or keyboard focus pauses timed dismissal so the message remains readable.", "Consumer-owned .sg-toast-stack regions prevent multiple messages from overlapping."],
+            render: renderToast,
+            markup: toastMarkup
+        },
+        {
             id: "sg-stat",
             name: "Status readout",
             icon: "heart",
@@ -523,6 +678,7 @@
         document.querySelector(".inspector-tabs").addEventListener("keydown", moveTabFocus);
 
         nodes.controls.addEventListener("click", handleControlClick);
+        nodes.stage.addEventListener("click", handleStageAction);
         nodes.code.addEventListener("click", function (event) {
             var button = event.target.closest("[data-copy-code]");
             if (button) copyText(current.markup(model), "Markup copied");
@@ -533,7 +689,7 @@
         document.getElementById("event-clear").addEventListener("click", clearEventLog);
         document.getElementById("event-copy").addEventListener("click", copyEventLog);
 
-        ["sg-activate", "sg-input", "sg-change", "sg-item-activate", "sg-dismiss"].forEach(function (eventName) {
+        ["sg-activate", "sg-input", "sg-change", "sg-item-activate", "sg-dismiss", "sg-close"].forEach(function (eventName) {
             document.addEventListener(eventName, recordComponentEvent);
         });
 
@@ -710,6 +866,28 @@
         normalizeModel(key);
         renderStage(false);
         renderInspector();
+    }
+
+    function handleStageAction(event) {
+        var opener = event.target.closest("[data-demo-open]");
+        if (opener) {
+            var targetName = opener.getAttribute("data-demo-open");
+            var overlay = nodes.stage.querySelector("sg-" + targetName);
+            if (overlay) overlay.open = true;
+            return;
+        }
+        var closer = event.target.closest("[data-demo-close]");
+        if (closer) {
+            var closeName = closer.getAttribute("data-demo-close");
+            var closeTarget = nodes.stage.querySelector("sg-" + closeName);
+            if (closeTarget) closeTarget.open = false;
+            return;
+        }
+        var showToast = event.target.closest("[data-demo-show-toast]");
+        if (showToast) {
+            var toast = nodes.stage.querySelector("sg-toast");
+            if (toast && typeof toast.show === "function") toast.show();
+        }
     }
 
     function normalizeModel(changedKey) {
@@ -984,6 +1162,96 @@
         if (state.showValue) attributes.push("show-value");
         if (state.disabled) attributes.push("disabled");
         return "<sg-slider " + attributes.join(" ") + "></sg-slider>";
+    }
+
+    function renderTabs(state) {
+        return "<div class=\"stage-stack\">" + tabsMarkup(state) + "<p class=\"stage-caption\">Tab content remains ordinary caller markup and can contain any Genesis component.</p></div>";
+    }
+
+    function tabsMarkup(state) {
+        return "<sg-tabs value=\"" + state.value + "\" orientation=\"" + state.orientation + "\">\n" +
+            "  <button data-sg-tab value=\"overview\">Overview</button>\n" +
+            "  <button data-sg-tab value=\"inventory\">Inventory</button>\n" +
+            "  <button data-sg-tab value=\"settings\">Settings</button>\n" +
+            "  <section data-sg-panel value=\"overview\">Identity and duty summary.</section>\n" +
+            "  <section data-sg-panel value=\"inventory\">Equipment and carried items.</section>\n" +
+            "  <section data-sg-panel value=\"settings\">Local interface preferences.</section>\n" +
+            "</sg-tabs>";
+    }
+
+    function renderSegmented(state) {
+        return "<div class=\"stage-stack\">" + segmentedMarkup(state) + "<p class=\"stage-caption\">One selected mode is communicated through position, fill, and programmatic state.</p></div>";
+    }
+
+    function segmentedMarkup(state) {
+        var attributes = ["label=\"Inventory view\"", "value=\"" + state.value + "\"", "size=\"" + state.size + "\""];
+        if (state.fullWidth) attributes.push("full-width");
+        if (state.disabled) attributes.push("disabled");
+        return "<sg-segmented " + attributes.join(" ") + ">\n" +
+            "  <button value=\"list\">List</button>\n" +
+            "  <button value=\"grid\">Grid</button>\n" +
+            "  <button value=\"tiles\">Tiles</button>\n" +
+            "</sg-segmented>";
+    }
+
+    function renderModal(state) {
+        return "<div class=\"stage-stack\"><sg-button variant=\"primary\" data-demo-open=\"modal\">Open modal</sg-button>" + modalMarkup(state) + "<p class=\"stage-caption\">The shell opens at document level and returns focus to this launcher.</p></div>";
+    }
+
+    function modalMarkup(state) {
+        var attributes = ["label=\"Confirm vehicle transfer\"", "size=\"" + state.size + "\""];
+        if (state.dismissible) attributes.push("dismissible");
+        return "<sg-modal " + attributes.join(" ") + ">\n" +
+            "  <p>Transfer this vehicle to Jordan Carter? The receiving player must have an available garage slot.</p>\n" +
+            "  <div data-sg-actions>\n" +
+            "    <sg-button variant=\"ghost\" data-demo-close=\"modal\">Cancel</sg-button>\n" +
+            "    <sg-button variant=\"primary\">Confirm transfer</sg-button>\n" +
+            "  </div>\n" +
+            "</sg-modal>";
+    }
+
+    function renderDrawer(state) {
+        return "<div class=\"stage-stack\"><sg-button data-demo-open=\"drawer\">Open drawer</sg-button>" + drawerMarkup(state) + "<p class=\"stage-caption\">A drawer supports one secondary workflow without replacing the underlying screen.</p></div>";
+    }
+
+    function drawerMarkup(state) {
+        var attributes = ["label=\"Player details\"", "side=\"" + state.side + "\"", "size=\"" + state.size + "\""];
+        if (state.dismissible) attributes.push("dismissible");
+        return "<sg-drawer " + attributes.join(" ") + ">\n" +
+            "  <p class=\"sg-overline\">Citizen record</p>\n" +
+            "  <h3>Jordan Carter</h3>\n" +
+            "  <p>ID 2501 · Los Santos · Civilian</p>\n" +
+            "  <div data-sg-actions><sg-button variant=\"ghost\" data-demo-close=\"drawer\">Done</sg-button></div>\n" +
+            "</sg-drawer>";
+    }
+
+    function renderTooltip(state) {
+        return "<div class=\"tooltip-stage\">" + tooltipMarkup(state) + "</div>";
+    }
+
+    function tooltipMarkup(state) {
+        var attributes = ["content=\"Open audio settings\"", "placement=\"" + state.placement + "\""];
+        if (state.disabled) attributes.push("disabled");
+        return "<sg-tooltip " + attributes.join(" ") + ">\n" +
+            "  <sg-icon-button icon=\"settings\" label=\"Audio settings\"></sg-icon-button>\n" +
+            "</sg-tooltip>";
+    }
+
+    function renderToast(state) {
+        return "<div class=\"stage-stack toast-stage\"><sg-button size=\"sm\" data-demo-show-toast>Show toast</sg-button><div class=\"sg-toast-stack\">" + toastMarkup(state) + "</div></div>";
+    }
+
+    function toastMarkup(state) {
+        var attributes = ["tone=\"" + state.tone + "\"", "duration=\"" + state.duration + "\""];
+        if (state.dismissible) attributes.push("dismissible");
+        if (state.urgent) attributes.push("urgent");
+        var messages = {
+            info: "A new duty assignment is available.",
+            success: "Vehicle transfer completed.",
+            warning: "Inventory capacity is nearly full.",
+            danger: "Unable to reach the server. Try again."
+        };
+        return "<sg-toast " + attributes.join(" ") + ">" + messages[state.tone] + "</sg-toast>";
     }
 
     function renderStat(state) {

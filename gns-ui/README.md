@@ -12,6 +12,9 @@ Implemented public elements:
 - `sg-icon-button`
 - `sg-input` and `sg-select`
 - `sg-toggle` and `sg-slider`
+- `sg-tabs` and `sg-segmented`
+- `sg-modal`, `sg-drawer`, and `sg-tooltip`
+- `sg-toast`
 - `sg-panel` and `sg-card`
 - `sg-badge`
 - `sg-icon`

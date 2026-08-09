@@ -35,6 +35,23 @@
     font-size: 13px;
 }
 
+[data-sg-density="compact"] .sg-tabs__list button {
+    min-height: var(--sg-control-height-sm);
+    padding: 0 10px;
+    font-size: 12px;
+}
+
+[data-sg-density="compact"] sg-segmented {
+    min-height: var(--sg-control-height-sm);
+}
+
+[data-sg-density="compact"] .sg-modal__header,
+[data-sg-density="compact"] .sg-drawer__header,
+[data-sg-density="compact"] .sg-modal__body,
+[data-sg-density="compact"] .sg-drawer__body {
+    padding: 14px 16px;
+}
+
 [data-sg-effects="reduced"] {
     --sg-effects-blur: 0px;
     --sg-effects-glow-opacity: 0;

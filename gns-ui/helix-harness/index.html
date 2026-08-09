@@ -61,6 +61,26 @@
             gap: 12px;
         }
         .harness-actions { margin-top: 24px; }
+        .harness-structure {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 18px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--sg-color-border);
+        }
+        .harness-structure-actions {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        .harness-toast-region .sg-toast-stack {
+            position: static;
+            width: 100%;
+            margin-top: 16px;
+        }
         output {
             display: block;
             min-height: 38px;
@@ -74,6 +94,8 @@
         @media (max-width: 760px) {
             body { padding: 16px; }
             .harness-controls { grid-template-columns: 1fr; }
+            .harness-structure { grid-template-columns: 1fr; }
+            .harness-structure-actions { justify-content: flex-start; }
         }
     </style>
 </head>
@@ -105,6 +127,34 @@
                 <sg-icon-button id="settings-action" icon="settings" label="Open audio settings"></sg-icon-button>
             </div>
         </div>
+        <div class="harness-structure">
+            <sg-tabs id="harness-tabs" value="inventory">
+                <button data-sg-tab value="overview">Overview</button>
+                <button data-sg-tab value="inventory">Inventory</button>
+                <button data-sg-tab value="settings">Settings</button>
+                <section data-sg-panel value="overview">Identity and duty summary.</section>
+                <section data-sg-panel value="inventory">Equipment and carried items.</section>
+                <section data-sg-panel value="settings">Local interface preferences.</section>
+            </sg-tabs>
+            <div class="harness-structure-actions">
+                <sg-segmented id="view-mode" label="Inventory view" value="grid" size="sm">
+                    <button value="list">List</button>
+                    <button value="grid">Grid</button>
+                    <button value="tiles">Tiles</button>
+                </sg-segmented>
+                <sg-tooltip content="Open overlay tests" placement="top">
+                    <sg-icon-button id="overlay-help" icon="info" label="Overlay test help"></sg-icon-button>
+                </sg-tooltip>
+                <sg-button id="open-modal" size="sm">Modal</sg-button>
+                <sg-button id="open-drawer" size="sm">Drawer</sg-button>
+                <sg-button id="show-toast" size="sm">Toast</sg-button>
+            </div>
+        </div>
+        <div class="harness-toast-region">
+            <div class="sg-toast-stack">
+                <sg-toast id="harness-toast" tone="success" dismissible duration="0" hidden>Navigation and overlay events are available.</sg-toast>
+            </div>
+        </div>
         <div class="harness-actions">
             <sg-button id="emit-test" variant="primary">Emit test event</sg-button>
             <sg-button id="update-test">Update values</sg-button>
@@ -112,5 +162,16 @@
         </div>
         <output id="harness-output" aria-live="polite">Waiting for component registration. Press F10 or Escape to close.</output>
     </sg-panel>
+    <sg-modal id="harness-modal" label="Confirm overlay behavior" size="sm" dismissible>
+        <p>Tab focus should remain inside this dialog. Escape and the close button should restore focus to the launcher.</p>
+        <div data-sg-actions>
+            <sg-button id="modal-done" variant="primary">Test complete</sg-button>
+        </div>
+    </sg-modal>
+    <sg-drawer id="harness-drawer" label="Secondary workflow" side="right" size="sm" dismissible>
+        <p class="sg-overline">Runtime check</p>
+        <h3>Drawer content</h3>
+        <p>This shell should remain opaque, keyboard-contained, and independent of the game scene.</p>
+    </sg-drawer>
 </body>
 </html>
