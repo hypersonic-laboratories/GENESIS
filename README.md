@@ -78,6 +78,14 @@ stay first — everything else depends on it.
 2. Add a `package.json` declaring the files and their load order.
 3. Register the package name in the root `config.json`, after its dependencies.
 
+## Shared WebUI components
+
+`gns-ui/` is the source of truth for Genesis WebUI design and common component behavior. New Genesis interfaces should compose its framework-neutral `sg-*` custom elements instead of recreating resource-local buttons, fields, prompts, menus, alerts, and status controls.
+
+Each consuming resource keeps a generated package-local snapshot at `html/vendor/genesis-ui/`. This is not a fork and must not be edited manually. Maintainers register consumers in `gns-ui/consumers.json`, validate library changes in the catalogue and HELIX harness, then run `npm.cmd run sync` from `gns-ui/` to refresh every registered resource together.
+
+See [gns-ui/CONTRIBUTOR_GUIDE.md](gns-ui/CONTRIBUTOR_GUIDE.md) for adoption, [gns-ui/ARCHITECTURE.md](gns-ui/ARCHITECTURE.md) for ownership and synchronization, and [gns-ui/HANDOFF.md](gns-ui/HANDOFF.md) for current status.
+
 ## Formatting
 
 Lua is formatted with [StyLua](https://github.com/JohnnyMorganz/StyLua). Settings live in

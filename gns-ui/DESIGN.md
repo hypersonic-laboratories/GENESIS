@@ -15,6 +15,8 @@ Shadow Glass should feel like one coherent operating layer placed over a living 
 
 The system is designed for dense operational interfaces. Inventory, HUD, prompts, banking, jobs, and administration may assemble the same components differently, but they must share one grammar of typography, state, focus, depth, and feedback. Expression never obscures the task.
 
+`gns-ui` is the implementation source of truth for that grammar. Individual resources compose the system and may use documented customization hooks, but they do not fork component styling. Approved library changes propagate through the registered-consumer sync workflow after validation.
+
 **Key Characteristics:**
 
 - Blue-black layered surfaces rather than pure-black voids.
@@ -187,6 +189,7 @@ Radial menus, complete equipment composition, full profile screens, and applicat
 - **Do** provide every applicable state, including focus-visible, loading, empty, disabled, and error.
 - **Do** validate the default, compact, and reduced-effects profiles inside HELIX WebUI.
 - **Do** compose multiple components inside a small number of script-owned WebUI roots.
+- **Do** make shared visual and interaction improvements in `gns-ui`, then synchronize registered consumers.
 
 ### Don't:
 
@@ -197,3 +200,4 @@ Radial menus, complete equipment composition, full profile screens, and applicat
 - **Don't** bake HELIX, QBCore, banking, inventory, permission, or gameplay event names into public components.
 - **Don't** make custom styling necessary to obtain a finished Genesis interface.
 - **Don't** redistribute depicted logos, portraits, maps, item imagery, or other assets until their source and license are confirmed.
+- **Don't** edit generated `html/vendor/genesis-ui/` snapshots or copy component CSS into a resource-local fork.

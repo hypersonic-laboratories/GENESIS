@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "build": "node tooling/build.mjs",
-    "check": "tsc --noEmit && npm run build && node --test tests/*.test.mjs",
+    "sync": "npm run build && node tooling/sync-consumers.mjs",
+    "sync:check": "node tooling/sync-consumers.mjs --check",
+    "check": "tsc --noEmit && npm run build && npm run sync:check && node --test tests/*.test.mjs",
     "verify:dist": "node tooling/verify-dist.mjs"
   },
   "devDependencies": {

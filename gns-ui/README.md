@@ -2,6 +2,18 @@
 
 Framework-neutral WebUI components for Genesis HELIX packages. The library is maintained with TypeScript tooling, but consumers use only compiled local files, native HTML, and DOM events.
 
+## Source of truth
+
+`gns-ui/src/` is the single source of truth for the Genesis interface language. Consuming resources do not fork component code or maintain their own copies by hand. They compose the public `sg-*` elements, provide their own data and assets, and connect the elements' DOM events to resource-owned gameplay logic.
+
+HELIX resources receive a package-local snapshot at `html/vendor/genesis-ui/`. This is deliberate: it keeps every WebUI self-contained and prevents an untested library edit from changing every live screen immediately. When a library update has passed the catalogue, automated checks, and the in-game harness, maintainers run one sync command to refresh every package registered in `consumers.json`:
+
+```powershell
+npm.cmd run sync
+```
+
+The result is centralized design ownership with controlled propagation. A changed component, such as `sg-interaction-prompt`, reaches all registered consumers after sync. A resource that is not registered, or that intentionally overrides public tokens, will not necessarily match the new default.
+
 ## Current status
 
 `0.1.0-alpha.0` is the Phase 1 foundation and consumer proof. It establishes the canonical tokens, build and distribution contract, package-local HELIX harness, rendering profiles, and representative components. It is not yet the first stable component release.
@@ -40,12 +52,21 @@ npm.cmd install
 npm.cmd run check
 ```
 
-The build creates `dist/` and refreshes `helix-harness/vendor/genesis-ui/`. Both are generated outputs; source files remain canonical.
+The build creates `dist/` and refreshes the harness fixtures. Generated outputs are never edited directly; source files remain canonical.
+
+After approving a library change:
+
+```powershell
+npm.cmd run sync
+npm.cmd run sync:check
+```
+
+`sync` builds the current library and replaces `html/vendor/genesis-ui/` in every package named in `consumers.json`. `sync:check` is read-only and fails when any registered consumer differs from the current distribution. Review and test the generated consumer diffs before committing them.
 
 ## Five-minute consumer setup
 
-1. Run the library build or obtain a release archive.
-2. Copy `dist/` into the consuming package as `html/vendor/genesis-ui/`.
+1. Add the consuming package name to `gns-ui/consumers.json`.
+2. From `gns-ui/`, run `npm.cmd run sync`. Contributors who do not maintain the library may instead obtain an approved release snapshot from a maintainer.
 3. Load the local files from the package HTML. Use the classic HELIX bundle in the embedded runtime:
 
 ```html
@@ -73,6 +94,10 @@ The ESM bundle remains available for ordinary browsers and module-based tooling:
 ```
 
 `hEvent` and the event name above are examples owned by the consuming script. Genesis UI does not include a HELIX, QBCore, economy, permission, or gameplay bridge.
+
+Do not edit files inside `html/vendor/genesis-ui/`. Changes there are generated and will be replaced by the next sync. Component fixes belong in `gns-ui/src/`; resource-specific composition and bridge logic belong in the consuming package.
+
+See [CONTRIBUTOR_GUIDE.md](CONTRIBUTOR_GUIDE.md) for the complete adoption and upgrade workflow, [ARCHITECTURE.md](ARCHITECTURE.md) for the ownership boundary, and [HANDOFF.md](HANDOFF.md) for current project state.
 
 ## Catalogue workflow
 

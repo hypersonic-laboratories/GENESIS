@@ -128,6 +128,19 @@ GNS.Heists = {}
 4. Get an approval.
 5. Squash and merge.
 
+## WebUI contributions
+
+Genesis WebUIs use `gns-ui` as their component and design source of truth. Before adding resource-local UI CSS or behavior, check the component catalogue and [gns-ui/CONTRIBUTOR_GUIDE.md](gns-ui/CONTRIBUTOR_GUIDE.md).
+
+- Compose existing `sg-*` elements using plain HTML and JavaScript.
+- Keep screen composition, data, permissions, server validation, and HELIX event names in the consuming resource.
+- Make reusable visual or generic interaction changes in `gns-ui`, not in generated vendor files.
+- Register every consumer in `gns-ui/consumers.json`.
+- Never edit `<resource>/html/vendor/genesis-ui/` by hand; `npm.cmd run sync` replaces it.
+- For a library change, run `npm.cmd run check`, `npm.cmd run verify:dist`, and `npm.cmd run sync`, then test affected screens in HELIX.
+
+Library changes and their synchronized consumer snapshots belong in the same pull request unless the PR explicitly documents a staged migration. This keeps the canonical source and every declared consumer reviewably aligned.
+
 ## Commit messages
 
 Conventional Commits, with the package as the scope:
@@ -148,6 +161,8 @@ Types: `feat`, `fix`, `refactor`, `perf`, `docs`, `chore`.
 - [ ] Every edit inside a `qb-` package is fenced with a `GNS:` marker
 - [ ] New packages registered in the root `config.json`, after their dependencies
 - [ ] Events, exports, items and tables follow the prefixes above
+- [ ] WebUI uses `gns-ui` components where available
+- [ ] Genesis UI consumers are registered and `npm.cmd run sync:check` is clean
 - [ ] No credentials, tokens, API keys, or webhook URLs — placeholders only
 - [ ] No unrelated formatting churn
 
