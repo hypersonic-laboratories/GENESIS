@@ -39,16 +39,28 @@ end
 local function sortData(data, skipfirst)
     local header = data[1]
     local tempData = data
-    if skipfirst then table.remove(tempData, 1) end
-    table.sort(tempData, function(a, b) return a.header < b.header end)
-    if skipfirst then table.insert(tempData, 1, header) end
+    if skipfirst then
+        table.remove(tempData, 1)
+    end
+    table.sort(tempData, function(a, b)
+        return a.header < b.header
+    end)
+    if skipfirst then
+        table.insert(tempData, 1, header)
+    end
     return tempData
 end
 
 local function openMenu(data, sort, skipFirst)
-    if not data or not next(data) then return end
-    if not my_webui then return end
-    if sort then data = sortData(data, skipFirst) end
+    if not data or not next(data) then
+        return
+    end
+    if not my_webui then
+        return
+    end
+    if sort then
+        data = sortData(data, skipFirst)
+    end
     sendData = data
     my_webui:BringToFront()
     my_webui:SetInputMode(1)
@@ -57,7 +69,9 @@ end
 
 local function closeMenu()
     sendData = nil
-    if not my_webui then return end
+    if not my_webui then
+        return
+    end
     my_webui:SetInputMode(0)
     my_webui:SendEvent('closeMenu')
 end

@@ -15,8 +15,12 @@ end
 local function HasAccess()
     local playerData = exports['qb-core']:GetPlayerData()
     local job = playerData and playerData.job
-    if not job or not job.type or not Config.Roles[job.type] then return false end
-    if Config.RequireOnDuty and not job.onduty then return false end
+    if not job or not job.type or not Config.Roles[job.type] then
+        return false
+    end
+    if Config.RequireOnDuty and not job.onduty then
+        return false
+    end
     return true
 end
 
@@ -31,14 +35,18 @@ end
 -- ─────────────────────────── open / close ───────────────────────────────────
 
 local function CloseMDT()
-    if not isOpen then return end
+    if not isOpen then
+        return
+    end
     isOpen = false
     my_webui:SendEvent('mdt:close', {})
     my_webui:SetInputMode(0)
 end
 
 local function OpenMDT()
-    if isOpen then return end
+    if isOpen then
+        return
+    end
     if not HasAccess() then
         TriggerLocalClientEvent('QBCore:Notify', 'You are not on duty with an authorized department', 'error')
         return
@@ -60,7 +68,9 @@ local function ToggleMDT()
         CloseMDT()
     else
         -- Don't open over another focused UI (input mode 1 = a WebUI has focus).
-        if HPlayer:GetInputMode() == 1 then return end
+        if HPlayer:GetInputMode() == 1 then
+            return
+        end
         OpenMDT()
     end
 end
@@ -75,16 +85,24 @@ end, 'Released')
 local pttHeld = false
 
 Input.BindKey(Config.PttKey, function()
-    if pttHeld then return end
+    if pttHeld then
+        return
+    end
     -- Don't key up while typing in a WebUI (CapsLock is a text key too).
-    if HPlayer:GetInputMode() == 1 then return end
-    if not HasAccess() then return end
+    if HPlayer:GetInputMode() == 1 then
+        return
+    end
+    if not HasAccess() then
+        return
+    end
     pttHeld = true
     TriggerServerEvent('qb-mdt:server:ptt', true, false)
 end, 'Pressed')
 
 Input.BindKey(Config.PttKey, function()
-    if not pttHeld then return end
+    if not pttHeld then
+        return
+    end
     pttHeld = false
     TriggerServerEvent('qb-mdt:server:ptt', false, false)
 end, 'Released')
@@ -92,7 +110,9 @@ end, 'Released')
 -- Real mic activity (engine voice detection) animates the HUD waveform while
 -- keyed up — crew sees who is actually speaking, not just who holds the key.
 RegisterClientEvent('HEvent:VoiceStateChanged', function(isTalking)
-    if not pttHeld then return end
+    if not pttHeld then
+        return
+    end
     TriggerServerEvent('qb-mdt:server:ptt', true, isTalking and true or false)
 end)
 
@@ -142,7 +162,9 @@ local AllowedActions = {
 }
 
 my_webui:RegisterEventHandler('mdt:request', function(data)
-    if type(data) ~= 'table' or not AllowedActions[data.action] then return end
+    if type(data) ~= 'table' or not AllowedActions[data.action] then
+        return
+    end
     local reqId = data.reqId
     Rpc(data.action, data.payload, function(result)
         my_webui:SendEvent('mdt:response', { reqId = reqId, action = data.action, data = result })
@@ -162,9 +184,13 @@ end)
 my_webui:RegisterEventHandler('mdt:setWaypoint', function(data)
     -- Payload arrives JSON-stringified: nested JS objects don't survive hEvent
     -- JS->Lua (coords came through as nil), same workaround as the rpc bridge.
-    if type(data) ~= 'table' or type(data.payload) ~= 'string' then return end
+    if type(data) ~= 'table' or type(data.payload) ~= 'string' then
+        return
+    end
     local ok, parsed = pcall(JSON.parse, data.payload)
-    if not ok or type(parsed) ~= 'table' or type(parsed.coords) ~= 'table' then return end
+    if not ok or type(parsed) ~= 'table' or type(parsed.coords) ~= 'table' then
+        return
+    end
     -- Waypoint support: route through qb-hud marker until a native waypoint API is wired
     exports['qb-hud']:AddMarker(Vector(parsed.coords.x, parsed.coords.y, parsed.coords.z), {
         title = parsed.title or 'Dispatch Call',

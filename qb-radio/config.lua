@@ -11,6 +11,6 @@ Config = {
         { police = true, ambulance = true },
         { police = true, ambulance = true },
         { police = true, ambulance = true },
-        { police = true, ambulance = true }
-    }
+        { police = true, ambulance = true },
+    },
 }

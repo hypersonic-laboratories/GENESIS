@@ -54,5 +54,5 @@ QBCore.Shared.Gangs = {
             ['2'] = { name = 'Shot Caller' },
             ['3'] = { name = 'Boss', isboss = true },
         },
-    }
+    },
 }

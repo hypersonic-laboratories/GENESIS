@@ -13,8 +13,12 @@ local Lang = require('locales/en')
 
 local function OpenGarageMenu()
     TriggerCallback('server.GetGarageVehicles', function(result)
-        if type(result) == 'string' then result = result:ToTable() end
-        if result == nil then return exports['qb-core']:Notify(Lang.t('error.no_vehicles'), 'error', 5000) end
+        if type(result) == 'string' then
+            result = result:ToTable()
+        end
+        if result == nil then
+            return exports['qb-core']:Notify(Lang.t('error.no_vehicles'), 'error', 5000)
+        end
         local formattedVehicles = {}
         for _, v in pairs(result) do
             local enginePercent = math.floor(v.engine + 0.5)
@@ -36,7 +40,7 @@ local function OpenGarageMenu()
                 type = zone.type,
                 index = zone.indexgarage,
                 depotPrice = v.depotprice or 0,
-                balance = v.balance or 0
+                balance = v.balance or 0,
             }
         end
 
@@ -53,7 +57,9 @@ local function DepositVehicle(vehicle)
 end
 
 local function IsVehicleAllowed(class, vehicle)
-    if not Config.ClassSystem then return true end
+    if not Config.ClassSystem then
+        return true
+    end
     if vehicle.VehicleType == class then
         return true
     end
@@ -64,7 +70,7 @@ local function CreateZone(index, garage, zoneType)
     local ZoneData = {
         indexgarage = index,
         type = garage.type,
-        category = garage.category
+        category = garage.category,
     }
     local CurrentZone = Trigger(garage.takeVehicle, Rotator(), Vector(100), TriggerType.Sphere, true, function()
         zone = ZoneData
@@ -118,11 +124,11 @@ local function CreateBlipsZones()
 
         if garage.showBlip ~= false then
             local markerId = exports['qb-hud']:AddMarker(garage.takeVehicle, {
-                title       = garage.blipName or garage.label or 'Garage',
+                title = garage.blipName or garage.label or 'Garage',
                 description = garage.description or '',
-                icon        = garage.blipIcon or 'parking',
-                color       = garage.blipColor,
-                markerType  = 'Store',
+                icon = garage.blipIcon or 'parking',
+                color = garage.blipColor,
+                markerType = 'Store',
             })
             if markerId then
                 garageMarkers[#garageMarkers + 1] = markerId
@@ -139,13 +145,21 @@ local function ClearGarageMarkers()
 end
 
 Input.BindKey('E', function()
-    if not inZone then return end
-    if HPlayer:GetInputMode() == 1 then return end
-    if not next(zone) then return end
+    if not inZone then
+        return
+    end
+    if HPlayer:GetInputMode() == 1 then
+        return
+    end
+    if not next(zone) then
+        return
+    end
 
     local Vehicle = GetVehiclePedIsIn(GetPlayerPawn())
     if Vehicle then
-        if zone.type == 'depot' then return end
+        if zone.type == 'depot' then
+            return
+        end
         if not IsVehicleAllowed(zone.category, Vehicle) then
             QBCore.Functions.Notify(Lang.t('error.not_correct_type'), 'error', 3500)
             return

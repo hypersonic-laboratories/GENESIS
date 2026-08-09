@@ -1,3 +1,3 @@
 Config = {
-    OpenKey = 'O'
+    OpenKey = 'O',
 }

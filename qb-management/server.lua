@@ -6,13 +6,21 @@ local Lang = require('locales/en')
 
 RegisterServerEvent('qb-management:server:jobStash', function(source)
     local Player = exports['qb-core']:GetPlayer(source)
-    if not Player then return end
+    if not Player then
+        return
+    end
     local playerJob = Player.PlayerData.job
-    if not playerJob.isboss then return end
+    if not playerJob.isboss then
+        return
+    end
     local ped = GetPlayerPawn(source)
-    if not ped then return end
+    if not ped then
+        return
+    end
     local playerCoords = GetEntityCoords(ped)
-    if not Config.BossMenus[playerJob.name] then return end
+    if not Config.BossMenus[playerJob.name] then
+        return
+    end
     local bossCoords = Config.BossMenus[playerJob.name]
     for i = 1, #bossCoords do
         local coords = bossCoords[i]
@@ -29,13 +37,21 @@ end)
 
 RegisterServerEvent('qb-management:server:gangStash', function(source)
     local Player = exports['qb-core']:GetPlayer(source)
-    if not Player then return end
+    if not Player then
+        return
+    end
     local playerGang = Player.PlayerData.gang
-    if not playerGang.isboss then return end
+    if not playerGang.isboss then
+        return
+    end
     local ped = GetPlayerPawn(source)
-    if not ped then return end
+    if not ped then
+        return
+    end
     local playerCoords = GetEntityCoords(ped)
-    if not Config.GangMenus[playerGang.name] then return end
+    if not Config.GangMenus[playerGang.name] then
+        return
+    end
     local bossCoords = Config.GangMenus[playerGang.name]
     for i = 1, #bossCoords do
         local coords = bossCoords[i]
@@ -54,9 +70,13 @@ end)
 
 RegisterServerEvent('qb-management:server:GradeUpdateGang', function(source, data)
     local Player = exports['qb-core']:GetPlayer(source)
-    if not Player then return end
+    if not Player then
+        return
+    end
     local Member = exports['qb-core']:GetPlayerByCitizenId(data.cid) or exports['qb-core']:GetOfflinePlayerByCitizenId(data.cid)
-    if not Member then return end
+    if not Member then
+        return
+    end
 
     -- if not Player.PlayerData.gang.isboss then
     --     ExploitBan(source, 'GradeUpdateGang Exploiting')
@@ -84,7 +104,9 @@ end)
 
 RegisterServerEvent('qb-management:server:FireMember', function(source, target)
     local Player = exports['qb-core']:GetPlayer(source)
-    if not Player then return end
+    if not Player then
+        return
+    end
     local Member = exports['qb-core']:GetPlayerByCitizenId(target) or exports['qb-core']:GetOfflinePlayerByCitizenId(target)
 
     -- if not Player.PlayerData.gang.isboss then
@@ -116,9 +138,13 @@ end)
 
 RegisterServerEvent('qb-management:server:HireMember', function(source, recruit)
     local Player = exports['qb-core']:GetPlayer(source)
-    if not Player then return end
+    if not Player then
+        return
+    end
     local Target = exports['qb-core']:GetPlayer(recruit)
-    if not Target then return end
+    if not Target then
+        return
+    end
 
     if not Player.PlayerData.gang.isboss then
         ExploitBan(source, 'HireMember Exploiting')
@@ -136,9 +162,13 @@ end)
 
 RegisterServerEvent('qb-management:server:GradeUpdate', function(source, data)
     local Player = exports['qb-core']:GetPlayer(source)
-    if not Player then return end
+    if not Player then
+        return
+    end
     local Employee = exports['qb-core']:GetPlayerByCitizenId(data.cid) or exports['qb-core']:GetOfflinePlayerByCitizenId(data.cid)
-    if not Employee then return end
+    if not Employee then
+        return
+    end
 
     -- if not Player.PlayerData.job.isboss then
     --     ExploitBan(source, 'GradeUpdate Exploiting')
@@ -166,7 +196,9 @@ end)
 
 RegisterServerEvent('qb-management:server:FireEmployee', function(source, target)
     local Player = exports['qb-core']:GetPlayer(source)
-    if not Player then return end
+    if not Player then
+        return
+    end
     local Employee = exports['qb-core']:GetPlayerByCitizenId(target) or exports['qb-core']:GetOfflinePlayerByCitizenId(target)
 
     -- if not Player.PlayerData.job.isboss then
@@ -198,9 +230,13 @@ end)
 
 RegisterServerEvent('qb-management:server:HireEmployee', function(source, recruit)
     local Player = exports['qb-core']:GetPlayer(source)
-    if not Player then return end
+    if not Player then
+        return
+    end
     local Target = exports['qb-core']:GetPlayerByCitizenId(recruit)
-    if not Target then return end
+    if not Target then
+        return
+    end
 
     -- if not Player.PlayerData.job.isboss then
     --     ExploitBan(source, 'HireEmployee Exploiting')
@@ -218,7 +254,9 @@ end)
 
 RegisterCallback('GetEmployees', function(source, jobname)
     local Player = exports['qb-core']:GetPlayer(source)
-    if not Player then return end
+    if not Player then
+        return
+    end
 
     -- if not Player.PlayerData.job.isboss then
     --     ExploitBan(source, 'GetEmployees Exploiting')
@@ -238,13 +276,13 @@ RegisterCallback('GetEmployees', function(source, jobname)
                 empSource = playerData.citizenid,
                 grade = playerData.job.grade,
                 isboss = playerData.job.isboss,
-                name = '🟢 ' .. playerData.charinfo.firstname .. ' ' .. playerData.charinfo.lastname
+                name = '🟢 ' .. playerData.charinfo.firstname .. ' ' .. playerData.charinfo.lastname,
             }
             foundEmployees[playerData.citizenid] = true
         end
     end
 
-    local offlinePlayers = exports['qb-core']:DatabaseAction('Select', "SELECT * FROM `players` WHERE `job` LIKE '%" .. jobname .. "%'", {})
+    local offlinePlayers = exports['qb-core']:DatabaseAction('Select', 'SELECT * FROM `players` WHERE `job` LIKE \'%' .. jobname .. '%\'', {})
     if offlinePlayers[1] then
         for _, data in pairs(offlinePlayers) do
             local jobData = JSON.parse(data.job)
@@ -254,7 +292,7 @@ RegisterCallback('GetEmployees', function(source, jobname)
                     empSource = data.citizenid,
                     grade = jobData.grade,
                     isboss = jobData.isboss,
-                    name = '❌ ' .. charInfo.firstname .. ' ' .. charInfo.lastname
+                    name = '❌ ' .. charInfo.firstname .. ' ' .. charInfo.lastname,
                 }
             end
         end
@@ -269,7 +307,9 @@ end)
 
 RegisterCallback('GetMembers', function(source, gangname)
     local Player = exports['qb-core']:GetPlayer(source)
-    if not Player then return end
+    if not Player then
+        return
+    end
 
     -- if not Player.PlayerData.gang.isboss then
     --     ExploitBan(source, 'GetMembers Exploiting')
@@ -289,13 +329,13 @@ RegisterCallback('GetMembers', function(source, gangname)
                 empSource = playerData.citizenid,
                 grade = playerData.gang.grade,
                 isboss = playerData.gang.isboss,
-                name = '🟢 ' .. playerData.charinfo.firstname .. ' ' .. playerData.charinfo.lastname
+                name = '🟢 ' .. playerData.charinfo.firstname .. ' ' .. playerData.charinfo.lastname,
             }
             foundMembers[playerData.citizenid] = true
         end
     end
 
-    local offlinePlayers = exports['qb-core']:DatabaseAction('Select', "SELECT * FROM `players` WHERE `gang` LIKE '%" .. gangname .. "%'", {})
+    local offlinePlayers = exports['qb-core']:DatabaseAction('Select', 'SELECT * FROM `players` WHERE `gang` LIKE \'%' .. gangname .. '%\'', {})
     if offlinePlayers[1] then
         for _, data in pairs(offlinePlayers) do
             local gangData = JSON.parse(data.gang)
@@ -305,7 +345,7 @@ RegisterCallback('GetMembers', function(source, gangname)
                     empSource = data.citizenid,
                     grade = gangData.grade,
                     isboss = gangData.isboss,
-                    name = '❌ ' .. charInfo.firstname .. ' ' .. charInfo.lastname
+                    name = '❌ ' .. charInfo.firstname .. ' ' .. charInfo.lastname,
                 }
             end
         end
@@ -321,7 +361,9 @@ end)
 RegisterCallback('GetPlayers', function(source)
     local players = {}
     local PlayerPed = GetPlayerPawn(source)
-    if not PlayerPed then return end
+    if not PlayerPed then
+        return
+    end
     local pCoords = GetEntityCoords(PlayerPed)
     local worldPawns = GetPawnsInArea(pCoords, 1000)
     for _, pawn in pairs(worldPawns) do

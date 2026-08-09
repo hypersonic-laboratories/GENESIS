@@ -11,5 +11,5 @@ Config = {
     },
     markers = {
         { coords = Vector(567546, 509934, 4567), label = 'Bank of Pacifica' },
-    }
+    },
 }

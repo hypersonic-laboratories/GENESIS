@@ -20,8 +20,12 @@ RegisterClientEvent('QBCore:Client:OnPlayerUpdated', function(key, val)
         TriggerLocalClientEvent('QBCore:Client:OnGangUpdate', val.gang)
     elseif QBCore.PlayerData and key then
         QBCore.PlayerData[key] = val
-        if key == 'job' then TriggerLocalClientEvent('QBCore:Client:OnJobUpdate', val) end
-        if key == 'gang' then TriggerLocalClientEvent('QBCore:Client:OnGangUpdate', val) end
+        if key == 'job' then
+            TriggerLocalClientEvent('QBCore:Client:OnJobUpdate', val)
+        end
+        if key == 'gang' then
+            TriggerLocalClientEvent('QBCore:Client:OnGangUpdate', val)
+        end
     end
 end)
 

@@ -15,7 +15,7 @@ Config = {
             location = 'apartment3',
             label = 'Docks Condo',
         },
-    }
+    },
 }
 
 return Config

@@ -163,4 +163,3 @@ Execute([[
     )
 ]])
 Execute([[CREATE INDEX IF NOT EXISTS idx_mdt_logs_actor ON mdt_logs(actor_cid)]])
-

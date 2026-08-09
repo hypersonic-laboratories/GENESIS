@@ -86,7 +86,7 @@ end
 --- @param newLocale string - Optional new locale to set
 --- @return string
 function Locale:locale(newLocale)
-    if (newLocale) then
+    if newLocale then
         self.currentLocale = newLocale
     end
     return self.currentLocale
@@ -148,6 +148,8 @@ function Locale:delete(phraseTarget, prefix)
     end
 end
 
-exports('qb-core', 'GetLocale', function() return Locale end)
+exports('qb-core', 'GetLocale', function()
+    return Locale
+end)
 
 return Locale

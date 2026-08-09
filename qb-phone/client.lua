@@ -24,10 +24,14 @@ local offsets = {
 
 local zoomFov = { [0.6] = 90, [1] = 60, [2] = 30, [5] = 12 }
 
-local function getCharacter() return GetPlayerPawn() end
+local function getCharacter()
+    return GetPlayerPawn()
+end
 
 local function nonEmpty(value)
-    if value == nil then return nil end
+    if value == nil then
+        return nil
+    end
     local text = tostring(value)
     return text ~= '' and text or nil
 end
@@ -36,7 +40,9 @@ local function getLocalProfile()
     local ok, data = pcall(function()
         return exports['qb-core']:GetPlayerData()
     end)
-    if not ok or type(data) ~= 'table' then return nil end
+    if not ok or type(data) ~= 'table' then
+        return nil
+    end
 
     local charinfo = data.charinfo or {}
     local firstName = nonEmpty(charinfo.firstname) or ''
@@ -62,7 +68,9 @@ local function sendProfile(profile)
 end
 
 local function applyCameraTransform(mode)
-    if not sceneCap or not sceneCap.Object then return end
+    if not sceneCap or not sceneCap.Object then
+        return
+    end
     local cfg = offsets[mode]
     localRotation = Rotator(cfg.rotation.Pitch, cfg.rotation.Yaw, cfg.rotation.Roll)
     sceneCap.Object:K2_SetActorRelativeLocation(cfg.location, false, nil, false)
@@ -70,7 +78,9 @@ local function applyCameraTransform(mode)
 end
 
 local function updateCameraRotation()
-    if not sceneCap or not sceneCap.Object then return end
+    if not sceneCap or not sceneCap.Object then
+        return
+    end
     local pc = UE.UGameplayStatics.GetPlayerController(sceneCap.Object, 0)
     local dx, dy = pc:GetInputMouseDelta()
     localRotation.Yaw = localRotation.Yaw + dx * sensitivity
@@ -80,21 +90,20 @@ end
 
 local function buildCaptureAndUI(mode)
     local character = getCharacter()
-    if not character then return end
+    if not character then
+        return
+    end
 
-    sceneCap = SceneCapture(
-        Vector(0, 0, 0), Rotator(0, 0, 0),
-        720, 1280,
-        SceneCaptureSource.FinalColorLDR,
-        false
-    )
+    sceneCap = SceneCapture(Vector(0, 0, 0), Rotator(0, 0, 0), 720, 1280, SceneCaptureSource.FinalColorLDR, false)
 
     local mesh = character:GetComponentByClass(UE.USkeletalMeshComponent.StaticClass())
     sceneCap.Object:K2_AttachToComponent(mesh, HAND_SOCKET, 0, 0, 0, true)
     applyCameraTransform(mode)
 
     local capComp = sceneCap.Object:GetComponentByClass(UE.USceneCaptureComponent2D.StaticClass())
-    if capComp then capComp.FOVAngle = 60 end
+    if capComp then
+        capComp.FOVAngle = 60
+    end
 
     local vp = UE.UWidgetLayoutLibrary.GetViewportSize(character)
     local sx, sy = vp.X / 2560, vp.Y / 1440
@@ -103,10 +112,7 @@ local function buildCaptureAndUI(mode)
     camRoot:AddToViewport()
     camFeed = Widget(NativeWidget.Image)
     camRoot:AddChild(camFeed)
-    camFeed:SetCanvasLayout(
-        Vector2D(math.floor(1761 * sx), math.floor(739 * sy)),
-        Vector2D(math.floor(254 * sx), math.floor(402 * sy))
-    )
+    camFeed:SetCanvasLayout(Vector2D(math.floor(1761 * sx), math.floor(739 * sy)), Vector2D(math.floor(254 * sx), math.floor(402 * sy)))
     camFeed.innerWidget:SetBrushResourceObject(sceneCap.RenderTarget)
 end
 
@@ -115,8 +121,12 @@ local function destroyCaptureAndUI()
         Timer.ClearInterval(camUpdateTimerId)
         camUpdateTimerId = nil
     end
-    if camRoot then camRoot:RemoveFromParent() end
-    if sceneCap and sceneCap.Object then sceneCap.Object:K2_DestroyActor() end
+    if camRoot then
+        camRoot:RemoveFromParent()
+    end
+    if sceneCap and sceneCap.Object then
+        sceneCap.Object:K2_DestroyActor()
+    end
     sceneCap, camRoot, camFeed = nil, nil, nil
 end
 
@@ -131,14 +141,18 @@ end
 
 local function setCameraMode(mode)
     local character = getCharacter()
-    if not character then return end
+    if not character then
+        return
+    end
 
     if cameraMode and cameraMode ~= mode then
         UE.UHRoleplaySystemGlobals.ClosePhoneCamera(character)
         cameraMode = nil
     end
 
-    if cameraMode == mode then return end
+    if cameraMode == mode then
+        return
+    end
 
     if mode == 'front' then
         UE.UHRoleplaySystemGlobals.OpenPhoneFrontCamera(character)
@@ -164,7 +178,9 @@ local function openPhone()
     my_webui:SendEvent('open')
     sendProfile(getLocalProfile())
     TriggerCallback('qb-phone:loadCoreData', function(data)
-        if not data then return end
+        if not data then
+            return
+        end
         my_webui:SendEvent('contactsLoaded', data.contacts)
         my_webui:SendEvent('conversationsLoaded', data.conversations)
         my_webui:SendEvent('callHistoryLoaded', data.callHistory)
@@ -183,7 +199,9 @@ end
 local function closePhone()
     phoneOpen = false
     TriggerServerEvent('qb-phone:server:takePhone')
-    if cameraMode then closeCamera() end
+    if cameraMode then
+        closeCamera()
+    end
     my_webui:SetInputMode(0)
 end
 
@@ -204,7 +222,9 @@ my_webui:RegisterEventHandler('hangup', function()
 end)
 
 RegisterClientEvent('qb-phone:client:incomingCall', function(callerName, callerNumber)
-    if not phoneOpen then openPhone() end
+    if not phoneOpen then
+        openPhone()
+    end
     my_webui:SendEvent('incomingCall', callerName, callerNumber)
 end)
 
@@ -282,7 +302,9 @@ end)
 
 my_webui:RegisterEventHandler('loadFeed', function()
     TriggerCallback('qb-phone:loadFeed', function(data)
-        if not data then return end
+        if not data then
+            return
+        end
         my_webui:SendEvent('feedLoaded', data.feed)
         my_webui:SendEvent('usersLoaded', data.users)
     end)
@@ -314,7 +336,9 @@ end)
 
 my_webui:RegisterEventHandler('loadEmails', function()
     TriggerCallback('qb-phone:loadEmails', function(data)
-        if not data then return end
+        if not data then
+            return
+        end
         my_webui:SendEvent('emailsLoaded', data.emails)
     end)
 end)
@@ -332,7 +356,9 @@ RegisterClientEvent('qb-phone:client:emailReceived', function(emailJson)
 end)
 
 my_webui:RegisterEventHandler('loadProfile', function(_, cb)
-    if type(_) == 'function' and cb == nil then cb = _ end
+    if type(_) == 'function' and cb == nil then
+        cb = _
+    end
 
     local responded = false
     local fallback = getLocalProfile()
@@ -345,7 +371,9 @@ my_webui:RegisterEventHandler('loadProfile', function(_, cb)
     end
 
     TriggerCallback('qb-phone:loadProfile', function(data)
-        if not data then return end
+        if not data then
+            return
+        end
         local profile = {
             name = data.name,
             phone = data.phone,
@@ -353,7 +381,9 @@ my_webui:RegisterEventHandler('loadProfile', function(_, cb)
             account = data.account,
         }
         sendProfile(profile)
-        if type(cb) == 'function' and not responded then cb(profile) end
+        if type(cb) == 'function' and not responded then
+            cb(profile)
+        end
     end)
 end)
 
@@ -364,7 +394,9 @@ my_webui:RegisterEventHandler('copyToClipboard', function(data)
     end
 
     text = nonEmpty(text)
-    if not text then return end
+    if not text then
+        return
+    end
     CopyToClipboard(text)
 end)
 
@@ -407,14 +439,20 @@ my_webui:RegisterEventHandler('cameraFlipped', function(data)
 end)
 
 my_webui:RegisterEventHandler('cameraZoom', function(data)
-    if not sceneCap or not sceneCap.Object then return end
+    if not sceneCap or not sceneCap.Object then
+        return
+    end
     local fov = zoomFov[data and data.zoom] or 60
     local capComp = sceneCap.Object:GetComponentByClass(UE.USceneCaptureComponent2D.StaticClass())
-    if capComp then capComp.FOVAngle = fov end
+    if capComp then
+        capComp.FOVAngle = fov
+    end
 end)
 
 my_webui:RegisterEventHandler('cameraClosed', function()
-    if cameraMode then closeCamera() end
+    if cameraMode then
+        closeCamera()
+    end
 end)
 
 local FIVEMANAGE_IMAGE_KEY = 'Py4jfdWgiRLzTTboAofHBC2aoiCSfrar'
@@ -449,11 +487,7 @@ my_webui:RegisterEventHandler('takePhoto', function(_)
     -- HTTP.Request can't send binary PNGs (UTF-16 corruption), so we use curl directly.
     local winPath = filePath:gsub('/', '\\')
     local winResponsePath = responsePath:gsub('/', '\\')
-    local cmd = 'start "" /b curl -s -X POST'
-        .. ' -F "file=@' .. winPath .. '"'
-        .. ' -H "Authorization: ' .. FIVEMANAGE_IMAGE_KEY .. '"'
-        .. ' "' .. FIVEMANAGE_URL .. '"'
-        .. ' -o "' .. winResponsePath .. '"'
+    local cmd = 'start "" /b curl -s -X POST' .. ' -F "file=@' .. winPath .. '"' .. ' -H "Authorization: ' .. FIVEMANAGE_IMAGE_KEY .. '"' .. ' "' .. FIVEMANAGE_URL .. '"' .. ' -o "' .. winResponsePath .. '"'
     os.execute(cmd)
 
     local attempts = 0
@@ -513,7 +547,9 @@ RegisterClientEvent('qb-phone:client:photoUploaded', function(url)
 end)
 
 function onShutdown()
-    if cameraMode then closeCamera() end
+    if cameraMode then
+        closeCamera()
+    end
     local character = getCharacter()
     if character and phoneEquipped then
         HInventory.RemoveItemByName(character, PHONE_ITEM, 1)
@@ -525,7 +561,9 @@ function onShutdown()
 end
 
 Input.BindKey(Config.OpenKey, function()
-    if HPlayer:GetInputMode() == 1 and not phoneOpen then return end
+    if HPlayer:GetInputMode() == 1 and not phoneOpen then
+        return
+    end
     if phoneOpen then
         my_webui:SendEvent('closePhone')
     else
@@ -534,11 +572,15 @@ Input.BindKey(Config.OpenKey, function()
 end, 'Released')
 
 my_webui:RegisterEventHandler('rightMouseDown', function()
-    if not phoneOpen then return end
+    if not phoneOpen then
+        return
+    end
     my_webui:SetInputMode(0)
 end)
 
 Input.BindKey('RightMouseButton', function()
-    if not phoneOpen then return end
+    if not phoneOpen then
+        return
+    end
     my_webui:SetInputMode(1)
 end, 'Released')

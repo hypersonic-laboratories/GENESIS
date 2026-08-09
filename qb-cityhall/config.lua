@@ -13,7 +13,7 @@ Config = {
         'realestate',
         'cardealer',
         'mechanic',
-        'delivery'
+        'delivery',
     },
 
     Cityhalls = {
@@ -41,14 +41,14 @@ Config = {
                 driver_license = {
                     label = 'Driver License',
                     cost = 50,
-                    metadata = 'driver'
+                    metadata = 'driver',
                 },
                 weaponlicense = {
                     label = 'Weapon License',
                     cost = 50,
-                    metadata = 'weapon'
+                    metadata = 'weapon',
                 },
-            }
+            },
         },
         -- {
         --     marker = {
@@ -80,5 +80,5 @@ Config = {
         --         },
         --     }
         -- },
-    }
+    },
 }

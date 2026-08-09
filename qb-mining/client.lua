@@ -30,14 +30,16 @@ local TargetOptions = {
             icon = 'hammer',
             label = 'Mine Rock',
             type = 'client',
-            event = 'qb-mining:client:startMining'
-        }
+            event = 'qb-mining:client:startMining',
+        },
     },
-    distance = 400
+    distance = 400,
 }
 
 local function SpawnLocalRocks()
-    if Config.NetworkedRocks then return end
+    if Config.NetworkedRocks then
+        return
+    end
 
     for i = 1, #Config.miningZones do
         local zone = Config.miningZones[i]
@@ -51,11 +53,7 @@ local function SpawnLocalRocks()
             while not isValid and tries < 50 do
                 local angle = math.random() * math.pi * 2
                 local rDist = math.random() * zone.radius
-                pos = Vector(
-                    zone.center.X + math.cos(angle) * rDist,
-                    zone.center.Y + math.sin(angle) * rDist,
-                    zone.center.Z
-                )
+                pos = Vector(zone.center.X + math.cos(angle) * rDist, zone.center.Y + math.sin(angle) * rDist, zone.center.Z)
 
                 isValid = true
                 for _, pt in ipairs(spawnedPts) do
@@ -118,11 +116,17 @@ RegisterClientEvent('QBCore:Client:OnPlayerLoaded', function()
 end)
 
 RegisterClientEvent('qb-mining:client:startMining', function(data)
-    if isMining then return end
-    if not data or not data.entity then return end
+    if isMining then
+        return
+    end
+    if not data or not data.entity then
+        return
+    end
 
     if not Config.NetworkedRocks then
-        if not localRocks[data.entity] then return end
+        if not localRocks[data.entity] then
+            return
+        end
     end
 
     currentTargetEntity = data.entity

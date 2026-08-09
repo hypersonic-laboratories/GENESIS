@@ -19,12 +19,12 @@ end
 for _, shopData in pairs(Config.Shops) do
     local vehicles = shopData['ShowroomVehicles']
     for i = 1, #vehicles do
-        local vehicleData  = vehicles[i]
-        local vehicleInfo  = Vehicles[vehicleData['defaultVehicle']]
+        local vehicleData = vehicles[i]
+        local vehicleInfo = Vehicles[vehicleData['defaultVehicle']]
         local vehicleClass = vehicleInfo['asset_name']
-        local location     = vehicleData['coords'].location
-        local rotation     = vehicleData['coords'].rotation
-        local vehicle      = HVehicle(location, rotation, vehicleClass)
+        local location = vehicleData['coords'].location
+        local rotation = vehicleData['coords'].rotation
+        local vehicle = HVehicle(location, rotation, vehicleClass)
         vehicle:SetInteractionEnabled(false)
     end
 end
@@ -46,13 +46,13 @@ RegisterServerEvent('qb-vehicleshop:server:testDrive', function(_, data)
 end)
 
 RegisterServerEvent('qb-vehicleshop:server:swapVehicle', function(_, data)
-    local vehicleName  = data.vehicle
-    local shop         = data.shop
-    local index        = data.index
-    local vehicleInfo  = Vehicles[vehicleName]
+    local vehicleName = data.vehicle
+    local shop = data.shop
+    local index = data.index
+    local vehicleInfo = Vehicles[vehicleName]
     local vehicleClass = vehicleInfo['asset_name']
-    local location     = Config.Shops[shop]['ShowroomVehicles'][index]['coords'].location
-    local rotation     = Config.Shops[shop]['ShowroomVehicles'][index]['coords'].rotation
+    local location = Config.Shops[shop]['ShowroomVehicles'][index]['coords'].location
+    local rotation = Config.Shops[shop]['ShowroomVehicles'][index]['coords'].rotation
     ClearAreaOfVehicles(location)
     local vehicle = HVehicle(location, rotation, vehicleClass)
     vehicle:SetInteractionEnabled(false)
@@ -61,7 +61,9 @@ end)
 
 RegisterServerEvent('qb-vehicleshop:server:purchaseVehicle', function(source, data)
     local Player = exports['qb-core']:GetPlayer(source)
-    if not Player then return end
+    if not Player then
+        return
+    end
     local cash = Player.PlayerData.money.cash
     local bank = Player.PlayerData.money.bank
 
@@ -73,7 +75,13 @@ RegisterServerEvent('qb-vehicleshop:server:purchaseVehicle', function(source, da
     local price = vehicleInfo['price']
 
     local moneyType
-    if cash >= price then moneyType = 'cash' elseif bank >= price then moneyType = 'bank' else moneyType = nil end
+    if cash >= price then
+        moneyType = 'cash'
+    elseif bank >= price then
+        moneyType = 'bank'
+    else
+        moneyType = nil
+    end
 
     if not moneyType then
         TriggerClientEvent(source, 'QBCore:Notify', Lang.t('error.notenoughmoney'), 'error')
@@ -89,7 +97,7 @@ RegisterServerEvent('qb-vehicleshop:server:purchaseVehicle', function(source, da
         '{}',
         plate,
         'apartments',
-        0
+        0,
     })
     local pVehicle = HVehicle(spawnLocation.location, spawnLocation.rotation, vehicleInfo.asset_name)
     pVehicle:SetPlate(plate)

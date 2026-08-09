@@ -1,12 +1,12 @@
 Config = {}
 
 -- General
-Config.OpenKey = 'F5'            -- key to toggle the MDT
-Config.RequireOnDuty = true      -- must be on duty to access
-Config.SupervisorGrade = 3       -- grade level (or isboss) required for supervisor actions
-Config.PageSize = 25             -- pagination size for lists
-Config.MaxSearchResults = 25     -- max results per search category
-Config.CallRetentionHours = 24   -- calls older than this are auto-closed
+Config.OpenKey = 'F5' -- key to toggle the MDT
+Config.RequireOnDuty = true -- must be on duty to access
+Config.SupervisorGrade = 3 -- grade level (or isboss) required for supervisor actions
+Config.PageSize = 25 -- pagination size for lists
+Config.MaxSearchResults = 25 -- max results per search category
+Config.CallRetentionHours = 24 -- calls older than this are auto-closed
 
 -- Maps job.type -> MDT role. Add more roles here (e.g. doj) and the shell adapts.
 Config.Roles = {
@@ -27,9 +27,9 @@ Config.UnitStatuses = { 'available', 'busy', 'enroute', 'onscene', 'unavailable'
 -- the UI; `channel` is the real HELIX voice channel.
 -- (Dispatch/all-units broadcast role: flagged for later.)
 Config.UnitVoiceBand = { min = 30000, max = 30999 } -- keep other resources out
-Config.PttKey = 'CapsLock'                          -- hold to transmit on the unit radio (prox + radio)
-Config.UnitProxRangeCm = 4000                       -- crew within this range (cm, ~40m) hear you via proximity;
-                                                    -- beyond it your voice is muted for them unless you hold PTT
+Config.PttKey = 'CapsLock' -- hold to transmit on the unit radio (prox + radio)
+Config.UnitProxRangeCm = 4000 -- crew within this range (cm, ~40m) hear you via proximity;
+-- beyond it your voice is muted for them unless you hold PTT
 Config.Units = {
     police = {
         { id = 'ADAM-1', channel = 30101, freq = '126.525' },

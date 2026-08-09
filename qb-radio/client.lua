@@ -10,9 +10,13 @@ local radioOpen = false
 -- Functions
 
 local function leaveradio()
-    if RadioChannel == 0 then return end
+    if RadioChannel == 0 then
+        return
+    end
     TriggerCallback('LeaveVoiceChannel', function(success)
-        if not success then return end
+        if not success then
+            return
+        end
         RadioChannel = 0
         onRadio = false
         exports['qb-core']:Notify(Lang.t('you_leave'), 'error')
@@ -21,7 +25,9 @@ local function leaveradio()
 end
 
 local function connecttoradio(channel)
-    if channel <= 0 then return false end
+    if channel <= 0 then
+        return false
+    end
 
     -- if Config.RestrictedChannels[channel] ~= nil then
     --     if not Config.RestrictedChannels[channel][player_data.job.name] or not player_data.job.onduty then
@@ -33,7 +39,9 @@ local function connecttoradio(channel)
     local intChannel = math.floor(channel)
 
     TriggerCallback('JoinVoiceChannel', function(success)
-        if not success then return end
+        if not success then
+            return
+        end
         RadioChannel = intChannel
         onRadio = true
         exports['qb-core']:Notify(Lang.t('joined_to_radio', { channel = intChannel .. ' MHz' }), 'success')
@@ -60,9 +68,15 @@ end)
 
 my_webui:RegisterEventHandler('joinRadio', function(data, cb)
     local rchannel = math.floor(tonumber(data.channel))
-    if not rchannel then return end
-    if rchannel < 0 then return end
-    if rchannel == RadioChannel then return end
+    if not rchannel then
+        return
+    end
+    if rchannel < 0 then
+        return
+    end
+    if rchannel == RadioChannel then
+        return
+    end
 
     local canaccess = connecttoradio(rchannel)
     if canaccess then
@@ -73,7 +87,9 @@ my_webui:RegisterEventHandler('joinRadio', function(data, cb)
 end)
 
 my_webui:RegisterEventHandler('leaveRadio', function()
-    if RadioChannel == 0 then return end
+    if RadioChannel == 0 then
+        return
+    end
     leaveradio()
 end)
 
@@ -96,14 +112,18 @@ end)
 -- end)
 
 my_webui:RegisterEventHandler('increaseradiochannel', function(_, cb)
-    if not onRadio then return end
+    if not onRadio then
+        return
+    end
     local newChannel = math.floor(RadioChannel + 1)
     local canaccess = connecttoradio(newChannel)
     cb({ canaccess = canaccess, channel = newChannel })
 end)
 
 my_webui:RegisterEventHandler('decreaseradiochannel', function(_, cb)
-    if not onRadio then return end
+    if not onRadio then
+        return
+    end
     local newChannel = math.floor(RadioChannel - 1)
     local canaccess = connecttoradio(newChannel)
     cb({ canaccess = canaccess, channel = newChannel })
@@ -125,8 +145,12 @@ end)
 -- Input
 
 Input.BindKey(Config.KeyBind, function()
-    if not isLoggedIn then return end
-    if HPlayer:GetInputMode() == 1 and not radioOpen then return end
+    if not isLoggedIn then
+        return
+    end
+    if HPlayer:GetInputMode() == 1 and not radioOpen then
+        return
+    end
     radioOpen = not radioOpen
     if radioOpen then
         my_webui:BringToFront()

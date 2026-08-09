@@ -86,5 +86,5 @@ QBCore.Shared.Locations = {
     police_station = {
         name = 'Police Station',
         coords = Vector(563826, 571439, 4652),
-    }
+    },
 }

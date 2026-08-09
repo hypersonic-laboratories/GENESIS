@@ -56,20 +56,30 @@ end
 --- @return table|nil Player, string|nil role
 function MDT.GetContext(source)
     local Player = exports['qb-core']:GetPlayer(source)
-    if not Player then return nil, nil end
+    if not Player then
+        return nil, nil
+    end
 
     local job = Player.PlayerData.job
     local role = job and job.type and Config.Roles[job.type] or nil
-    if not role then return nil, nil end
-    if Config.RequireOnDuty and not job.onduty then return nil, nil end
+    if not role then
+        return nil, nil
+    end
+    if Config.RequireOnDuty and not job.onduty then
+        return nil, nil
+    end
 
     return Player, role
 end
 
 function MDT.IsSupervisor(Player)
     local job = Player.PlayerData.job
-    if not job then return false end
-    if job.isboss then return true end
+    if not job then
+        return false
+    end
+    if job.isboss then
+        return true
+    end
     local level = job.grade and job.grade.level or 0
     return level >= Config.SupervisorGrade
 end
@@ -83,10 +93,7 @@ function MDT.CharName(Player)
 end
 
 function MDT.Log(role, Player, action, details)
-    MDT.Execute(
-        'INSERT INTO mdt_logs (role, actor_cid, actor_name, action, details) VALUES (?, ?, ?, ?, ?)',
-        { role, Player.PlayerData.citizenid, MDT.CharName(Player), action, details or '' }
-    )
+    MDT.Execute('INSERT INTO mdt_logs (role, actor_cid, actor_name, action, details) VALUES (?, ?, ?, ?, ?)', { role, Player.PlayerData.citizenid, MDT.CharName(Player), action, details or '' })
 end
 
 --- Broadcast an event to every on-duty player of a role ('all' hits every role).
@@ -139,7 +146,9 @@ function MDT.RegisterUnit(source, Player, role)
     -- MDT.Units is authoritative for the callsign: the SetMetaData write in
     -- joinUnit doesn't survive the qb-core export boundary in game, so a fresh
     -- descriptor (built from metadata) would silently revert to NO CALLSIGN.
-    if prev and prev.callsign then unit.callsign = prev.callsign end
+    if prev and prev.callsign then
+        unit.callsign = prev.callsign
+    end
     MDT.Units[unit.citizenid] = unit
     return unit
 end
@@ -175,14 +184,13 @@ end
 
 MDT.RegisterRpc('open', function(source)
     local Player, role = MDT.GetContext(source)
-    if not Player then return { ok = false } end
+    if not Player then
+        return { ok = false }
+    end
 
     local me = MDT.RegisterUnit(source, Player, role)
 
-    local bulletins = MDT.Select(
-        'SELECT * FROM mdt_bulletins WHERE role = ? ORDER BY created DESC LIMIT 20',
-        { role }
-    )
+    local bulletins = MDT.Select('SELECT * FROM mdt_bulletins WHERE role = ? ORDER BY created DESC LIMIT 20', { role })
 
     return {
         ok = true,
@@ -190,9 +198,14 @@ MDT.RegisterRpc('open', function(source)
         -- Copy from the registered unit (authoritative callsign), not a fresh
         -- descriptor; strip .source — the HELIX player object won't serialize.
         officer = {
-            citizenid = me.citizenid, name = me.name, callsign = me.callsign,
-            role = me.role, job = me.job, grade = me.grade,
-            gradeLevel = me.gradeLevel, supervisor = me.supervisor,
+            citizenid = me.citizenid,
+            name = me.name,
+            callsign = me.callsign,
+            role = me.role,
+            job = me.job,
+            grade = me.grade,
+            gradeLevel = me.gradeLevel,
+            supervisor = me.supervisor,
         },
         bulletins = bulletins or {},
         units = MDT.GetUnits(role),
@@ -205,13 +218,14 @@ end)
 
 MDT.RegisterRpc('addBulletin', function(source, data)
     local Player, role = MDT.GetContext(source)
-    if not Player then return { ok = false } end
-    if type(data) ~= 'table' or type(data.title) ~= 'string' or data.title == '' then return { ok = false } end
+    if not Player then
+        return { ok = false }
+    end
+    if type(data) ~= 'table' or type(data.title) ~= 'string' or data.title == '' then
+        return { ok = false }
+    end
 
-    MDT.Execute(
-        'INSERT INTO mdt_bulletins (role, title, content, author_cid, author_name) VALUES (?, ?, ?, ?, ?)',
-        { role, data.title, data.content or '', Player.PlayerData.citizenid, MDT.CharName(Player) }
-    )
+    MDT.Execute('INSERT INTO mdt_bulletins (role, title, content, author_cid, author_name) VALUES (?, ?, ?, ?, ?)', { role, data.title, data.content or '', Player.PlayerData.citizenid, MDT.CharName(Player) })
     MDT.Log(role, Player, 'bulletin:add', data.title)
     MDT.BroadcastRole(role, 'qb-mdt:client:refresh', { view = 'bulletins' })
     return { ok = true, id = MDT.LastInsertId() }
@@ -219,13 +233,19 @@ end)
 
 MDT.RegisterRpc('deleteBulletin', function(source, data)
     local Player, role = MDT.GetContext(source)
-    if not Player then return { ok = false } end
+    if not Player then
+        return { ok = false }
+    end
     local id = tonumber(data and data.id)
-    if not id then return { ok = false } end
+    if not id then
+        return { ok = false }
+    end
 
     local rows = MDT.Select('SELECT author_cid FROM mdt_bulletins WHERE id = ?', { id })
     local bulletin = rows and rows[1]
-    if not bulletin then return { ok = false } end
+    if not bulletin then
+        return { ok = false }
+    end
     if bulletin.author_cid ~= Player.PlayerData.citizenid and not MDT.IsSupervisor(Player) then
         return { ok = false, message = 'Insufficient permissions' }
     end
@@ -238,14 +258,12 @@ end)
 
 MDT.RegisterRpc('getLogs', function(source, data)
     local Player, role = MDT.GetContext(source)
-    if not Player or not MDT.IsSupervisor(Player) then return { ok = false } end
+    if not Player or not MDT.IsSupervisor(Player) then
+        return { ok = false }
+    end
 
     local page = math.max(1, tonumber(data and data.page) or 1)
     local offset = (page - 1) * Config.PageSize
-    local rows = MDT.Select(
-        'SELECT * FROM mdt_logs WHERE role = ? ORDER BY created DESC LIMIT ? OFFSET ?',
-        { role, Config.PageSize, offset }
-    )
+    local rows = MDT.Select('SELECT * FROM mdt_logs WHERE role = ? ORDER BY created DESC LIMIT ? OFFSET ?', { role, Config.PageSize, offset })
     return { ok = true, logs = rows or {}, page = page }
 end)
-
