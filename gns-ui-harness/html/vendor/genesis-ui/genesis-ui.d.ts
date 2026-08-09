@@ -9,6 +9,7 @@ export interface SGActivateDetail {
 export interface SGItemActivateDetail {
     label: string;
     selected: boolean;
+    value?: string;
 }
 
 export interface SGDismissDetail {
@@ -144,6 +145,24 @@ export class SGPagination extends HTMLElement {
     readonly total: number;
 }
 
+export class SGProgress extends HTMLElement {
+    value: number;
+}
+
+export class SGMeter extends HTMLElement {
+    value: number;
+}
+
+export class SGAvatar extends HTMLElement {}
+
+export class SGListRow extends HTMLElement {
+    selected: boolean;
+}
+
+export class SGEmptyState extends HTMLElement {}
+export class SGSkeleton extends HTMLElement {}
+export class SGDataTable extends HTMLElement {}
+
 export class SGTabs extends HTMLElement {
     value: string;
 }
@@ -177,27 +196,34 @@ export function defineAll(): void;
 declare global {
     interface HTMLElementTagNameMap {
         "sg-alert": SGAlert;
+        "sg-avatar": SGAvatar;
         "sg-badge": HTMLElement;
         "sg-breadcrumb": SGBreadcrumb;
         "sg-button": SGButton;
         "sg-card": HTMLElement;
         "sg-checkbox": SGCheckbox;
         "sg-chip": SGChip;
+        "sg-data-table": SGDataTable;
         "sg-divider": HTMLElement;
         "sg-drawer": SGDrawer;
+        "sg-empty-state": SGEmptyState;
         "sg-icon": SGIcon;
         "sg-icon-button": SGIconButton;
         "sg-input": SGInput;
         "sg-item-slot": SGItemSlot;
         "sg-keybind": SGKeybind;
+        "sg-list-row": SGListRow;
+        "sg-meter": SGMeter;
         "sg-modal": SGModal;
         "sg-number-stepper": SGNumberStepper;
         "sg-pagination": SGPagination;
         "sg-panel": HTMLElement;
+        "sg-progress": SGProgress;
         "sg-radio-group": SGRadioGroup;
         "sg-segmented": SGSegmented;
         "sg-select": SGSelect;
         "sg-slider": SGSlider;
+        "sg-skeleton": SGSkeleton;
         "sg-stat": SGStat;
         "sg-tabs": SGTabs;
         "sg-textarea": SGTextarea;

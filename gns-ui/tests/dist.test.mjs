@@ -28,7 +28,10 @@ test("manifest exposes a framework-neutral zero-dependency contract", async () =
     for (const component of ["sg-checkbox", "sg-radio-group", "sg-textarea", "sg-number-stepper", "sg-chip", "sg-breadcrumb", "sg-pagination"]) {
         assert.ok(manifest.components.includes(component));
     }
-    assert.equal(manifest.components.length, 28);
+    for (const component of ["sg-progress", "sg-meter", "sg-avatar", "sg-list-row", "sg-empty-state", "sg-skeleton", "sg-data-table"]) {
+        assert.ok(manifest.components.includes(component));
+    }
+    assert.equal(manifest.components.length, 35);
 });
 
 test("minimal consumer loads only local distribution files", async () => {
@@ -57,7 +60,7 @@ test("catalogue exposes the complete public registry and truthful integration to
     assert.doesNotMatch(html, /Runtime ready|Stable contract/);
 
     const publicRecords = script.match(/id:\s*"sg-[a-z-]+"/g) || [];
-    assert.equal(publicRecords.length, 28);
+    assert.equal(publicRecords.length, 35);
     assert.match(script, /#?components\/sg-button/);
     assert.match(script, /execCommand\("copy"\)/);
     assert.match(script, /sg-item-activate/);
@@ -116,9 +119,38 @@ test("HELIX harness is emitted as a package-local classic-script fixture", async
     assert.match(html, /<sg-chip/);
     assert.match(html, /<sg-breadcrumb/);
     assert.match(html, /<sg-pagination/);
+    assert.match(html, /<sg-progress/);
+    assert.match(html, /<sg-meter/);
+    assert.match(html, /<sg-avatar/);
+    assert.match(html, /<sg-list-row/);
+    assert.match(html, /<sg-empty-state/);
+    assert.match(html, /<sg-skeleton/);
+    assert.match(html, /<sg-data-table/);
     assert.match(script, /addEventListener\("sg-input"/);
     assert.match(script, /addEventListener\("sg-change"/);
     assert.match(script, /addEventListener\("sg-remove"/);
+});
+
+test("data display components preserve native semantics and script ownership", async () => {
+    const icon = await readFile(path.join(root, "src", "elements", "icon.ts"), "utf8");
+    const progress = await readFile(path.join(root, "src", "elements", "progress.ts"), "utf8");
+    const meter = await readFile(path.join(root, "src", "elements", "meter.ts"), "utf8");
+    const avatar = await readFile(path.join(root, "src", "elements", "avatar.ts"), "utf8");
+    const listRow = await readFile(path.join(root, "src", "elements", "list-row.ts"), "utf8");
+    const emptyState = await readFile(path.join(root, "src", "elements", "empty-state.ts"), "utf8");
+    const skeleton = await readFile(path.join(root, "src", "elements", "skeleton.ts"), "utf8");
+    const dataTable = await readFile(path.join(root, "src", "elements", "data-table.ts"), "utf8");
+    const controls = [progress, meter, avatar, listRow, emptyState, skeleton, dataTable].join("\n");
+
+    assert.match(progress, /document\.createElement\("progress"\)/);
+    assert.match(meter, /document\.createElement\("meter"\)/);
+    assert.match(avatar, /document\.createElement\("img"\)/);
+    assert.match(listRow, /"sg-item-activate"/);
+    assert.match(emptyState, /aria-labelledby/);
+    assert.match(skeleton, /aria-hidden/);
+    assert.match(dataTable, /HTMLTableElement/);
+    assert.match(icon, /genesis-icons\.svg\?rev=35/);
+    assert.doesNotMatch(controls, /ElementInternals|formAssociated/);
 });
 
 test("remaining core controls use native semantics and separated action contracts", async () => {

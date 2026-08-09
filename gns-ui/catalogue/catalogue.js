@@ -363,6 +363,143 @@
             markup: paginationMarkup
         },
         {
+            id: "sg-progress",
+            name: "Progress",
+            icon: "radio",
+            category: "Data display",
+            summary: "A native linear progress indicator with bounded values, semantic tones, and a deliberate indeterminate state.",
+            description: "Linear progress primitive",
+            keywords: "progress loading completion percent value max indeterminate tone size native",
+            stageNote: "Use progress only for a real bounded process; indeterminate state communicates unknown duration",
+            defaults: { value: "68", tone: "primary", size: "md", showValue: true, indeterminate: false },
+            controls: [
+                { key: "value", label: "Completion", type: "choice", options: [["18", "18%"], ["48", "48%"], ["68", "68%"], ["100", "100%"]] },
+                { key: "tone", label: "Tone", type: "choice", options: [["primary", "Primary"], ["success", "Success"], ["warning", "Warning"], ["danger", "Danger"], ["violet", "Violet"]] },
+                { key: "size", label: "Size", type: "choice", options: [["sm", "Small"], ["md", "Medium"], ["lg", "Large"]] },
+                { key: "showValue", label: "Show value", type: "boolean" },
+                { key: "indeterminate", label: "Indeterminate", type: "boolean" }
+            ],
+            attributes: [["label", "string", "Visible process name."], ["value / max", "number", "Current bounded value and maximum."], ["tone", "primary | success | warning | danger | violet", "Semantic process signal."], ["size", "sm | md | lg", "Track thickness."], ["show-value / indeterminate", "boolean", "Visible percentage and unknown-duration state."], ["detail", "string", "Optional supporting progress context."]],
+            events: [],
+            a11y: ["Uses a native progress element associated with its visible label.", "Indeterminate progress omits the native value rather than inventing a percentage.", "Text and native semantics communicate state without relying on color."],
+            render: renderProgress,
+            markup: progressMarkup
+        },
+        {
+            id: "sg-meter",
+            name: "Circular meter",
+            icon: "circle",
+            category: "Data display",
+            summary: "A compact circular reading backed by a native meter for bounded status values such as stamina or capacity.",
+            description: "Bounded status primitive",
+            keywords: "meter circular ring status capacity stamina value min max low high optimum unit",
+            stageNote: "The ring supplements an exact value, label, and native meter semantics",
+            defaults: { value: "64", tone: "warning", size: "md" },
+            controls: [
+                { key: "value", label: "Value", type: "choice", options: [["18", "18%"], ["48", "48%"], ["64", "64%"], ["92", "92%"]] },
+                { key: "tone", label: "Tone", type: "choice", options: [["primary", "Primary"], ["success", "Success"], ["warning", "Warning"], ["danger", "Danger"], ["violet", "Violet"]] },
+                { key: "size", label: "Size", type: "choice", options: [["sm", "Small"], ["md", "Medium"], ["lg", "Large"]] }
+            ],
+            attributes: [["label", "string", "Visible measurement name."], ["value / min / max", "number", "Current reading and bounds."], ["low / high / optimum", "number", "Optional native meter thresholds."], ["unit", "string", "Short visible suffix."], ["tone / size", "string", "Semantic signal and geometry."], ["detail", "string", "Optional supporting reading."]],
+            events: [],
+            a11y: ["A native meter carries the accessible measurement semantics.", "The circular rendering is hidden from assistive technology and always includes an exact text value.", "Choose semantic tones from script-owned thresholds rather than visual preference."],
+            render: renderMeter,
+            markup: meterMarkup
+        },
+        {
+            id: "sg-avatar",
+            name: "Avatar",
+            icon: "user",
+            category: "Identity",
+            summary: "A resilient player identity image with initials fallback, compact sizing, and optional availability status.",
+            description: "Identity image primitive",
+            keywords: "avatar profile player image initials fallback status online away busy size shape",
+            stageNote: "The initials fallback requires no external asset and remains visible when an image fails",
+            defaults: { size: "lg", shape: "circle", status: "online" },
+            controls: [
+                { key: "size", label: "Size", type: "choice", options: [["sm", "Small"], ["md", "Medium"], ["lg", "Large"], ["xl", "Extra large"]] },
+                { key: "shape", label: "Shape", type: "choice", options: [["circle", "Circle"], ["square", "Square"]] },
+                { key: "status", label: "Status", type: "choice", options: [["online", "Online"], ["away", "Away"], ["busy", "Busy"], ["", "None"]] }
+            ],
+            attributes: [["src", "local image URL", "Optional caller-owned image asset."], ["alt", "string", "Accessible identity label and image alternative."], ["initials", "string", "Fallback text when no image is available."], ["size", "sm | md | lg | xl", "Shared avatar scale."], ["shape", "circle | square", "Identity geometry."], ["status", "online | away | busy", "Optional visible availability marker."]],
+            events: [],
+            a11y: ["The alt value names the identity rather than describing the image style.", "Initials remain available when a local image is absent or fails.", "Availability status needs nearby text when it changes a decision; the colored dot is supplementary."],
+            render: renderAvatar,
+            markup: avatarMarkup
+        },
+        {
+            id: "sg-list-row",
+            name: "List row",
+            icon: "layers",
+            category: "Data display",
+            summary: "A compact record row with stable label, detail, metadata, optional icon, trailing content, and selection state.",
+            description: "Record row primitive",
+            keywords: "list row record label detail meta selectable selected disabled trailing sg-item-activate",
+            stageNote: "The primary selection target and trailing actions remain separate native controls",
+            defaults: { selected: false, selectable: true, disabled: false },
+            controls: [{ key: "selected", label: "Selected", type: "boolean" }, { key: "selectable", label: "Selectable", type: "boolean" }, { key: "disabled", label: "Disabled", type: "boolean" }],
+            attributes: [["label / detail / meta", "string", "Primary, supporting, and aligned metadata."], ["icon", "sprite name", "Optional leading bundled icon."], ["value", "string", "Stable caller-owned event value."], ["selectable / selected / disabled", "boolean", "Interaction and availability states."], ["child content", "HTML", "Optional separate trailing actions or badges."]],
+            events: [["sg-item-activate", "{ label, selected, value }", "Bubbles when the primary row selection changes."]],
+            a11y: ["Selectable rows use a native button with aria-pressed.", "Trailing caller actions are siblings rather than nested inside the row button.", "Long labels and detail truncate visually while the accessible label remains intact."],
+            render: renderListRow,
+            markup: listRowMarkup
+        },
+        {
+            id: "sg-empty-state",
+            name: "Empty state",
+            icon: "package",
+            category: "Feedback",
+            summary: "A quiet zero-data state with a specific explanation and an optional caller-owned recovery action.",
+            description: "No-data primitive",
+            keywords: "empty state no data no results filters recovery action compact icon",
+            stageNote: "Describe why the region is empty and offer only a relevant recovery action",
+            defaults: { compact: false, action: true },
+            controls: [{ key: "compact", label: "Compact", type: "boolean" }, { key: "action", label: "Show recovery", type: "boolean" }],
+            attributes: [["label", "string", "Specific empty-state heading."], ["description", "string", "Cause, context, or useful next step."], ["icon", "sprite name", "Optional supporting icon."], ["compact", "boolean", "Reduced-height placement."], ["child content", "HTML", "Optional caller-owned recovery actions."]],
+            events: [],
+            a11y: ["Creates a named region connected to its title and description.", "The icon is decorative; visible copy communicates the actual condition.", "Recovery actions retain their own native component semantics."],
+            render: renderEmptyState,
+            markup: emptyStateMarkup
+        },
+        {
+            id: "sg-skeleton",
+            name: "Skeleton",
+            icon: "columns-3",
+            category: "Feedback",
+            summary: "A restrained loading placeholder for text, media, or avatar geometry with reduced-motion support.",
+            description: "Loading placeholder primitive",
+            keywords: "skeleton loading placeholder shimmer text circle rect lines animated aria busy",
+            stageNote: "Skeletons reserve layout; the containing region should own aria-busy and its loading message",
+            defaults: { shape: "text", lines: "3", animated: true },
+            controls: [
+                { key: "shape", label: "Shape", type: "choice", options: [["text", "Text"], ["circle", "Circle"], ["rect", "Rectangle"]] },
+                { key: "lines", label: "Lines", type: "choice", options: [["1", "One"], ["3", "Three"], ["5", "Five"]] },
+                { key: "animated", label: "Animated", type: "boolean" }
+            ],
+            attributes: [["shape", "text | circle | rect", "Reserved content geometry."], ["lines", "1–6", "Text-line count."], ["width / height", "safe CSS length", "Optional bounded dimensions."], ["animated", "boolean", "Loading sweep disabled by reduced-motion preference."], ["label", "string", "Optional standalone status announcement; omit inside an already labeled busy region."]],
+            events: [],
+            a11y: ["Unlabeled skeletons are hidden from assistive technology.", "Use one loading announcement on the containing region rather than announcing every placeholder.", "Reduced-motion preference removes the sweep while preserving geometry."],
+            render: renderSkeleton,
+            markup: skeletonMarkup
+        },
+        {
+            id: "sg-data-table",
+            name: "Data table",
+            icon: "columns-3",
+            category: "Data display",
+            summary: "A responsive viewport for caller-owned native tables with compact, striped, and sticky-header treatments.",
+            description: "Tabular data primitive",
+            keywords: "data table native rows columns responsive scroll compact striped sticky header",
+            stageNote: "Use a table only when row and column relationships matter; scripts own sorting and data",
+            defaults: { compact: false, striped: false, stickyHeader: false },
+            controls: [{ key: "compact", label: "Compact", type: "boolean" }, { key: "striped", label: "Striped", type: "boolean" }, { key: "stickyHeader", label: "Sticky header", type: "boolean" }],
+            attributes: [["label", "string", "Accessible region and table name."], ["compact / striped / sticky-header", "boolean", "Density and scanning treatments."], ["child table", "native HTML", "Caller-owned caption, headers, rows, and cells."]],
+            events: [],
+            a11y: ["Preserves native table, thead, tbody, th, and scope semantics.", "Horizontal overflow stays inside the named table region at narrow widths.", "Interactive sorting or row actions remain explicit native buttons supplied by the consumer."],
+            render: renderDataTable,
+            markup: dataTableMarkup
+        },
+        {
             id: "sg-tabs",
             name: "Tabs",
             icon: "layers",
@@ -1423,6 +1560,92 @@
         var attributes = ["label=\"Inventory pages\"", "page=\"" + page + "\"", "total=\"" + state.total + "\"", "siblings=\"1\"", "size=\"" + state.size + "\""];
         if (state.disabled) attributes.push("disabled");
         return "<sg-pagination " + attributes.join(" ") + "></sg-pagination>";
+    }
+
+    function renderProgress(state) {
+        return "<div class=\"stage-stack\">" + progressMarkup(state) + "<sg-progress label=\"Connecting to dispatch\" indeterminate detail=\"Waiting for the server.\"></sg-progress></div>";
+    }
+
+    function progressMarkup(state) {
+        var attributes = ["label=\"Lockpicking\"", "max=\"100\"", "tone=\"" + state.tone + "\"", "size=\"" + state.size + "\"", "detail=\"Level 12 skill progress.\""];
+        if (state.indeterminate) attributes.push("indeterminate");
+        else attributes.push("value=\"" + state.value + "\"");
+        if (state.showValue) attributes.push("show-value");
+        return "<sg-progress " + attributes.join(" ") + "></sg-progress>";
+    }
+
+    function renderMeter(state) {
+        return "<div class=\"stage-row\">" + meterMarkup(state) + "<sg-meter label=\"Stamina\" value=\"82\" unit=\"%\" tone=\"success\" detail=\"Ready\"></sg-meter></div>";
+    }
+
+    function meterMarkup(state) {
+        return "<sg-meter label=\"Hunger\" value=\"" + state.value + "\" min=\"0\" max=\"100\" unit=\"%\" tone=\"" + state.tone + "\" size=\"" + state.size + "\" detail=\"Current status\"></sg-meter>";
+    }
+
+    function renderAvatar(state) {
+        return "<div class=\"stage-row\">" + avatarMarkup(state) + "<sg-avatar initials=\"AM\" alt=\"Alex Morgan\" size=\"md\" status=\"away\"></sg-avatar><sg-avatar initials=\"LS\" alt=\"Los Santos dispatch\" size=\"sm\" shape=\"square\"></sg-avatar></div>";
+    }
+
+    function avatarMarkup(state) {
+        var attributes = ["initials=\"JC\"", "alt=\"Jordan Carter\"", "size=\"" + state.size + "\"", "shape=\"" + state.shape + "\""];
+        if (state.status) attributes.push("status=\"" + state.status + "\"");
+        return "<sg-avatar " + attributes.join(" ") + "></sg-avatar>";
+    }
+
+    function renderListRow(state) {
+        return "<div class=\"stage-stack\">" + listRowMarkup(state) + "<sg-list-row icon=\"car\" label=\"Buffalo STX\" detail=\"Vehicle · Stored\" meta=\"LS 4821\"><sg-badge tone=\"success\">Available</sg-badge></sg-list-row></div>";
+    }
+
+    function listRowMarkup(state) {
+        var attributes = ["icon=\"user\"", "label=\"Jordan Carter\"", "detail=\"Civilian · ID 2501\"", "meta=\"2.4 m\"", "value=\"2501\""];
+        if (state.selectable) attributes.push("selectable");
+        if (state.selected) attributes.push("selected");
+        if (state.disabled) attributes.push("disabled");
+        return "<sg-list-row " + attributes.join(" ") + ">\n  <sg-badge tone=\"info\">Nearby</sg-badge>\n</sg-list-row>";
+    }
+
+    function renderEmptyState(state) {
+        return "<div class=\"stage-stack\">" + emptyStateMarkup(state) + "</div>";
+    }
+
+    function emptyStateMarkup(state) {
+        var attributes = ["icon=\"users\"", "label=\"No players found\"", "description=\"Try adjusting your search or clearing the active filters.\""];
+        if (state.compact) attributes.push("compact");
+        var action = state.action ? "\n  <sg-button size=\"sm\">Clear filters</sg-button>\n" : "";
+        return "<sg-empty-state " + attributes.join(" ") + ">" + action + "</sg-empty-state>";
+    }
+
+    function renderSkeleton(state) {
+        return "<div class=\"skeleton-stage\"><div class=\"stage-row stage-row--start\">" + skeletonMarkup(state) + "<sg-skeleton shape=\"circle\" width=\"48px\" height=\"48px\" animated></sg-skeleton></div><sg-skeleton shape=\"rect\" height=\"88px\" animated></sg-skeleton></div>";
+    }
+
+    function skeletonMarkup(state) {
+        var attributes = ["shape=\"" + state.shape + "\"", "lines=\"" + state.lines + "\""];
+        if (state.shape === "circle") attributes.push("width=\"48px\"", "height=\"48px\"");
+        if (state.shape === "rect") attributes.push("height=\"88px\"");
+        if (state.animated) attributes.push("animated");
+        return "<sg-skeleton " + attributes.join(" ") + "></sg-skeleton>";
+    }
+
+    function renderDataTable(state) {
+        return "<div class=\"stage-stack\">" + dataTableMarkup(state) + "<p class=\"stage-caption\">Illustrative records demonstrate table structure only; scripts supply the real dataset.</p></div>";
+    }
+
+    function dataTableMarkup(state) {
+        var attributes = ["label=\"Online players\""];
+        if (state.compact) attributes.push("compact");
+        if (state.striped) attributes.push("striped");
+        if (state.stickyHeader) attributes.push("sticky-header");
+        return "<sg-data-table " + attributes.join(" ") + ">\n" +
+            "  <table>\n" +
+            "    <thead><tr><th scope=\"col\">Player</th><th scope=\"col\">Job</th><th scope=\"col\">Ping</th><th scope=\"col\">Status</th></tr></thead>\n" +
+            "    <tbody>\n" +
+            "      <tr><td>Jordan Carter</td><td>Civilian</td><td>48 ms</td><td>Online</td></tr>\n" +
+            "      <tr><td>Alex Morgan</td><td>Police</td><td>62 ms</td><td>On duty</td></tr>\n" +
+            "      <tr><td>Maya Chen</td><td>EMS</td><td>71 ms</td><td>Available</td></tr>\n" +
+            "    </tbody>\n" +
+            "  </table>\n" +
+            "</sg-data-table>";
     }
 
     function renderTabs(state) {

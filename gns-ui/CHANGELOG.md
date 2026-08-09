@@ -7,8 +7,8 @@ All notable public-contract changes to Genesis Shadow Glass UI are recorded here
 ### Added
 
 - Canonical Shadow Glass tokens, typography, density, and reduced-effects profiles.
-- Framework-neutral registration with twenty-eight initial `sg-*` custom elements.
-- Buttons, icon buttons, native-backed inputs, selects, toggles, sliders, checkboxes, radio groups, textareas, number steppers, chips, breadcrumbs, pagination, tabs, segmented controls, modal and drawer shells, tooltips, toasts, surfaces, badges, icons, status capsules, item slots, alerts, keybinds, and dividers.
+- Framework-neutral registration with thirty-five initial `sg-*` custom elements.
+- Buttons, icon buttons, native-backed inputs, selects, toggles, sliders, checkboxes, radio groups, textareas, number steppers, chips, breadcrumbs, pagination, progress, meters, avatars, list rows, empty states, skeletons, data tables, tabs, segmented controls, modal and drawer shells, tooltips, toasts, surfaces, badges, icons, status capsules, item slots, alerts, keybinds, and dividers.
 - Typed activation, value-input, value-change, close, item-activation, and dismissal event contracts.
 - Local Exo 2 and Inter variable fonts and a generated Lucide icon sprite.
 - No-build minimal consumer, component catalogue, and package-local HELIX harness.

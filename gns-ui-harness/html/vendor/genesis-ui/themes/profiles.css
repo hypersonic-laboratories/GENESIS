@@ -56,6 +56,19 @@
     height: 32px;
 }
 
+[data-sg-density="compact"] sg-list-row {
+    min-height: 48px;
+}
+
+[data-sg-density="compact"] .sg-list-row__action {
+    padding: 7px 9px;
+}
+
+[data-sg-density="compact"] .sg-data-table__table th,
+[data-sg-density="compact"] .sg-data-table__table td {
+    padding: 8px 10px;
+}
+
 [data-sg-density="compact"] .sg-modal__header,
 [data-sg-density="compact"] .sg-drawer__header,
 [data-sg-density="compact"] .sg-modal__body,

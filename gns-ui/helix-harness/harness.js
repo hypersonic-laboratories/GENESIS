@@ -59,6 +59,10 @@ if (!window.customElements) {
             output.textContent = describeEvent(event);
         });
 
+        harness.addEventListener("sg-item-activate", (event) => {
+            output.textContent = describeEvent(event);
+        });
+
         document.addEventListener("sg-close", (event) => {
             output.textContent = describeEvent(event);
         });
@@ -84,7 +88,11 @@ if (!window.customElements) {
             stepper.value = stepper.value === 2 ? 6 : 2;
             const chip = document.querySelector("#filter-chip");
             chip.hidden = false;
-            output.textContent = `Targeted attribute update delivered - health: ${value}, units: ${stepper.value}`;
+            const progress = document.querySelector("#skill-progress");
+            progress.value = progress.value === 68 ? 92 : 68;
+            const meter = document.querySelector("#hunger-meter");
+            meter.value = meter.value === 64 ? 18 : 64;
+            output.textContent = `Targeted attribute update delivered - health: ${value}, units: ${stepper.value}, skill: ${progress.value}%`;
         });
 
         document.querySelector("#close-harness").addEventListener("sg-activate", requestClose);

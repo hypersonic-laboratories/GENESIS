@@ -80,6 +80,18 @@
             padding-top: 16px;
             border-top: 1px solid var(--sg-color-border);
         }
+        .harness-display {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px 18px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--sg-color-border);
+        }
+        .harness-display-wide { grid-column: 1 / -1; }
+        .harness-identity { display: flex; align-items: center; gap: 12px; color: var(--sg-color-text-secondary); }
+        .harness-identity strong { display: block; color: var(--sg-color-text); }
+        .harness-skeletons { display: grid; grid-template-columns: 48px minmax(0, 1fr); align-items: center; gap: 12px; }
         .harness-core-wide { grid-column: 1 / -1; }
         .harness-chip-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
         .harness-toggle-row {
@@ -120,7 +132,8 @@
         }
         @media (max-width: 900px) {
             .harness-controls,
-            .harness-core { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .harness-core,
+            .harness-display { grid-template-columns: repeat(2, minmax(0, 1fr)); }
             .harness-structure { grid-template-columns: 1fr; }
             .harness-structure-actions { justify-content: flex-start; }
         }
@@ -130,7 +143,9 @@
             .harness-header { flex-wrap: wrap; }
             .harness-controls { grid-template-columns: 1fr; }
             .harness-core { grid-template-columns: 1fr; }
+            .harness-display { grid-template-columns: 1fr; }
             .harness-core-wide { grid-column: auto; }
+            .harness-display-wide { grid-column: auto; }
         }
     </style>
 </head>
@@ -209,6 +224,33 @@
                 <a href="#inventory">Inventory</a>
                 <span>Runtime checks</span>
             </sg-breadcrumb>
+        </div>
+        <div class="harness-display">
+            <sg-progress id="skill-progress" label="Lockpicking" value="68" max="100" show-value detail="Level 12 progress"></sg-progress>
+            <sg-meter id="hunger-meter" label="Hunger" value="64" min="0" max="100" unit="%" tone="warning" detail="Current status"></sg-meter>
+            <div class="harness-identity">
+                <sg-avatar initials="JC" alt="Jordan Carter" size="lg" status="online"></sg-avatar>
+                <span><strong>Jordan Carter</strong>Citizen · ID 2501</span>
+            </div>
+            <sg-list-row id="nearby-player" icon="user" label="Alex Morgan" detail="Civilian · ID 3187" meta="2.4 m" value="3187" selectable>
+                <sg-badge tone="info">Nearby</sg-badge>
+            </sg-list-row>
+            <div class="harness-skeletons" aria-busy="true" aria-label="Loading player record">
+                <sg-skeleton shape="circle" width="48px" height="48px" animated></sg-skeleton>
+                <sg-skeleton lines="3" animated></sg-skeleton>
+            </div>
+            <sg-empty-state icon="users" label="No filtered players" description="Clear filters to show nearby players." compact>
+                <sg-button size="sm">Clear filters</sg-button>
+            </sg-empty-state>
+            <sg-data-table class="harness-display-wide" label="Online players" compact striped>
+                <table>
+                    <thead><tr><th scope="col">Player</th><th scope="col">Job</th><th scope="col">Ping</th><th scope="col">Status</th></tr></thead>
+                    <tbody>
+                        <tr><td>Jordan Carter</td><td>Civilian</td><td>48 ms</td><td>Online</td></tr>
+                        <tr><td>Alex Morgan</td><td>Police</td><td>62 ms</td><td>On duty</td></tr>
+                    </tbody>
+                </table>
+            </sg-data-table>
         </div>
         <div class="harness-actions">
             <sg-button id="emit-test" variant="primary">Emit test event</sg-button>
