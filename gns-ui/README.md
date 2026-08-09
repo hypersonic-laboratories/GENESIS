@@ -14,6 +14,8 @@ Implemented public elements:
 - `sg-toggle` and `sg-slider`
 - `sg-checkbox`, `sg-radio-group`, `sg-textarea`, and `sg-number-stepper`
 - `sg-chip`
+- `sg-interaction-prompt`, `sg-action-list`, and `sg-confirm-progress`
+- `sg-popover`, `sg-context-menu`, and `sg-radial-menu`
 - `sg-breadcrumb` and `sg-pagination`
 - `sg-progress`, `sg-meter`, and `sg-avatar`
 - `sg-list-row`, `sg-empty-state`, `sg-skeleton`, and `sg-data-table`

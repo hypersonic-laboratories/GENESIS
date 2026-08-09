@@ -324,6 +324,124 @@
             markup: chipMarkup
         },
         {
+            id: "sg-interaction-prompt",
+            name: "Interaction prompt",
+            icon: "hand",
+            category: "Interactions",
+            summary: "A focused world-interaction prompt that pairs one key with an explicit action and optional context.",
+            description: "World interaction primitive",
+            keywords: "interaction prompt key bind nearby world action disabled keyboard pointer sg-activate",
+            stageNote: "The component communicates the available action; the consuming script still owns key capture and proximity rules",
+            defaults: { tone: "primary", disabled: false },
+            controls: [
+                { key: "tone", label: "Tone", type: "choice", options: [["primary", "Primary"], ["success", "Success"], ["warning", "Warning"], ["danger", "Danger"]] },
+                { key: "disabled", label: "Disabled", type: "boolean" }
+            ],
+            attributes: [["key", "string", "Visible input hint such as E, F, or G."], ["label / hint", "string", "Required action copy and optional supporting context."], ["icon", "sprite name", "Optional trailing context icon."], ["value", "string", "Stable action identity included in the event."], ["tone", "primary | success | warning | danger", "Semantic emphasis without changing behavior."], ["disabled", "boolean", "Blocks activation."]],
+            events: [["sg-activate", "{ source, value }", "Bubbles after pointer, Enter, or Space activation."]],
+            a11y: ["Uses a native button with a visible keycap and action label.", "The keycap is a hint, not a keyboard listener; scripts remain responsible for gameplay bindings.", "Disabled state removes the prompt from interaction without hiding its purpose."],
+            render: renderInteractionPrompt,
+            markup: interactionPromptMarkup
+        },
+        {
+            id: "sg-action-list",
+            name: "Action list",
+            icon: "layers",
+            category: "Interactions",
+            summary: "A compact vertical command list with native buttons, roving focus, and one script-owned selection event.",
+            description: "Command list primitive",
+            keywords: "action list command menu inspect use give drop keyboard sg-action-select",
+            stageNote: "Arrow keys move through enabled actions; each button value becomes the stable event identity",
+            defaults: { compact: false, disabled: false },
+            controls: [{ key: "compact", label: "Compact", type: "boolean" }, { key: "disabled", label: "Disabled", type: "boolean" }],
+            attributes: [["label", "string", "Accessible name for the action collection."], ["child buttons", "HTML", "Caller-owned labels, values, icons, and disabled states."], ["compact", "boolean", "Reduces row height for dense menus."], ["disabled", "boolean", "Blocks all contained actions."]],
+            events: [["sg-action-select", "{ value, label }", "Bubbles when an enabled action is chosen."], ["sg-close", "{ reason: 'escape' }", "Requests that a containing surface close."]],
+            a11y: ["Uses native buttons inside a named menu region.", "Arrow keys, Home, and End move focus without replacing Enter and Space activation.", "Destructive choices require visible wording and should use a semantic icon or tone in their content."],
+            render: renderActionList,
+            markup: actionListMarkup
+        },
+        {
+            id: "sg-confirm-progress",
+            name: "Hold to confirm",
+            icon: "clock",
+            category: "Interactions",
+            summary: "A press-and-hold confirmation control for consequential actions that should resist accidental activation.",
+            description: "Hold confirmation primitive",
+            keywords: "hold confirm progress interaction key duration cancel danger sg-confirm",
+            stageNote: "Hold the specimen until the progress track completes; releasing early cancels without an event",
+            defaults: { duration: "1200", tone: "warning", disabled: false },
+            controls: [
+                { key: "duration", label: "Duration", type: "choice", options: [["600", "0.6 seconds"], ["1200", "1.2 seconds"], ["2000", "2 seconds"]] },
+                { key: "tone", label: "Tone", type: "choice", options: [["primary", "Primary"], ["success", "Success"], ["warning", "Warning"], ["danger", "Danger"]] },
+                { key: "disabled", label: "Disabled", type: "boolean" }
+            ],
+            attributes: [["key", "string", "Visible input hint."], ["label / hint", "string", "Action and hold guidance."], ["duration", "300-10000", "Required hold duration in milliseconds."], ["value", "string", "Stable action identity."], ["tone", "primary | success | warning | danger", "Semantic progress signal."], ["disabled", "boolean", "Blocks confirmation."]],
+            events: [["sg-confirm", "{ source, value, duration }", "Bubbles only after uninterrupted completion."]],
+            a11y: ["Uses a native button and reports hold progress in its accessible name.", "Pointer release, key release, pointer cancellation, window blur, and disconnection cancel the hold.", "Reserve the pattern for consequential actions; ordinary commands should remain single activation buttons."],
+            render: renderConfirmProgress,
+            markup: confirmProgressMarkup
+        },
+        {
+            id: "sg-popover",
+            name: "Popover",
+            icon: "info",
+            category: "Interactions",
+            summary: "A non-modal anchored surface for short contextual information or a small secondary action group.",
+            description: "Anchored surface primitive",
+            keywords: "popover anchored surface trigger placement outside escape focus sg-close",
+            stageNote: "Open the specimen, then use Escape or click outside to verify dismissal and focus return",
+            defaults: { placement: "bottom-start", autofocus: false, disabled: false },
+            controls: [
+                { key: "placement", label: "Placement", type: "choice", options: [["bottom-start", "Bottom start"], ["bottom-end", "Bottom end"], ["top-start", "Top start"], ["top-end", "Top end"], ["right", "Right"], ["left", "Left"]] },
+                { key: "autofocus", label: "Autofocus content", type: "boolean" },
+                { key: "disabled", label: "Disabled", type: "boolean" }
+            ],
+            attributes: [["open", "boolean", "Caller-readable open state."], ["label", "string", "Accessible content-surface name."], ["placement", "six anchored positions", "Positions content relative to the trigger."], ["autofocus", "boolean", "Moves focus into interactive content when opened."], ["data-sg-trigger / data-sg-content", "child hooks", "Declare the trigger and contextual surface."], ["disabled", "boolean", "Blocks opening."]],
+            events: [["sg-close", "{ reason: 'escape' | 'outside' | 'trigger' }", "Cancelable dismissal request."]],
+            a11y: ["Connects trigger and content with aria-controls and aria-expanded.", "The content is a named non-modal dialog and Escape restores focus.", "Use a modal when the task requires protected focus or interruption."],
+            render: renderPopover,
+            markup: popoverMarkup
+        },
+        {
+            id: "sg-context-menu",
+            name: "Context menu",
+            icon: "square-stack",
+            category: "Interactions",
+            summary: "A viewport-clamped pointer menu for script-owned actions at a requested screen position.",
+            description: "Pointer menu primitive",
+            keywords: "context menu right click x y position actions keyboard outside sg-action-select sg-close",
+            stageNote: "The catalogue uses an illustrative position; consumers supply actual pointer coordinates",
+            defaults: { keepOpen: false, disabled: false },
+            controls: [{ key: "keepOpen", label: "Keep open", type: "boolean" }, { key: "disabled", label: "Disabled", type: "boolean" }],
+            attributes: [["open", "boolean", "Caller-readable visibility state."], ["x / y", "number", "Requested viewport coordinates, clamped to visible bounds."], ["label", "string", "Accessible menu name."], ["child buttons", "HTML", "Caller-owned actions and values."], ["keep-open", "boolean", "Prevents selection from automatically closing the menu."], ["disabled", "boolean", "Blocks all contained actions."]],
+            events: [["sg-action-select", "{ value, label }", "Bubbles when an enabled action is chosen."], ["sg-close", "{ reason: 'selection' | 'escape' | 'outside' }", "Cancelable dismissal request."]],
+            a11y: ["Uses a named native-button menu and focuses the first action when opened.", "Arrow keys, Home, End, Escape, and outside-pointer dismissal are supported.", "Opening scripts should supply the pointer position and return focus to the originating object."],
+            render: renderContextMenu,
+            markup: contextMenuMarkup
+        },
+        {
+            id: "sg-radial-menu",
+            name: "Radial menu",
+            icon: "circle",
+            category: "Interactions",
+            summary: "A four-to-eight action wheel with native buttons, ordered keyboard navigation, and a compact central anchor.",
+            description: "Quick action wheel",
+            keywords: "radial menu wheel actions quick keyboard icons segments sg-action-select sg-close",
+            stageNote: "Directional keys move through actions in clockwise DOM order; visual position never changes script values",
+            defaults: { count: "6", iconOnly: false, keepOpen: false, disabled: false },
+            controls: [
+                { key: "count", label: "Segments", type: "choice", options: [["4", "Four"], ["6", "Six"], ["8", "Eight"]] },
+                { key: "iconOnly", label: "Icon only", type: "boolean" },
+                { key: "keepOpen", label: "Keep open", type: "boolean" },
+                { key: "disabled", label: "Disabled", type: "boolean" }
+            ],
+            attributes: [["open", "boolean", "Caller-readable visibility state."], ["label", "string", "Accessible wheel name."], ["center-icon", "sprite name", "Decorative center marker."], ["icon-only", "boolean", "Hides visible labels while preserving each button's accessible name."], ["child buttons", "4-8 native buttons", "Clockwise caller-owned actions with stable values."], ["data-selected / data-active / data-locked", "child state hooks", "Persistent selection, held action, and unavailable-condition treatments."], ["keep-open", "boolean", "Prevents selection from automatically closing the wheel."], ["disabled", "boolean", "Blocks every action."]],
+            events: [["sg-action-select", "{ value, label }", "Bubbles when an enabled segment is chosen."], ["sg-close", "{ reason: 'selection' | 'escape' }", "Cancelable dismissal request."]],
+            a11y: ["Visual segments remain native buttons in meaningful clockwise DOM order.", "Directional keys, Home, End, Enter, Space, and Escape are supported.", "Do not rely on icons or wheel position alone; every action keeps visible text."],
+            render: renderRadialMenu,
+            markup: radialMenuMarkup
+        },
+        {
             id: "sg-breadcrumb",
             name: "Breadcrumb",
             icon: "chevron-right",
@@ -1000,7 +1118,7 @@
         document.getElementById("event-clear").addEventListener("click", clearEventLog);
         document.getElementById("event-copy").addEventListener("click", copyEventLog);
 
-        ["sg-activate", "sg-input", "sg-change", "sg-item-activate", "sg-dismiss", "sg-close", "sg-remove"].forEach(function (eventName) {
+        ["sg-activate", "sg-input", "sg-change", "sg-item-activate", "sg-action-select", "sg-confirm", "sg-dismiss", "sg-close", "sg-remove"].forEach(function (eventName) {
             document.addEventListener(eventName, recordComponentEvent);
         });
 
@@ -1539,6 +1657,103 @@
         if (state.removable) attributes.push("removable");
         if (state.disabled) attributes.push("disabled");
         return "<sg-chip " + attributes.join(" ") + ">Weapons</sg-chip>";
+    }
+
+    function renderInteractionPrompt(state) {
+        return "<div class=\"stage-stack\">" + interactionPromptMarkup(state) + "<sg-interaction-prompt key=\"F\" label=\"Pick up bandage\" hint=\"Hold for more options\" icon=\"package\" value=\"pickup-bandage\"></sg-interaction-prompt></div>";
+    }
+
+    function interactionPromptMarkup(state) {
+        var attributes = ["key=\"E\"", "label=\"Talk to Jordan Carter\"", "hint=\"2.4 m away\"", "icon=\"message-square\"", "value=\"talk-player\"", "tone=\"" + state.tone + "\""];
+        if (state.disabled) attributes.push("disabled");
+        return "<sg-interaction-prompt " + attributes.join(" ") + "></sg-interaction-prompt>";
+    }
+
+    function renderActionList(state) {
+        return "<div class=\"stage-stack\">" + actionListMarkup(state) + "<p class=\"stage-caption\">Native buttons keep values and disabled rules under script ownership.</p></div>";
+    }
+
+    function actionListMarkup(state) {
+        var attributes = ["label=\"Player actions\""];
+        if (state.compact) attributes.push("compact");
+        if (state.disabled) attributes.push("disabled");
+        return "<sg-action-list " + attributes.join(" ") + ">\n" +
+            "  <button value=\"talk\" data-icon=\"message-square\">Talk</button>\n" +
+            "  <button value=\"give\" data-icon=\"package\">Give item</button>\n" +
+            "  <button value=\"follow\" data-icon=\"users\">Follow</button>\n" +
+            "  <button value=\"search\" data-icon=\"search\" disabled>Search</button>\n" +
+            "</sg-action-list>";
+    }
+
+    function renderConfirmProgress(state) {
+        return "<div class=\"stage-stack\">" + confirmProgressMarkup(state) + "<p class=\"stage-caption\">Releasing before completion resets the control and emits nothing.</p></div>";
+    }
+
+    function confirmProgressMarkup(state) {
+        var attributes = ["key=\"E\"", "label=\"Pick lock\"", "hint=\"Keep holding to complete\"", "duration=\"" + state.duration + "\"", "value=\"pick-lock\"", "tone=\"" + state.tone + "\""];
+        if (state.disabled) attributes.push("disabled");
+        return "<sg-confirm-progress " + attributes.join(" ") + "></sg-confirm-progress>";
+    }
+
+    function renderPopover(state) {
+        return "<div class=\"popover-stage\">" + popoverMarkup(state) + "</div>";
+    }
+
+    function popoverMarkup(state) {
+        var attributes = ["label=\"Vehicle details\"", "placement=\"" + state.placement + "\""];
+        if (state.autofocus) attributes.push("autofocus");
+        if (state.disabled) attributes.push("disabled");
+        return "<sg-popover " + attributes.join(" ") + ">\n" +
+            "  <sg-button data-sg-trigger>Vehicle details</sg-button>\n" +
+            "  <section data-sg-content>\n" +
+            "    <strong>Buffalo STX</strong>\n" +
+            "    <p>Stored at Pillbox Garage. Fuel 78%.</p>\n" +
+            "    <sg-button size=\"sm\">Set waypoint</sg-button>\n" +
+            "  </section>\n" +
+            "</sg-popover>";
+    }
+
+    function renderContextMenu(state) {
+        return "<div class=\"stage-stack\"><sg-button data-demo-open=\"context-menu\">Open context menu</sg-button>" + contextMenuMarkup(state) + "<p class=\"stage-caption\">The menu clamps its requested coordinates to the current viewport.</p></div>";
+    }
+
+    function contextMenuMarkup(state) {
+        var attributes = ["label=\"Inventory actions\"", "x=\"420\"", "y=\"260\""];
+        if (state.keepOpen) attributes.push("keep-open");
+        if (state.disabled) attributes.push("disabled");
+        return "<sg-context-menu " + attributes.join(" ") + ">\n" +
+            "  <button value=\"use\" data-icon=\"hand\">Use item</button>\n" +
+            "  <button value=\"give\" data-icon=\"users\">Give to player</button>\n" +
+            "  <button value=\"inspect\" data-icon=\"search\">Inspect</button>\n" +
+            "  <button value=\"drop\" data-icon=\"x\">Drop item</button>\n" +
+            "</sg-context-menu>";
+    }
+
+    function renderRadialMenu(state) {
+        return "<div class=\"stage-stack radial-stage\"><sg-button data-demo-open=\"radial-menu\">Open action wheel</sg-button>" + radialMenuMarkup(state) + "</div>";
+    }
+
+    function radialMenuMarkup(state) {
+        var actions = [
+            ["talk", "message-square", "Talk"],
+            ["give", "package", "Give"],
+            ["follow", "users", "Follow"],
+            ["search", "search", "Search"],
+            ["vehicle", "car", "Vehicle"],
+            ["inventory", "backpack", "Inventory"],
+            ["radio", "radio", "Radio"],
+            ["more", "lock", "More", true]
+        ];
+        var count = Math.max(4, Math.min(8, Number(state.count) || 6));
+        var attributes = ["label=\"Quick actions\"", "center-icon=\"zap\""];
+        if (state.iconOnly) attributes.push("icon-only");
+        if (state.keepOpen) attributes.push("keep-open");
+        if (state.disabled) attributes.push("disabled");
+        var buttons = actions.slice(0, count).map(function (action) {
+            var stateAttributes = action[3] ? " data-locked disabled" : "";
+            return "  <button value=\"" + action[0] + "\" data-icon=\"" + action[1] + "\"" + stateAttributes + ">" + action[2] + "</button>";
+        });
+        return "<sg-radial-menu " + attributes.join(" ") + ">\n" + buttons.join("\n") + "\n</sg-radial-menu>";
     }
 
     function renderBreadcrumb(state) {

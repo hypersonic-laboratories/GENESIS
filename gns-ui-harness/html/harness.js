@@ -10,7 +10,7 @@ function describeEvent(event) {
 function setVisible(visible) {
     document.body.classList.toggle("is-visible", visible);
     if (!visible) {
-        document.querySelectorAll("sg-modal[open], sg-drawer[open]").forEach((overlay) => {
+        document.querySelectorAll("sg-modal[open], sg-drawer[open], sg-popover[open], sg-context-menu[open], sg-radial-menu[open]").forEach((overlay) => {
             overlay.open = false;
         });
     }
@@ -63,6 +63,14 @@ if (!window.customElements) {
             output.textContent = describeEvent(event);
         });
 
+        harness.addEventListener("sg-action-select", (event) => {
+            output.textContent = describeEvent(event);
+        });
+
+        harness.addEventListener("sg-confirm", (event) => {
+            output.textContent = describeEvent(event);
+        });
+
         document.addEventListener("sg-close", (event) => {
             output.textContent = describeEvent(event);
         });
@@ -111,6 +119,19 @@ if (!window.customElements) {
 
         document.querySelector("#show-toast").addEventListener("sg-activate", () => {
             document.querySelector("#harness-toast").show();
+        });
+
+        document.querySelector("#open-context-menu").addEventListener("sg-activate", () => {
+            const launcher = document.querySelector("#open-context-menu");
+            const menu = document.querySelector("#harness-context-menu");
+            const bounds = launcher.getBoundingClientRect();
+            menu.setAttribute("x", String(Math.round(bounds.right + 8)));
+            menu.setAttribute("y", String(Math.round(bounds.top)));
+            menu.open = true;
+        });
+
+        document.querySelector("#open-radial-menu").addEventListener("sg-activate", () => {
+            document.querySelector("#harness-radial-menu").open = true;
         });
 
         document.querySelector("#modal-done").addEventListener("sg-activate", () => {

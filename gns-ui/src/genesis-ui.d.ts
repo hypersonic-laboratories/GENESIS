@@ -4,6 +4,7 @@ export type SGButtonSize = "sm" | "md" | "lg";
 
 export interface SGActivateDetail {
     source: "keyboard" | "pointer";
+    value?: string;
 }
 
 export interface SGItemActivateDetail {
@@ -17,7 +18,18 @@ export interface SGDismissDetail {
 }
 
 export interface SGCloseDetail {
-    reason: "close-button" | "escape" | "scrim";
+    reason: "close-button" | "escape" | "scrim" | "outside" | "selection" | "trigger";
+}
+
+export interface SGActionSelectDetail {
+    value: string;
+    label: string;
+}
+
+export interface SGConfirmDetail {
+    source: "keyboard" | "pointer";
+    value: string;
+    duration: number;
 }
 
 export interface SGSelectionChangeDetail {
@@ -138,6 +150,22 @@ export class SGChip extends HTMLElement {
     disabled: boolean;
 }
 
+export class SGInteractionPrompt extends HTMLElement {}
+export class SGActionList extends HTMLElement {}
+export class SGConfirmProgress extends HTMLElement {}
+
+export class SGPopover extends HTMLElement {
+    open: boolean;
+}
+
+export class SGContextMenu extends HTMLElement {
+    open: boolean;
+}
+
+export class SGRadialMenu extends HTMLElement {
+    open: boolean;
+}
+
 export class SGBreadcrumb extends HTMLElement {}
 
 export class SGPagination extends HTMLElement {
@@ -196,6 +224,7 @@ export function defineAll(): void;
 declare global {
     interface HTMLElementTagNameMap {
         "sg-alert": SGAlert;
+        "sg-action-list": SGActionList;
         "sg-avatar": SGAvatar;
         "sg-badge": HTMLElement;
         "sg-breadcrumb": SGBreadcrumb;
@@ -203,6 +232,8 @@ declare global {
         "sg-card": HTMLElement;
         "sg-checkbox": SGCheckbox;
         "sg-chip": SGChip;
+        "sg-confirm-progress": SGConfirmProgress;
+        "sg-context-menu": SGContextMenu;
         "sg-data-table": SGDataTable;
         "sg-divider": HTMLElement;
         "sg-drawer": SGDrawer;
@@ -210,6 +241,7 @@ declare global {
         "sg-icon": SGIcon;
         "sg-icon-button": SGIconButton;
         "sg-input": SGInput;
+        "sg-interaction-prompt": SGInteractionPrompt;
         "sg-item-slot": SGItemSlot;
         "sg-keybind": SGKeybind;
         "sg-list-row": SGListRow;
@@ -218,7 +250,9 @@ declare global {
         "sg-number-stepper": SGNumberStepper;
         "sg-pagination": SGPagination;
         "sg-panel": HTMLElement;
+        "sg-popover": SGPopover;
         "sg-progress": SGProgress;
+        "sg-radial-menu": SGRadialMenu;
         "sg-radio-group": SGRadioGroup;
         "sg-segmented": SGSegmented;
         "sg-select": SGSelect;
@@ -240,6 +274,8 @@ declare global {
         "sg-change": CustomEvent<SGValueDetail | SGSelectDetail | SGToggleChangeDetail | SGCheckboxChangeDetail | SGChipChangeDetail | SGPaginationChangeDetail | SGSelectionChangeDetail>;
         "sg-close": CustomEvent<SGCloseDetail>;
         "sg-remove": CustomEvent<SGChipRemoveDetail>;
+        "sg-action-select": CustomEvent<SGActionSelectDetail>;
+        "sg-confirm": CustomEvent<SGConfirmDetail>;
     }
 
     interface Window {

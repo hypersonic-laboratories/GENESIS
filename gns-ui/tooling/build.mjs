@@ -9,6 +9,7 @@ const source = path.join(root, "src");
 const packageJson = JSON.parse(await readFile(path.join(root, "package.json"), "utf8"));
 
 const components = [
+    "sg-action-list",
     "sg-alert",
     "sg-avatar",
     "sg-badge",
@@ -17,6 +18,8 @@ const components = [
     "sg-card",
     "sg-checkbox",
     "sg-chip",
+    "sg-confirm-progress",
+    "sg-context-menu",
     "sg-data-table",
     "sg-divider",
     "sg-drawer",
@@ -24,6 +27,7 @@ const components = [
     "sg-icon",
     "sg-icon-button",
     "sg-input",
+    "sg-interaction-prompt",
     "sg-item-slot",
     "sg-keybind",
     "sg-list-row",
@@ -32,7 +36,9 @@ const components = [
     "sg-number-stepper",
     "sg-pagination",
     "sg-panel",
+    "sg-popover",
     "sg-progress",
+    "sg-radial-menu",
     "sg-radio-group",
     "sg-segmented",
     "sg-select",

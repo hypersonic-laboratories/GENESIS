@@ -631,6 +631,13 @@ kbd {
     place-items: center;
 }
 
+.popover-stage {
+    display: grid;
+    min-height: 190px;
+    align-items: start;
+    justify-items: start;
+}
+
 .toast-stage {
     justify-items: center;
 }

@@ -36,8 +36,8 @@ for (const file of ["genesis-ui.css", "genesis-ui.js", "genesis-ui.helix.js", "e
 
 const budgets = {
     "genesis-ui.css": 96 * 1024,
-    "genesis-ui.js": 88 * 1024,
-    "genesis-ui.helix.js": 88 * 1024,
+    "genesis-ui.js": 112 * 1024,
+    "genesis-ui.helix.js": 112 * 1024,
     "genesis-icons.svg": 128 * 1024,
 };
 

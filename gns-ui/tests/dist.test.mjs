@@ -31,7 +31,10 @@ test("manifest exposes a framework-neutral zero-dependency contract", async () =
     for (const component of ["sg-progress", "sg-meter", "sg-avatar", "sg-list-row", "sg-empty-state", "sg-skeleton", "sg-data-table"]) {
         assert.ok(manifest.components.includes(component));
     }
-    assert.equal(manifest.components.length, 35);
+    for (const component of ["sg-interaction-prompt", "sg-action-list", "sg-confirm-progress", "sg-popover", "sg-context-menu", "sg-radial-menu"]) {
+        assert.ok(manifest.components.includes(component));
+    }
+    assert.equal(manifest.components.length, 41);
 });
 
 test("minimal consumer loads only local distribution files", async () => {
@@ -60,7 +63,7 @@ test("catalogue exposes the complete public registry and truthful integration to
     assert.doesNotMatch(html, /Runtime ready|Stable contract/);
 
     const publicRecords = script.match(/id:\s*"sg-[a-z-]+"/g) || [];
-    assert.equal(publicRecords.length, 35);
+    assert.equal(publicRecords.length, 41);
     assert.match(script, /#?components\/sg-button/);
     assert.match(script, /execCommand\("copy"\)/);
     assert.match(script, /sg-item-activate/);
@@ -68,6 +71,8 @@ test("catalogue exposes the complete public registry and truthful integration to
     assert.match(script, /sg-change/);
     assert.match(script, /sg-close/);
     assert.match(script, /sg-remove/);
+    assert.match(script, /sg-action-select/);
+    assert.match(script, /sg-confirm/);
     assert.match(script, /dataset\.eventExpanded/);
 });
 
@@ -126,9 +131,42 @@ test("HELIX harness is emitted as a package-local classic-script fixture", async
     assert.match(html, /<sg-empty-state/);
     assert.match(html, /<sg-skeleton/);
     assert.match(html, /<sg-data-table/);
+    assert.match(html, /<sg-interaction-prompt/);
+    assert.match(html, /<sg-action-list/);
+    assert.match(html, /<sg-confirm-progress/);
+    assert.match(html, /<sg-popover/);
+    assert.match(html, /<sg-context-menu/);
+    assert.match(html, /<sg-radial-menu/);
     assert.match(script, /addEventListener\("sg-input"/);
     assert.match(script, /addEventListener\("sg-change"/);
     assert.match(script, /addEventListener\("sg-remove"/);
+    assert.match(script, /addEventListener\("sg-action-select"/);
+    assert.match(script, /addEventListener\("sg-confirm"/);
+});
+
+test("gameplay interaction components preserve native actions and controlled overlays", async () => {
+    const prompt = await readFile(path.join(root, "src", "elements", "interaction-prompt.ts"), "utf8");
+    const actionList = await readFile(path.join(root, "src", "elements", "action-list.ts"), "utf8");
+    const confirm = await readFile(path.join(root, "src", "elements", "confirm-progress.ts"), "utf8");
+    const popover = await readFile(path.join(root, "src", "elements", "popover.ts"), "utf8");
+    const contextMenu = await readFile(path.join(root, "src", "elements", "context-menu.ts"), "utf8");
+    const radialMenu = await readFile(path.join(root, "src", "elements", "radial-menu.ts"), "utf8");
+    const interactions = [prompt, actionList, confirm, popover, contextMenu, radialMenu].join("\n");
+
+    assert.match(prompt, /document\.createElement\("button"\)/);
+    assert.match(actionList, /role", "menu"/);
+    assert.match(actionList, /"sg-action-select"/);
+    assert.match(confirm, /requestAnimationFrame/);
+    assert.match(confirm, /"sg-confirm"/);
+    assert.match(popover, /aria-expanded/);
+    assert.match(popover, /restoreFocus/);
+    assert.match(contextMenu, /window\.innerWidth/);
+    assert.match(contextMenu, /"outside"/);
+    assert.match(radialMenu, /Math\.cos/);
+    assert.match(radialMenu, /slicePolygon/);
+    assert.match(radialMenu, /style\.clipPath/);
+    assert.match(radialMenu, /"ArrowRight"/);
+    assert.doesNotMatch(interactions, /ElementInternals|formAssociated|setInterval/);
 });
 
 test("data display components preserve native semantics and script ownership", async () => {

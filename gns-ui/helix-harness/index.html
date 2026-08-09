@@ -88,6 +88,20 @@
             padding-top: 16px;
             border-top: 1px solid var(--sg-color-border);
         }
+        .harness-interactions {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px 18px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--sg-color-border);
+        }
+        .harness-interaction-stack { display: grid; align-content: start; gap: 10px; }
+        .harness-interaction-stack > p { margin: 0; color: var(--sg-color-text-muted); font-size: 12px; }
+        .harness-radial { grid-column: 1 / -1; display: grid; justify-items: center; gap: 12px; }
+        .harness-popover-demo[open] .harness-popover-copy { display: grid; gap: 9px; }
+        .harness-popover-copy p { max-width: 28ch; margin: 0; }
+        .harness-popover-demo[open] { margin-bottom: 130px; }
         .harness-display-wide { grid-column: 1 / -1; }
         .harness-identity { display: flex; align-items: center; gap: 12px; color: var(--sg-color-text-secondary); }
         .harness-identity strong { display: block; color: var(--sg-color-text); }
@@ -133,7 +147,8 @@
         @media (max-width: 900px) {
             .harness-controls,
             .harness-core,
-            .harness-display { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .harness-display,
+            .harness-interactions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
             .harness-structure { grid-template-columns: 1fr; }
             .harness-structure-actions { justify-content: flex-start; }
         }
@@ -144,8 +159,10 @@
             .harness-controls { grid-template-columns: 1fr; }
             .harness-core { grid-template-columns: 1fr; }
             .harness-display { grid-template-columns: 1fr; }
+            .harness-interactions { grid-template-columns: 1fr; }
             .harness-core-wide { grid-column: auto; }
             .harness-display-wide { grid-column: auto; }
+            .harness-radial { grid-column: auto; }
         }
     </style>
 </head>
@@ -251,6 +268,51 @@
                     </tbody>
                 </table>
             </sg-data-table>
+        </div>
+        <div class="harness-interactions">
+            <div class="harness-interaction-stack">
+                <p class="sg-overline">World prompt</p>
+                <sg-interaction-prompt key="E" label="Talk to Jordan Carter" hint="2.4 m away" icon="message-square" value="talk-player"></sg-interaction-prompt>
+                <sg-confirm-progress key="F" label="Pick lock" hint="Hold to complete" duration="900" value="pick-lock" tone="warning"></sg-confirm-progress>
+            </div>
+            <div class="harness-interaction-stack">
+                <p class="sg-overline">Action list</p>
+                <sg-action-list label="Player actions" compact>
+                    <button value="talk" data-icon="message-square">Talk</button>
+                    <button value="give" data-icon="package">Give item</button>
+                    <button value="follow" data-icon="users">Follow</button>
+                    <button value="search" data-icon="search" disabled>Search</button>
+                </sg-action-list>
+            </div>
+            <div class="harness-interaction-stack">
+                <p class="sg-overline">Anchored surfaces</p>
+                <sg-popover class="harness-popover-demo" label="Vehicle details" placement="bottom-start">
+                    <sg-button data-sg-trigger>Vehicle details</sg-button>
+                    <section class="harness-popover-copy" data-sg-content>
+                        <strong>Buffalo STX</strong>
+                        <p>Stored at Pillbox Garage. Fuel 78%.</p>
+                        <sg-button size="sm">Set waypoint</sg-button>
+                    </section>
+                </sg-popover>
+                <sg-button id="open-context-menu">Context menu</sg-button>
+                <sg-context-menu id="harness-context-menu" label="Inventory actions">
+                    <button value="use" data-icon="hand">Use item</button>
+                    <button value="give" data-icon="users">Give to player</button>
+                    <button value="inspect" data-icon="search">Inspect</button>
+                    <button value="drop" data-icon="x">Drop item</button>
+                </sg-context-menu>
+            </div>
+            <div class="harness-radial">
+                <sg-button id="open-radial-menu">Open action wheel</sg-button>
+                <sg-radial-menu id="harness-radial-menu" label="Quick actions" center-icon="zap">
+                    <button value="talk" data-icon="message-square">Talk</button>
+                    <button value="give" data-icon="package">Give</button>
+                    <button value="follow" data-icon="users">Follow</button>
+                    <button value="search" data-icon="search">Search</button>
+                    <button value="vehicle" data-icon="car">Vehicle</button>
+                    <button value="inventory" data-icon="lock" data-locked disabled>Inventory</button>
+                </sg-radial-menu>
+            </div>
         </div>
         <div class="harness-actions">
             <sg-button id="emit-test" variant="primary">Emit test event</sg-button>
