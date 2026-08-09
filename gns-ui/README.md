@@ -9,6 +9,9 @@ Framework-neutral WebUI components for Genesis HELIX packages. The library is ma
 Implemented public elements:
 
 - `sg-button`
+- `sg-icon-button`
+- `sg-input` and `sg-select`
+- `sg-toggle` and `sg-slider`
 - `sg-panel` and `sg-card`
 - `sg-badge`
 - `sg-icon`
@@ -65,7 +68,7 @@ The ESM bundle remains available for ordinary browsers and module-based tooling:
 
 Serve the package root with any local static server, then open `catalogue/index.html`. The workbench supports hash-addressable component views and keeps rendering profiles scoped to the preview surface so testing compact or reduced-effects output does not alter the documentation shell.
 
-The catalogue reports browser registration and HELIX validation separately. “Components registered” means the compiled custom elements loaded in the browser; it does not claim that the current Unreal/CEF runtime has passed the package-local harness.
+The catalogue reports browser registration and HELIX validation separately. “Components registered” means the compiled custom elements loaded; “HELIX harness passed” records the successful package-local run in the current bleeding-edge client, not a permanent guarantee for future client builds.
 
 ## Rendering profiles
 
@@ -89,4 +92,4 @@ The distribution self-hosts Inter and Exo 2 and includes their OFL 1.1 license f
 
 The automated Phase 1 checks validate TypeScript, reproducible distribution contents, local-only runtime references, file budgets, the manifest, and the minimal consumer. Browser inspection validates component registration, layout, focus, and DOM-event behavior.
 
-The current Chromium target is a conservative Chromium 89 baseline. This is not a claim that the current HELIX Unreal WebUI build has passed yet. Final compatibility and performance approval requires loading `helix-harness/` inside HELIX and recording its actual CEF/Chromium behavior.
+The current Chromium target is a conservative Chromium 89 baseline. The package-local harness has rendered successfully in the current HELIX bleeding-edge client; each release still requires an in-game smoke test because the embedded runtime can change independently.

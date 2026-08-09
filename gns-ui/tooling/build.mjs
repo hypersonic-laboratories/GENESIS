@@ -15,10 +15,15 @@ const components = [
     "sg-card",
     "sg-divider",
     "sg-icon",
+    "sg-icon-button",
+    "sg-input",
     "sg-item-slot",
     "sg-keybind",
     "sg-panel",
+    "sg-select",
+    "sg-slider",
     "sg-stat",
+    "sg-toggle",
 ];
 
 await rm(dist, { recursive: true, force: true });
@@ -82,7 +87,7 @@ await writeFile(
         version: packageJson.version,
         license: packageJson.license,
         format: "framework-neutral-custom-elements",
-        browserTarget: "Chromium 89+ compatibility baseline; HELIX runtime validation pending",
+        browserTarget: "Chromium 89+ compatibility baseline; package harness passed in the current HELIX bleeding-edge client",
         runtimeDependencies: [],
         components,
         files: {

@@ -1,9 +1,7 @@
 [data-sg-density="compact"] {
-    --sg-control-height-xs: 24px;
     --sg-control-height-sm: 28px;
     --sg-control-height-md: 34px;
     --sg-control-height-lg: 40px;
-    --sg-control-height-xl: 44px;
     --sg-panel-padding: 16px;
     --sg-component-gap: 8px;
 }

@@ -1,5 +1,11 @@
 const output = document.querySelector("#harness-output");
 const state = document.querySelector("#runtime-state");
+const harness = document.querySelector(".harness");
+
+function describeEvent(event) {
+    var detail = event.detail || {};
+    return event.type + " delivered - " + JSON.stringify(detail);
+}
 
 function setVisible(visible) {
     document.body.classList.toggle("is-visible", visible);
@@ -39,6 +45,14 @@ if (!window.customElements) {
         state.setAttribute("tone", "success");
         output.textContent = `Genesis UI ${version} registered without a framework. Press F10 or Escape to close.`;
 
+        harness.addEventListener("sg-input", (event) => {
+            output.textContent = describeEvent(event);
+        });
+
+        harness.addEventListener("sg-change", (event) => {
+            output.textContent = describeEvent(event);
+        });
+
         document.querySelector("#emit-test").addEventListener("sg-activate", (event) => {
             output.textContent = `sg-activate delivered - source: ${event.detail.source}`;
         });
@@ -52,5 +66,9 @@ if (!window.customElements) {
         });
 
         document.querySelector("#close-harness").addEventListener("sg-activate", requestClose);
+
+        document.querySelector("#settings-action").addEventListener("sg-activate", (event) => {
+            output.textContent = describeEvent(event);
+        });
     });
 }

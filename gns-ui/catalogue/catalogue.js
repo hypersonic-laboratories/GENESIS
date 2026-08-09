@@ -7,20 +7,20 @@
             name: "Button",
             icon: "hand",
             category: "Actions",
-            summary: "Primary, secondary, ghost, and semantic actions with one browser-native activation event.",
+            summary: "Primary, secondary, tertiary, ghost, and semantic actions with one browser-native activation event.",
             description: "Action primitive",
             keywords: "action click submit confirm loading disabled keyboard sg-activate",
             stageNote: "Activate the specimen to inspect sg-activate",
             defaults: { variant: "primary", size: "md", disabled: false, loading: false },
             controls: [
-                { key: "variant", label: "Variant", type: "choice", options: [["primary", "Primary"], ["default", "Secondary"], ["ghost", "Ghost"], ["success", "Success"], ["warning", "Warning"], ["danger", "Danger"]] },
+                { key: "variant", label: "Variant", type: "choice", options: [["primary", "Primary"], ["secondary", "Secondary"], ["tertiary", "Tertiary"], ["ghost", "Ghost"], ["success", "Success"], ["warning", "Warning"], ["danger", "Danger"]] },
                 { key: "size", label: "Size", type: "choice", options: [["sm", "Small"], ["md", "Medium"], ["lg", "Large"]] },
                 { key: "loading", label: "Loading", type: "boolean" },
                 { key: "disabled", label: "Disabled", type: "boolean" }
             ],
             attributes: [
-                ["variant", "primary | ghost | success | warning | danger", "Visual priority; omit for secondary."],
-                ["size", "sm | lg", "Medium is the default."],
+                ["variant", "primary | secondary | tertiary | ghost | success | warning | danger", "Visual priority; secondary is the default treatment."],
+                ["size", "sm | md | lg", "Medium is the default."],
                 ["loading", "boolean", "Blocks activation and exposes aria-busy."],
                 ["disabled", "boolean", "Removes the element from the tab order."]
             ],
@@ -38,9 +38,11 @@
             description: "Compact action primitive",
             keywords: "icon button toolbar utility action label pressed loading disabled keyboard sg-activate",
             stageNote: "The visible icon is decorative; the label supplies the control name",
-            defaults: { icon: "settings", pressed: false, loading: false, disabled: false },
+            defaults: { icon: "settings", variant: "secondary", size: "md", pressed: false, loading: false, disabled: false },
             controls: [
                 { key: "icon", label: "Action", type: "choice", options: [["settings", "Settings"], ["search", "Search"], ["x", "Close"], ["plus", "Add"]] },
+                { key: "variant", label: "Variant", type: "choice", options: [["secondary", "Secondary"], ["primary", "Primary"], ["ghost", "Ghost"], ["danger", "Danger"]] },
+                { key: "size", label: "Size", type: "choice", options: [["sm", "Small"], ["md", "Medium"], ["lg", "Large"]] },
                 { key: "pressed", label: "Pressed", type: "boolean" },
                 { key: "loading", label: "Loading", type: "boolean" },
                 { key: "disabled", label: "Disabled", type: "boolean" }
@@ -48,6 +50,8 @@
             attributes: [
                 ["icon", "sprite symbol name", "Required bundled icon displayed inside the control."],
                 ["label", "string", "Required accessible action name."],
+                ["variant", "primary | secondary | ghost | danger", "Visual priority; secondary is the default treatment."],
+                ["size", "sm | md | lg", "Square geometry follows the shared control-height scale."],
                 ["pressed", "boolean", "Exposes a persistent on/off action with aria-pressed."],
                 ["loading", "boolean", "Blocks activation and exposes aria-busy."],
                 ["disabled", "boolean", "Blocks activation and removes the control from the tab order."]
@@ -529,7 +533,7 @@
         document.getElementById("event-clear").addEventListener("click", clearEventLog);
         document.getElementById("event-copy").addEventListener("click", copyEventLog);
 
-        ["sg-activate", "sg-item-activate", "sg-dismiss"].forEach(function (eventName) {
+        ["sg-activate", "sg-input", "sg-change", "sg-item-activate", "sg-dismiss"].forEach(function (eventName) {
             document.addEventListener(eventName, recordComponentEvent);
         });
 
@@ -650,7 +654,7 @@
     function renderControls() {
         if (!current.controls || current.controls.length === 0) {
             nodes.controls.innerHTML = "<section class=\"contract-section\"><h3>Guide focus</h3><p>This route is a reference workflow. Select a component to expose live state controls.</p></section>" +
-                "<section class=\"contract-section\"><h3>Evidence boundary</h3><p class=\"truth-note\">Components are browser verified. Embedded HELIX runtime validation is still pending.</p></section>";
+                "<section class=\"contract-section\"><h3>Evidence boundary</h3><p class=\"truth-note\">The package-local harness rendered and exchanged events in the current HELIX bleeding-edge client. Re-test each release because the embedded runtime can change independently.</p></section>";
             return;
         }
 
@@ -896,12 +900,90 @@
 
     function buttonMarkup(state, stage) {
         var attributes = [];
-        if (state.variant && state.variant !== "default") attributes.push("variant=\"" + state.variant + "\"");
+        if (state.variant) attributes.push("variant=\"" + state.variant + "\"");
         if (state.size && state.size !== "md") attributes.push("size=\"" + state.size + "\"");
         if (state.loading) attributes.push("loading");
         if (state.disabled) attributes.push("disabled");
         var icon = stage ? "<sg-icon name=\"hand\"></sg-icon>" : "";
         return "<sg-button id=\"confirm-action\"" + attributeString(attributes) + ">" + icon + "Confirm action</sg-button>";
+    }
+
+    function renderIconButton(state) {
+        return "<div class=\"stage-stack\"><div class=\"stage-row\">" + iconButtonMarkup(state) + "<span class=\"stage-caption\">" + escapeHtml(iconButtonLabel(state.icon)) + "</span></div><p class=\"stage-caption\">Compact utility actions keep a clear accessible name even when no text is visible inside the control.</p></div>";
+    }
+
+    function iconButtonMarkup(state) {
+        var attributes = ["icon=\"" + state.icon + "\"", "label=\"" + iconButtonLabel(state.icon) + "\"", "variant=\"" + state.variant + "\"", "size=\"" + state.size + "\""];
+        if (state.pressed) attributes.push("pressed");
+        if (state.loading) attributes.push("loading");
+        if (state.disabled) attributes.push("disabled");
+        return "<sg-icon-button " + attributes.join(" ") + "></sg-icon-button>";
+    }
+
+    function iconButtonLabel(icon) {
+        var labels = { settings: "Open settings", search: "Search records", x: "Close panel", plus: "Add entry" };
+        return labels[icon] || "Utility action";
+    }
+
+    function renderInput(state) {
+        return "<div class=\"stage-stack\">" + inputMarkup(state) + "<p class=\"stage-caption\">The field emits browser-native value timing through library-owned DOM events.</p></div>";
+    }
+
+    function inputMarkup(state) {
+        var presets = {
+            text: { label: "Radio callsign", value: "LSPD 1", placeholder: "Enter callsign", hint: "Shown to nearby units." },
+            search: { label: "Search inventory", value: "", placeholder: "Search items", hint: "Matches item names and categories." },
+            password: { label: "Terminal access code", value: "", placeholder: "Enter access code", hint: "Use the code issued for this terminal." },
+            number: { label: "Transfer amount", value: "250", placeholder: "0", hint: "Enter an amount from 1 to 10000." }
+        };
+        var preset = presets[state.type] || presets.text;
+        var attributes = ["label=\"" + preset.label + "\"", "name=\"control-demo\"", "type=\"" + state.type + "\"", "value=\"" + preset.value + "\"", "placeholder=\"" + preset.placeholder + "\"", "hint=\"" + preset.hint + "\""];
+        if (state.type === "search") attributes.push("icon=\"search\"");
+        if (state.type === "number") attributes.push("min=\"1\"", "max=\"10000\"", "step=\"1\"");
+        if (state.required) attributes.push("required");
+        if (state.invalid) attributes.push("invalid", "error=\"Review this value before continuing.\"");
+        if (state.readonly) attributes.push("readonly");
+        if (state.disabled) attributes.push("disabled");
+        return "<sg-input " + attributes.join(" ") + "></sg-input>";
+    }
+
+    function renderSelect(state) {
+        return "<div class=\"stage-stack\">" + selectMarkup(state) + "<p class=\"stage-caption\">The component styles caller-owned native options without taking ownership of radio or duty logic.</p></div>";
+    }
+
+    function selectMarkup(state) {
+        var attributes = ["label=\"Active radio channel\"", "name=\"radio-channel\"", "value=\"" + state.value + "\"", "hint=\"Choose the channel used for duty communications.\""];
+        if (state.required) attributes.push("required");
+        if (state.multiple) attributes.push("multiple", "size=\"3\"");
+        if (state.invalid) attributes.push("invalid", "error=\"Select an available duty channel.\"");
+        if (state.disabled) attributes.push("disabled");
+        return "<sg-select " + attributes.join(" ") + ">\n" +
+            "  <option value=\"dispatch\">Dispatch</option>\n" +
+            "  <option value=\"patrol\">Patrol 1</option>\n" +
+            "  <option value=\"tactical\">Tactical</option>\n" +
+            "</sg-select>";
+    }
+
+    function renderToggle(state) {
+        return "<div class=\"stage-stack\">" + toggleMarkup(state) + "<p class=\"stage-caption\">Immediate binary settings emit the requested state; scripts remain authoritative.</p></div>";
+    }
+
+    function toggleMarkup(state) {
+        var attributes = ["label=\"Proximity voice\"", "name=\"proximity-voice\"", "value=\"enabled\"", "hint=\"Allow nearby players to hear your voice channel.\""];
+        if (state.checked) attributes.push("checked");
+        if (state.disabled) attributes.push("disabled");
+        return "<sg-toggle " + attributes.join(" ") + "></sg-toggle>";
+    }
+
+    function renderSlider(state) {
+        return "<div class=\"stage-stack\">" + sliderMarkup(state) + "<p class=\"stage-caption\">A stable percentage reading keeps live radio adjustments scannable.</p></div>";
+    }
+
+    function sliderMarkup(state) {
+        var attributes = ["label=\"Radio volume\"", "name=\"radio-volume\"", "value=\"" + state.value + "\"", "min=\"0\"", "max=\"100\"", "step=\"5\"", "unit=\"%\"", "hint=\"Adjust incoming duty-channel audio.\""];
+        if (state.showValue) attributes.push("show-value");
+        if (state.disabled) attributes.push("disabled");
+        return "<sg-slider " + attributes.join(" ") + "></sg-slider>";
     }
 
     function renderStat(state) {

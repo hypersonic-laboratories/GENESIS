@@ -3,7 +3,7 @@
   "version": "0.1.0-alpha.0",
   "license": "GPL-3.0-only",
   "format": "framework-neutral-custom-elements",
-  "browserTarget": "Chromium 89+ compatibility baseline; HELIX runtime validation pending",
+  "browserTarget": "Chromium 89+ compatibility baseline; package harness passed in the current HELIX bleeding-edge client",
   "runtimeDependencies": [],
   "components": [
     "sg-alert",
@@ -12,10 +12,15 @@
     "sg-card",
     "sg-divider",
     "sg-icon",
+    "sg-icon-button",
+    "sg-input",
     "sg-item-slot",
     "sg-keybind",
     "sg-panel",
-    "sg-stat"
+    "sg-select",
+    "sg-slider",
+    "sg-stat",
+    "sg-toggle"
   ],
   "files": {
     "styles": "genesis-ui.css",
