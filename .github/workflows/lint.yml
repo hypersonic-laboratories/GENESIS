@@ -13,7 +13,7 @@ jobs:
     name: StyLua
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Check Lua formatting
         uses: JohnnyMorganz/stylua-action@v4
@@ -26,7 +26,7 @@ jobs:
     name: Package manifests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Validate config.json and package manifests
         run: |
@@ -84,7 +84,7 @@ jobs:
     name: Naming convention
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Check package and event prefixes
         run: |
@@ -149,7 +149,7 @@ jobs:
     name: Secret placeholders
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Look for committed credentials
         run: |

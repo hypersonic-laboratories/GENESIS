@@ -1,0 +1,12 @@
+# Commits that only reformat code. Listed here so `git blame` attributes lines
+# to whoever actually wrote them, not to whoever ran the formatter.
+#
+# Enable locally (once per clone):
+#   git config blame.ignoreRevsFile .git-blame-ignore-revs
+#
+# GitHub reads this file automatically — no setup needed for the web UI.
+#
+# Only add commits that are provably formatting-only.
+
+# CLEANUP: Stylua pass on the whole repo (PR #1)
+e5b308f17529df9b7e32eb1ee51497a78f8f3260

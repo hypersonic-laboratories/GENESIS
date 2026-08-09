@@ -81,13 +81,23 @@ stay first — everything else depends on it.
 ## Formatting
 
 Lua is formatted with [StyLua](https://github.com/JohnnyMorganz/StyLua). Settings live in
-`.stylua.toml` (4 spaces, single quotes, LF). Run it before opening a pull request:
+`.stylua.toml` (4 spaces, single quotes, LF, 500 columns — wrapping is effectively off, which keeps
+reflow out of diffs). Run it before opening a pull request:
 
 ```bash
 stylua .
 ```
 
 CI checks formatting on every pull request.
+
+Formatting-only commits are listed in `.git-blame-ignore-revs` so they don't obscure who wrote a
+line. GitHub applies it automatically; for local `git blame`, enable it once per clone:
+
+```bash
+git config blame.ignoreRevsFile .git-blame-ignore-revs
+```
+
+If you land a formatting-only commit, add its full SHA to that file in the same pull request.
 
 ## Assets and Git LFS
 
