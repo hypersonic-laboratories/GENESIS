@@ -20,6 +20,12 @@
 - [ ] `UPSTREAM.md` status updated if this changes a package's state
 - [ ] No credentials, tokens, keys, or webhook URLs
 - [ ] No unrelated formatting churn
+- [ ] WebUI uses `gns-ui` components where available
+- [ ] Genesis UI consumers are registered and synchronized
+
+## Genesis UI impact
+
+<!-- If this changes gns-ui or a consuming WebUI: list synchronized packages and HELIX states tested. Otherwise write "Not applicable". -->
 
 ## Risk
 

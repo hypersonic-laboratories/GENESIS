@@ -1,6 +1,6 @@
 import { defineElement } from "../internal/element";
 
-const defaultSpriteUrl = new URL("./genesis-icons.svg", import.meta.url).toString();
+const defaultSpriteUrl = new URL("./genesis-icons.svg?rev=35", import.meta.url).toString();
 
 export class SGIcon extends HTMLElement {
     static observedAttributes = ["name", "label", "src"];

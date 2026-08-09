@@ -13,7 +13,28 @@ test("manifest exposes a framework-neutral zero-dependency contract", async () =
     assert.deepEqual(manifest.runtimeDependencies, []);
     assert.equal(manifest.files.helixScript, "genesis-ui.helix.js");
     assert.ok(manifest.components.includes("sg-button"));
+    assert.ok(manifest.components.includes("sg-icon-button"));
+    assert.ok(manifest.components.includes("sg-input"));
+    assert.ok(manifest.components.includes("sg-select"));
+    assert.ok(manifest.components.includes("sg-toggle"));
+    assert.ok(manifest.components.includes("sg-slider"));
+    assert.ok(manifest.components.includes("sg-tabs"));
+    assert.ok(manifest.components.includes("sg-segmented"));
+    assert.ok(manifest.components.includes("sg-modal"));
+    assert.ok(manifest.components.includes("sg-drawer"));
+    assert.ok(manifest.components.includes("sg-tooltip"));
+    assert.ok(manifest.components.includes("sg-toast"));
     assert.ok(manifest.components.includes("sg-item-slot"));
+    for (const component of ["sg-checkbox", "sg-radio-group", "sg-textarea", "sg-number-stepper", "sg-chip", "sg-breadcrumb", "sg-pagination"]) {
+        assert.ok(manifest.components.includes(component));
+    }
+    for (const component of ["sg-progress", "sg-meter", "sg-avatar", "sg-list-row", "sg-empty-state", "sg-skeleton", "sg-data-table"]) {
+        assert.ok(manifest.components.includes(component));
+    }
+    for (const component of ["sg-interaction-prompt", "sg-action-list", "sg-confirm-progress", "sg-popover", "sg-context-menu", "sg-radial-menu"]) {
+        assert.ok(manifest.components.includes(component));
+    }
+    assert.equal(manifest.components.length, 41);
 });
 
 test("minimal consumer loads only local distribution files", async () => {
@@ -38,14 +59,20 @@ test("catalogue exposes the complete public registry and truthful integration to
     const script = await readFile(path.join(root, "catalogue", "catalogue.js"), "utf8");
 
     assert.match(html, /Components registered/);
-    assert.match(html, /HELIX validation pending/);
+    assert.match(html, /HELIX harness passed/);
     assert.doesNotMatch(html, /Runtime ready|Stable contract/);
 
     const publicRecords = script.match(/id:\s*"sg-[a-z-]+"/g) || [];
-    assert.equal(publicRecords.length, 10);
+    assert.equal(publicRecords.length, 41);
     assert.match(script, /#?components\/sg-button/);
     assert.match(script, /execCommand\("copy"\)/);
     assert.match(script, /sg-item-activate/);
+    assert.match(script, /sg-input/);
+    assert.match(script, /sg-change/);
+    assert.match(script, /sg-close/);
+    assert.match(script, /sg-remove/);
+    assert.match(script, /sg-action-select/);
+    assert.match(script, /sg-confirm/);
     assert.match(script, /dataset\.eventExpanded/);
 });
 
@@ -79,4 +106,149 @@ test("HELIX harness is emitted as a package-local classic-script fixture", async
     assert.match(html, /genesis-ui\.helix\.js/);
     assert.doesNotMatch(html, /type="module"/);
     assert.doesNotMatch(script, /^await\s/m);
+    assert.match(html, /<sg-input/);
+    assert.match(html, /<sg-select/);
+    assert.match(html, /<sg-toggle/);
+    assert.match(html, /<sg-slider/);
+    assert.match(html, /<sg-icon-button/);
+    assert.match(html, /<sg-tabs/);
+    assert.match(html, /<sg-segmented/);
+    assert.match(html, /<sg-modal/);
+    assert.match(html, /<sg-drawer/);
+    assert.match(html, /<sg-tooltip/);
+    assert.match(html, /<sg-toast/);
+    assert.match(html, /<sg-checkbox/);
+    assert.match(html, /<sg-radio-group/);
+    assert.match(html, /<sg-textarea/);
+    assert.match(html, /<sg-number-stepper/);
+    assert.match(html, /<sg-chip/);
+    assert.match(html, /<sg-breadcrumb/);
+    assert.match(html, /<sg-pagination/);
+    assert.match(html, /<sg-progress/);
+    assert.match(html, /<sg-meter/);
+    assert.match(html, /<sg-avatar/);
+    assert.match(html, /<sg-list-row/);
+    assert.match(html, /<sg-empty-state/);
+    assert.match(html, /<sg-skeleton/);
+    assert.match(html, /<sg-data-table/);
+    assert.match(html, /<sg-interaction-prompt/);
+    assert.match(html, /<sg-action-list/);
+    assert.match(html, /<sg-confirm-progress/);
+    assert.match(html, /<sg-popover/);
+    assert.match(html, /<sg-context-menu/);
+    assert.match(html, /<sg-radial-menu/);
+    assert.match(script, /addEventListener\("sg-input"/);
+    assert.match(script, /addEventListener\("sg-change"/);
+    assert.match(script, /addEventListener\("sg-remove"/);
+    assert.match(script, /addEventListener\("sg-action-select"/);
+    assert.match(script, /addEventListener\("sg-confirm"/);
+});
+
+test("gameplay interaction components preserve native actions and controlled overlays", async () => {
+    const prompt = await readFile(path.join(root, "src", "elements", "interaction-prompt.ts"), "utf8");
+    const actionList = await readFile(path.join(root, "src", "elements", "action-list.ts"), "utf8");
+    const confirm = await readFile(path.join(root, "src", "elements", "confirm-progress.ts"), "utf8");
+    const popover = await readFile(path.join(root, "src", "elements", "popover.ts"), "utf8");
+    const contextMenu = await readFile(path.join(root, "src", "elements", "context-menu.ts"), "utf8");
+    const radialMenu = await readFile(path.join(root, "src", "elements", "radial-menu.ts"), "utf8");
+    const interactions = [prompt, actionList, confirm, popover, contextMenu, radialMenu].join("\n");
+
+    assert.match(prompt, /document\.createElement\("button"\)/);
+    assert.match(actionList, /role", "menu"/);
+    assert.match(actionList, /"sg-action-select"/);
+    assert.match(confirm, /requestAnimationFrame/);
+    assert.match(confirm, /"sg-confirm"/);
+    assert.match(popover, /aria-expanded/);
+    assert.match(popover, /restoreFocus/);
+    assert.match(contextMenu, /window\.innerWidth/);
+    assert.match(contextMenu, /"outside"/);
+    assert.match(radialMenu, /Math\.cos/);
+    assert.match(radialMenu, /slicePolygon/);
+    assert.match(radialMenu, /style\.clipPath/);
+    assert.match(radialMenu, /"ArrowRight"/);
+    assert.doesNotMatch(interactions, /ElementInternals|formAssociated|setInterval/);
+});
+
+test("data display components preserve native semantics and script ownership", async () => {
+    const icon = await readFile(path.join(root, "src", "elements", "icon.ts"), "utf8");
+    const progress = await readFile(path.join(root, "src", "elements", "progress.ts"), "utf8");
+    const meter = await readFile(path.join(root, "src", "elements", "meter.ts"), "utf8");
+    const avatar = await readFile(path.join(root, "src", "elements", "avatar.ts"), "utf8");
+    const listRow = await readFile(path.join(root, "src", "elements", "list-row.ts"), "utf8");
+    const emptyState = await readFile(path.join(root, "src", "elements", "empty-state.ts"), "utf8");
+    const skeleton = await readFile(path.join(root, "src", "elements", "skeleton.ts"), "utf8");
+    const dataTable = await readFile(path.join(root, "src", "elements", "data-table.ts"), "utf8");
+    const controls = [progress, meter, avatar, listRow, emptyState, skeleton, dataTable].join("\n");
+
+    assert.match(progress, /document\.createElement\("progress"\)/);
+    assert.match(meter, /document\.createElement\("meter"\)/);
+    assert.match(avatar, /document\.createElement\("img"\)/);
+    assert.match(listRow, /"sg-item-activate"/);
+    assert.match(emptyState, /aria-labelledby/);
+    assert.match(skeleton, /aria-hidden/);
+    assert.match(dataTable, /HTMLTableElement/);
+    assert.match(icon, /genesis-icons\.svg\?rev=35/);
+    assert.doesNotMatch(controls, /ElementInternals|formAssociated/);
+});
+
+test("remaining core controls use native semantics and separated action contracts", async () => {
+    const checkbox = await readFile(path.join(root, "src", "elements", "checkbox.ts"), "utf8");
+    const radio = await readFile(path.join(root, "src", "elements", "radio-group.ts"), "utf8");
+    const textarea = await readFile(path.join(root, "src", "elements", "textarea.ts"), "utf8");
+    const stepper = await readFile(path.join(root, "src", "elements", "number-stepper.ts"), "utf8");
+    const chip = await readFile(path.join(root, "src", "elements", "chip.ts"), "utf8");
+    const breadcrumb = await readFile(path.join(root, "src", "elements", "breadcrumb.ts"), "utf8");
+    const pagination = await readFile(path.join(root, "src", "elements", "pagination.ts"), "utf8");
+    const controls = [checkbox, radio, textarea, stepper, chip, breadcrumb, pagination].join("\n");
+
+    assert.match(checkbox, /type = "checkbox"/);
+    assert.match(radio, /type = "radio"/);
+    assert.match(radio, /document\.createElement\("fieldset"\)/);
+    assert.match(textarea, /document\.createElement\("textarea"\)/);
+    assert.match(stepper, /type = "number"/);
+    assert.match(chip, /"sg-remove"/);
+    assert.match(chip, /cancelable: true/);
+    assert.match(breadcrumb, /document\.createElement\("nav"\)/);
+    assert.match(pagination, /aria-current/);
+    assert.doesNotMatch(controls, /ElementInternals|formAssociated/);
+});
+
+test("production controls preserve native Chromium behavior and framework-neutral events", async () => {
+    const input = await readFile(path.join(root, "src", "elements", "input.ts"), "utf8");
+    const select = await readFile(path.join(root, "src", "elements", "select.ts"), "utf8");
+    const toggle = await readFile(path.join(root, "src", "elements", "toggle.ts"), "utf8");
+    const slider = await readFile(path.join(root, "src", "elements", "slider.ts"), "utf8");
+    const iconButton = await readFile(path.join(root, "src", "elements", "icon-button.ts"), "utf8");
+    const controls = [input, select, toggle, slider, iconButton].join("\n");
+
+    assert.match(input, /document\.createElement\("input"\)/);
+    assert.match(select, /document\.createElement\("select"\)/);
+    assert.match(toggle, /type = "checkbox"/);
+    assert.match(slider, /type = "range"/);
+    assert.match(controls, /"sg-input"/);
+    assert.match(controls, /"sg-change"/);
+    assert.match(iconButton, /"sg-activate"/);
+    assert.doesNotMatch(controls, /ElementInternals|formAssociated/);
+});
+
+test("navigation and overlays preserve keyboard and lifecycle contracts", async () => {
+    const tabs = await readFile(path.join(root, "src", "elements", "tabs.ts"), "utf8");
+    const segmented = await readFile(path.join(root, "src", "elements", "segmented.ts"), "utf8");
+    const modal = await readFile(path.join(root, "src", "elements", "modal.ts"), "utf8");
+    const drawer = await readFile(path.join(root, "src", "elements", "drawer.ts"), "utf8");
+    const tooltip = await readFile(path.join(root, "src", "elements", "tooltip.ts"), "utf8");
+    const toast = await readFile(path.join(root, "src", "elements", "toast.ts"), "utf8");
+    const focus = await readFile(path.join(root, "src", "internal", "focus.ts"), "utf8");
+    const styles = await readFile(path.join(root, "src", "styles", "components.css"), "utf8");
+
+    assert.match(tabs, /role", "tablist"/);
+    assert.match(tabs, /"ArrowLeft"/);
+    assert.match(segmented, /role", "radiogroup"/);
+    assert.match(modal, /"sg-close"/);
+    assert.match(drawer, /"sg-close"/);
+    assert.match(focus, /trapTab/);
+    assert.match(focus, /restoreFocus/);
+    assert.match(tooltip, /aria-describedby/);
+    assert.match(toast, /"timeout"/);
+    assert.doesNotMatch(styles, /backdrop-filter:\s*(?!none)/);
 });

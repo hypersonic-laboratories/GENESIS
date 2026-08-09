@@ -14,6 +14,7 @@ export class SGButton extends HTMLElement {
         this.addEventListener("click", this.handleClick);
         this.addEventListener("keydown", this.handleKeyDown);
         this.addEventListener("keyup", this.handleKeyUp);
+        this.addEventListener("blur", this.clearPressedState);
         this.syncState();
     }
 
@@ -21,6 +22,8 @@ export class SGButton extends HTMLElement {
         this.removeEventListener("click", this.handleClick);
         this.removeEventListener("keydown", this.handleKeyDown);
         this.removeEventListener("keyup", this.handleKeyUp);
+        this.removeEventListener("blur", this.clearPressedState);
+        this.clearPressedState();
     }
 
     attributeChangedCallback(): void {
@@ -53,6 +56,11 @@ export class SGButton extends HTMLElement {
         }
 
         this.activate("pointer");
+    };
+
+    private readonly clearPressedState = (): void => {
+        this.spacePressed = false;
+        this.removeAttribute("data-pressed");
     };
 
     private readonly handleKeyDown = (event: KeyboardEvent): void => {
@@ -90,8 +98,15 @@ export class SGButton extends HTMLElement {
 
     private syncState(): void {
         const unavailable = this.disabled || this.loading;
+        if (unavailable) {
+            this.clearPressedState();
+        }
         this.setAttribute("aria-disabled", String(unavailable));
-        this.toggleAttribute("aria-busy", this.loading);
+        if (this.loading) {
+            this.setAttribute("aria-busy", "true");
+        } else {
+            this.removeAttribute("aria-busy");
+        }
         this.tabIndex = unavailable ? -1 : 0;
     }
 }
