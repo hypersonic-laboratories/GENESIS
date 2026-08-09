@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en" data-sg-theme="shadow">
+<head>
+    <!--
+    THESIS: A developer operations workbench for finding, configuring, and wiring Shadow Glass components.
+    OWN-WORLD: Blue-black instrument surfaces, steel dividers, Exo 2 readouts, Inter copy, and selective cyan state light.
+    STORY: Find a component, alter a real state, inspect its browser-native contract, copy the markup, and verify the emitted event.
+    FIRST VIEWPORT: Command bar, searchable registry, live stage, contract inspector, and event channel are all immediately available.
+    FORM: Established Shadow Glass Operate-mode interface; the catalogue behaves like a tool rather than a style-guide poster.
+    -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Developer workbench for Genesis Shadow Glass framework-neutral WebUI components.">
+    <title>Genesis Shadow Glass — Component Workbench</title>
+    <link rel="stylesheet" href="../dist/genesis-ui.css">
+    <link rel="stylesheet" href="./catalogue.css">
+    <script type="module" src="../dist/genesis-ui.js"></script>
+    <script defer src="./catalogue.js"></script>
+</head>
+<body>
+    <a class="skip-link" href="#main-workbench">Skip to component preview</a>
+
+    <header class="command-bar">
+        <button id="drawer-toggle" class="icon-control drawer-toggle" type="button" aria-label="Open component browser" aria-expanded="false" aria-controls="component-browser">
+            <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+        </button>
+
+        <a class="brand-lockup" href="#components/sg-button" aria-label="Genesis Shadow Glass component workbench">
+            <span class="brand-mark" aria-hidden="true">G</span>
+            <span class="brand-copy"><strong>Genesis</strong><small>Shadow Glass / UI</small></span>
+        </a>
+
+        <div class="command-status" aria-label="Library status">
+            <span class="status-pulse" aria-hidden="true"></span>
+            <span><strong>Components registered</strong><small>HELIX validation pending</small></span>
+        </div>
+
+        <div class="command-actions" aria-label="Preview profiles">
+            <button id="density-toggle" class="command-button" type="button" aria-pressed="false">
+                <span>Density</span><strong>Default</strong>
+            </button>
+            <button id="effects-toggle" class="command-button" type="button" aria-pressed="false">
+                <span>Effects</span><strong>Full</strong>
+            </button>
+        </div>
+    </header>
+
+    <div class="catalogue-shell">
+        <div id="drawer-scrim" class="drawer-scrim" hidden></div>
+
+        <aside id="component-browser" class="component-browser" aria-label="Component browser">
+            <div class="browser-heading">
+                <div>
+                    <span class="section-label">Registry</span>
+                    <strong>Browse components</strong>
+                </div>
+                <button id="drawer-close" class="icon-control browser-close" type="button" aria-label="Close component browser">×</button>
+            </div>
+
+            <label class="search-field" for="component-search">
+                <span class="visually-hidden">Search components, attributes, or events</span>
+                <sg-icon name="search" aria-hidden="true"></sg-icon>
+                <input id="component-search" type="search" autocomplete="off" placeholder="Search components or events">
+                <kbd>/</kbd>
+            </label>
+
+            <nav id="component-nav" class="registry-nav" aria-label="Component registry"></nav>
+
+            <div class="browser-guides">
+                <span class="section-label">Ship with confidence</span>
+                <nav id="guide-nav" class="registry-nav registry-nav--guides" aria-label="Integration guides"></nav>
+            </div>
+
+            <p id="search-empty" class="search-empty" hidden>No matching component. Try an event such as <code>sg-activate</code>.</p>
+        </aside>
+
+        <main id="main-workbench" class="main-workbench" tabindex="-1">
+            <header class="preview-header">
+                <div class="preview-title">
+                    <span id="component-kicker" class="section-label">Action primitive</span>
+                    <h1 id="component-title">Button</h1>
+                    <p id="component-summary">Primary, secondary, ghost, and semantic actions with one browser-native activation event.</p>
+                </div>
+                <div class="preview-meta">
+                    <sg-badge id="component-status" tone="info">Alpha</sg-badge>
+                    <span id="component-tag">sg-button</span>
+                </div>
+            </header>
+
+            <section class="preview-workspace" aria-labelledby="preview-heading">
+                <div class="workspace-toolbar">
+                    <div>
+                        <span class="section-label">Live preview</span>
+                        <h2 id="preview-heading">Configured specimen</h2>
+                    </div>
+                    <div class="viewport-readout" aria-label="Preview profile">
+                        <span id="preview-density">Default density</span>
+                        <span id="preview-effects">Full effects</span>
+                    </div>
+                </div>
+
+                <div id="preview-root" class="preview-root" data-sg-density="default" data-sg-effects="default">
+                    <div class="stage-axis stage-axis--top" aria-hidden="true"><span>PREVIEW / LOCAL DOM</span><i></i></div>
+                    <div id="component-stage" class="component-stage"></div>
+                    <div class="stage-axis stage-axis--bottom" aria-hidden="true"><i></i><span id="stage-note">Activate it to inspect the event</span></div>
+                </div>
+            </section>
+
+            <section class="reference-strip" aria-label="Implementation readiness">
+                <div><span>Runtime</span><strong>Custom elements</strong></div>
+                <div><span>Dependencies</span><strong>Zero at runtime</strong></div>
+                <div><span>Ownership</span><strong>Script controls logic</strong></div>
+                <div><span>Evidence</span><strong>HELIX validation pending</strong></div>
+            </section>
+        </main>
+
+        <aside id="contract-inspector" class="contract-inspector" aria-labelledby="inspector-title">
+            <div class="inspector-heading">
+                <div>
+                    <span class="section-label">Contract inspector</span>
+                    <strong id="inspector-title">sg-button</strong>
+                </div>
+                <span id="contract-version">v0.1 alpha</span>
+            </div>
+
+            <div class="inspector-tabs" role="tablist" aria-label="Component details">
+                <button id="tab-controls" type="button" role="tab" aria-selected="true" aria-controls="panel-controls">Controls</button>
+                <button id="tab-api" type="button" role="tab" aria-selected="false" aria-controls="panel-api" tabindex="-1">API</button>
+                <button id="tab-code" type="button" role="tab" aria-selected="false" aria-controls="panel-code" tabindex="-1">Code</button>
+                <button id="tab-a11y" type="button" role="tab" aria-selected="false" aria-controls="panel-a11y" tabindex="-1">A11y</button>
+            </div>
+
+            <div id="panel-controls" class="inspector-panel" role="tabpanel" aria-labelledby="tab-controls"></div>
+            <div id="panel-api" class="inspector-panel" role="tabpanel" aria-labelledby="tab-api" hidden></div>
+            <div id="panel-code" class="inspector-panel" role="tabpanel" aria-labelledby="tab-code" hidden></div>
+            <div id="panel-a11y" class="inspector-panel" role="tabpanel" aria-labelledby="tab-a11y" hidden></div>
+        </aside>
+    </div>
+
+    <section id="event-dock" class="event-dock" aria-labelledby="event-title" data-expanded="false">
+        <button id="event-toggle" class="event-toggle" type="button" aria-expanded="false" aria-controls="event-channel">
+            <span class="event-signal" aria-hidden="true"></span>
+            <strong id="event-title">Event channel</strong>
+            <span id="event-summary">Listening for bubbling sg-* events</span>
+            <span class="event-chevron" aria-hidden="true">⌃</span>
+        </button>
+        <div id="event-channel" class="event-channel" hidden>
+            <div class="event-actions">
+                <button id="event-pause" type="button" aria-pressed="false">Pause</button>
+                <button id="event-copy" type="button">Copy log</button>
+                <button id="event-clear" type="button">Clear</button>
+            </div>
+            <ol id="event-list" class="event-list">
+                <li class="event-empty">No events yet. Activate the live specimen to inspect its payload.</li>
+            </ol>
+        </div>
+    </section>
+
+    <div id="copy-status" class="copy-status" role="status" aria-live="polite"></div>
+    <textarea id="clipboard-fallback" class="clipboard-fallback" aria-hidden="true" tabindex="-1"></textarea>
+</body>
+</html>

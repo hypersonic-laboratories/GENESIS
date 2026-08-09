@@ -42,6 +42,7 @@
     "qb-crypto",
     "qb-consumables",
     "qb-crafting",
-    "qb-emotes"
+    "qb-emotes",
+    "gns-ui-harness"
   ]
 }
