@@ -18,7 +18,7 @@
             min-height: 100vh;
             display: grid;
             margin: 0;
-            padding: 32px;
+            padding: 10px 16px;
             font-family: var(--sg-font-body);
             pointer-events: none;
             place-items: center;
@@ -28,9 +28,26 @@
         }
         .harness {
             display: none;
-            width: min(980px, 100%);
-            max-height: calc(100vh - 48px);
-            overflow: auto;
+            width: min(1200px, 100%);
+            max-height: calc(100vh - 20px);
+            overflow-x: hidden;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+        }
+        .harness::-webkit-scrollbar {
+            width: 10px;
+        }
+        .harness::-webkit-scrollbar-track {
+            border-radius: var(--sg-radius-pill);
+            background: var(--sg-color-background);
+        }
+        .harness::-webkit-scrollbar-thumb {
+            border: 2px solid var(--sg-color-background);
+            border-radius: var(--sg-radius-pill);
+            background: var(--sg-color-border-strong);
+        }
+        .harness::-webkit-scrollbar-thumb:hover {
+            background: var(--sg-color-cyan);
         }
         body.is-visible .harness {
             display: block;
@@ -46,27 +63,37 @@
             justify-content: space-between;
         }
         .harness-header p { margin: 8px 0 0; color: var(--sg-color-text-secondary); }
-        .harness-grid { flex-wrap: wrap; margin-top: 24px; }
+        .harness-grid { flex-wrap: wrap; margin-top: 20px; }
         .harness-controls {
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 18px;
-            margin-top: 24px;
-            padding-top: 20px;
+            margin-top: 20px;
+            padding-top: 16px;
             border-top: 1px solid var(--sg-color-border);
         }
+        .harness-core {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px 18px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--sg-color-border);
+        }
+        .harness-core-wide { grid-column: 1 / -1; }
+        .harness-chip-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
         .harness-toggle-row {
             display: flex;
             align-items: center;
             gap: 12px;
         }
-        .harness-actions { margin-top: 24px; }
+        .harness-actions { flex-wrap: wrap; margin-top: 18px; }
         .harness-structure {
             display: grid;
             grid-template-columns: minmax(0, 1fr) auto;
             gap: 18px;
-            margin-top: 20px;
-            padding-top: 20px;
+            margin-top: 16px;
+            padding-top: 16px;
             border-top: 1px solid var(--sg-color-border);
         }
         .harness-structure-actions {
@@ -91,11 +118,19 @@
             color: var(--sg-color-text-secondary);
             font-size: 12px;
         }
-        @media (max-width: 760px) {
-            body { padding: 16px; }
-            .harness-controls { grid-template-columns: 1fr; }
+        @media (max-width: 900px) {
+            .harness-controls,
+            .harness-core { grid-template-columns: repeat(2, minmax(0, 1fr)); }
             .harness-structure { grid-template-columns: 1fr; }
             .harness-structure-actions { justify-content: flex-start; }
+        }
+        @media (max-width: 640px) {
+            body { padding: 8px; }
+            .harness { max-height: calc(100vh - 16px); }
+            .harness-header { flex-wrap: wrap; }
+            .harness-controls { grid-template-columns: 1fr; }
+            .harness-core { grid-template-columns: 1fr; }
+            .harness-core-wide { grid-column: auto; }
         }
     </style>
 </head>
@@ -154,6 +189,26 @@
             <div class="sg-toast-stack">
                 <sg-toast id="harness-toast" tone="success" dismissible duration="0" hidden>Navigation and overlay events are available.</sg-toast>
             </div>
+        </div>
+        <div class="harness-core">
+            <sg-checkbox id="share-location" label="Share radio location" name="share-location" value="enabled" checked hint="Native checkbox"></sg-checkbox>
+            <sg-radio-group id="response-priority" label="Response priority" name="response-priority" value="routine" hint="Use arrow keys">
+                <span data-sg-option value="routine">Routine</span>
+                <span data-sg-option value="urgent">Urgent</span>
+                <span data-sg-option value="critical">Critical</span>
+            </sg-radio-group>
+            <sg-number-stepper id="unit-count" label="Units requested" name="unit-count" value="2" min="1" max="8" unit="units" hint="Buttons or keyboard"></sg-number-stepper>
+            <sg-textarea id="dispatch-note" label="Dispatch note" name="dispatch-note" value="Unit en route." maxlength="80" rows="3" show-count hint="Native multiline input"></sg-textarea>
+            <div class="harness-chip-row">
+                <sg-chip id="filter-chip" value="weapons" selectable removable selected>Weapons</sg-chip>
+                <sg-chip tone="success">On duty</sg-chip>
+            </div>
+            <sg-pagination id="result-pages" label="Result pages" page="3" total="12" siblings="0" size="sm"></sg-pagination>
+            <sg-breadcrumb class="harness-core-wide" label="Harness location">
+                <a href="#overview">Overview</a>
+                <a href="#inventory">Inventory</a>
+                <span>Runtime checks</span>
+            </sg-breadcrumb>
         </div>
         <div class="harness-actions">
             <sg-button id="emit-test" variant="primary">Emit test event</sg-button>

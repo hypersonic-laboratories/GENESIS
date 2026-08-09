@@ -25,7 +25,10 @@ test("manifest exposes a framework-neutral zero-dependency contract", async () =
     assert.ok(manifest.components.includes("sg-tooltip"));
     assert.ok(manifest.components.includes("sg-toast"));
     assert.ok(manifest.components.includes("sg-item-slot"));
-    assert.equal(manifest.components.length, 21);
+    for (const component of ["sg-checkbox", "sg-radio-group", "sg-textarea", "sg-number-stepper", "sg-chip", "sg-breadcrumb", "sg-pagination"]) {
+        assert.ok(manifest.components.includes(component));
+    }
+    assert.equal(manifest.components.length, 28);
 });
 
 test("minimal consumer loads only local distribution files", async () => {
@@ -54,13 +57,14 @@ test("catalogue exposes the complete public registry and truthful integration to
     assert.doesNotMatch(html, /Runtime ready|Stable contract/);
 
     const publicRecords = script.match(/id:\s*"sg-[a-z-]+"/g) || [];
-    assert.equal(publicRecords.length, 21);
+    assert.equal(publicRecords.length, 28);
     assert.match(script, /#?components\/sg-button/);
     assert.match(script, /execCommand\("copy"\)/);
     assert.match(script, /sg-item-activate/);
     assert.match(script, /sg-input/);
     assert.match(script, /sg-change/);
     assert.match(script, /sg-close/);
+    assert.match(script, /sg-remove/);
     assert.match(script, /dataset\.eventExpanded/);
 });
 
@@ -105,8 +109,38 @@ test("HELIX harness is emitted as a package-local classic-script fixture", async
     assert.match(html, /<sg-drawer/);
     assert.match(html, /<sg-tooltip/);
     assert.match(html, /<sg-toast/);
+    assert.match(html, /<sg-checkbox/);
+    assert.match(html, /<sg-radio-group/);
+    assert.match(html, /<sg-textarea/);
+    assert.match(html, /<sg-number-stepper/);
+    assert.match(html, /<sg-chip/);
+    assert.match(html, /<sg-breadcrumb/);
+    assert.match(html, /<sg-pagination/);
     assert.match(script, /addEventListener\("sg-input"/);
     assert.match(script, /addEventListener\("sg-change"/);
+    assert.match(script, /addEventListener\("sg-remove"/);
+});
+
+test("remaining core controls use native semantics and separated action contracts", async () => {
+    const checkbox = await readFile(path.join(root, "src", "elements", "checkbox.ts"), "utf8");
+    const radio = await readFile(path.join(root, "src", "elements", "radio-group.ts"), "utf8");
+    const textarea = await readFile(path.join(root, "src", "elements", "textarea.ts"), "utf8");
+    const stepper = await readFile(path.join(root, "src", "elements", "number-stepper.ts"), "utf8");
+    const chip = await readFile(path.join(root, "src", "elements", "chip.ts"), "utf8");
+    const breadcrumb = await readFile(path.join(root, "src", "elements", "breadcrumb.ts"), "utf8");
+    const pagination = await readFile(path.join(root, "src", "elements", "pagination.ts"), "utf8");
+    const controls = [checkbox, radio, textarea, stepper, chip, breadcrumb, pagination].join("\n");
+
+    assert.match(checkbox, /type = "checkbox"/);
+    assert.match(radio, /type = "radio"/);
+    assert.match(radio, /document\.createElement\("fieldset"\)/);
+    assert.match(textarea, /document\.createElement\("textarea"\)/);
+    assert.match(stepper, /type = "number"/);
+    assert.match(chip, /"sg-remove"/);
+    assert.match(chip, /cancelable: true/);
+    assert.match(breadcrumb, /document\.createElement\("nav"\)/);
+    assert.match(pagination, /aria-current/);
+    assert.doesNotMatch(controls, /ElementInternals|formAssociated/);
 });
 
 test("production controls preserve native Chromium behavior and framework-neutral events", async () => {

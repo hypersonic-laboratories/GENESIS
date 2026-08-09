@@ -189,6 +189,180 @@
             markup: sliderMarkup
         },
         {
+            id: "sg-checkbox",
+            name: "Checkbox",
+            icon: "check",
+            category: "Forms",
+            summary: "A native checkbox with checked, mixed, disabled, and validation states that remain readable without color.",
+            description: "Independent choice primitive",
+            keywords: "checkbox checked indeterminate required disabled error hint native sg-change",
+            stageNote: "Mixed state clears on interaction and emits the resulting checked value",
+            defaults: { checked: true, indeterminate: false, invalid: false, disabled: false },
+            controls: [
+                { key: "checked", label: "Checked", type: "boolean" },
+                { key: "indeterminate", label: "Mixed", type: "boolean" },
+                { key: "invalid", label: "Invalid", type: "boolean" },
+                { key: "disabled", label: "Disabled", type: "boolean" }
+            ],
+            attributes: [
+                ["label", "string", "Required visible choice label."],
+                ["checked / indeterminate", "boolean", "Current binary or mixed visual state."],
+                ["name / value", "string", "Form-compatible field identity included in event detail."],
+                ["hint / error", "string", "Supporting guidance or recoverable validation message."],
+                ["required / disabled / invalid", "boolean", "Native constraint and explicit availability states."]
+            ],
+            events: [["sg-change", "{ checked, indeterminate, value, name }", "Bubbles after native checkbox interaction."]],
+            a11y: ["Uses a native checkbox with a programmatically associated visible label.", "Mixed state is exposed through the native indeterminate property and clears after a user choice.", "Validation uses linked text and aria-invalid instead of color alone."],
+            render: renderCheckbox,
+            markup: checkboxMarkup
+        },
+        {
+            id: "sg-radio-group",
+            name: "Radio group",
+            icon: "circle",
+            category: "Forms",
+            summary: "A labeled native radio group for one choice among a short, caller-owned set of options.",
+            description: "Exclusive choice primitive",
+            keywords: "radio group options fieldset legend orientation required disabled error sg-change",
+            stageNote: "Arrow-key selection remains browser-native inside the generated fieldset",
+            defaults: { value: "patrol", orientation: "horizontal", invalid: false, disabled: false },
+            controls: [
+                { key: "value", label: "Selected channel", type: "choice", options: [["dispatch", "Dispatch"], ["patrol", "Patrol"], ["tactical", "Tactical"]] },
+                { key: "orientation", label: "Orientation", type: "choice", options: [["horizontal", "Horizontal"], ["vertical", "Vertical"]] },
+                { key: "invalid", label: "Invalid", type: "boolean" },
+                { key: "disabled", label: "Disabled", type: "boolean" }
+            ],
+            attributes: [
+                ["label / name / value", "string", "Visible group label, shared native name, and current selection."],
+                ["orientation", "horizontal | vertical", "Changes visual flow without replacing native radio behavior."],
+                ["data-sg-option / value", "child hook", "Declares each caller-owned option; disabled is supported per option."],
+                ["hint / error", "string", "Supporting guidance or recoverable validation message."],
+                ["required / disabled / invalid", "boolean", "Native constraint and explicit group states."]
+            ],
+            events: [["sg-change", "{ value: string, name: string }", "Bubbles when the selected native radio changes."]],
+            a11y: ["Builds a native fieldset, legend, and shared-name radio set.", "Browser-native arrow-key behavior is preserved and disabled options are skipped.", "Option text and selection markers remain visible at high zoom."],
+            render: renderRadioGroup,
+            markup: radioGroupMarkup
+        },
+        {
+            id: "sg-textarea",
+            name: "Textarea",
+            icon: "message-square",
+            category: "Forms",
+            summary: "A labeled native multiline field with count, validation, read-only, and committed-event contracts.",
+            description: "Multiline entry primitive",
+            keywords: "textarea multiline input count maxlength readonly disabled invalid hint error sg-input sg-change",
+            stageNote: "Type into the specimen to inspect continuous events and the live character count",
+            defaults: { showCount: true, invalid: false, readonly: false, disabled: false },
+            controls: [
+                { key: "showCount", label: "Show count", type: "boolean" },
+                { key: "invalid", label: "Invalid", type: "boolean" },
+                { key: "readonly", label: "Read only", type: "boolean" },
+                { key: "disabled", label: "Disabled", type: "boolean" }
+            ],
+            attributes: [
+                ["label / value / name", "string", "Visible field label, current value, and event identity."],
+                ["rows / minlength / maxlength", "number", "Native multiline sizing and length constraints."],
+                ["placeholder / hint / error", "string", "Entry prompt, guidance, and recoverable validation text."],
+                ["show-count", "boolean", "Displays current length and the maximum when present."],
+                ["required / readonly / disabled / invalid", "boolean", "Native constraint and explicit field states."]
+            ],
+            events: [["sg-input", "{ value, name }", "Bubbles on live native input."], ["sg-change", "{ value, name }", "Bubbles when the native field commits."]],
+            a11y: ["The visible label is associated with the native textarea and messages use aria-describedby.", "Invalid state exposes aria-invalid and explanatory text.", "Character count supplements, rather than replaces, maxlength enforcement."],
+            render: renderTextarea,
+            markup: textareaMarkup
+        },
+        {
+            id: "sg-number-stepper",
+            name: "Number stepper",
+            icon: "plus",
+            category: "Forms",
+            summary: "A bounded native number field with explicit increment and decrement targets for precise quantities.",
+            description: "Numeric adjustment primitive",
+            keywords: "number stepper quantity min max step unit input buttons keyboard sg-input sg-change",
+            stageNote: "Use the buttons or native number-field keyboard commands to update quantity",
+            defaults: { value: "2", invalid: false, readonly: false, disabled: false },
+            controls: [
+                { key: "value", label: "Quantity", type: "choice", options: [["0", "0"], ["2", "2"], ["8", "8"], ["12", "12"]] },
+                { key: "invalid", label: "Invalid", type: "boolean" },
+                { key: "readonly", label: "Read only", type: "boolean" },
+                { key: "disabled", label: "Disabled", type: "boolean" }
+            ],
+            attributes: [
+                ["label / value / name", "string | number", "Visible label, current number, and event identity."],
+                ["min / max / step", "number", "Native bounds and increment."],
+                ["unit", "string", "Short visible suffix such as kg or rounds."],
+                ["hint / error", "string", "Supporting guidance or recoverable validation message."],
+                ["required / readonly / disabled / invalid", "boolean", "Native constraint and explicit field states."]
+            ],
+            events: [["sg-input", "{ value: number, name: string }", "Bubbles during native or button changes."], ["sg-change", "{ value: number, name: string }", "Bubbles when the new quantity commits."]],
+            a11y: ["Uses a native number input with separately named increment and decrement buttons.", "Buttons disable at declared bounds and keyboard number-field behavior remains available.", "The unit is visible while the field label supplies the accessible context."],
+            render: renderNumberStepper,
+            markup: numberStepperMarkup
+        },
+        {
+            id: "sg-chip",
+            name: "Chip",
+            icon: "x",
+            category: "Actions",
+            summary: "A compact filter or removable token with distinct selection and removal actions.",
+            description: "Compact token primitive",
+            keywords: "chip filter tag selected selectable removable disabled tone sg-change sg-remove",
+            stageNote: "Selection and removal are separate focusable actions with separate events",
+            defaults: { selected: true, selectable: true, removable: true, tone: "neutral", disabled: false },
+            controls: [
+                { key: "selected", label: "Selected", type: "boolean" },
+                { key: "selectable", label: "Selectable", type: "boolean" },
+                { key: "removable", label: "Removable", type: "boolean" },
+                { key: "tone", label: "Tone", type: "choice", options: [["neutral", "Neutral"], ["success", "Success"], ["warning", "Warning"], ["danger", "Danger"], ["violet", "Violet"]] },
+                { key: "disabled", label: "Disabled", type: "boolean" }
+            ],
+            attributes: [["label / value", "string", "Visible token text and stable event value."], ["selected / selectable / removable", "boolean", "Independent selection and removal affordances."], ["tone", "neutral | success | warning | danger | violet", "Semantic or rarity signal."], ["disabled", "boolean", "Blocks both actions."]],
+            events: [["sg-change", "{ selected: boolean, value: string }", "Bubbles when selection toggles."], ["sg-remove", "{ value: string }", "Cancelable. Default behavior hides the chip."]],
+            a11y: ["Selectable and removable actions use separate native buttons rather than nested controls.", "The selection button exposes aria-pressed and the remove action includes the chip label.", "Static chips remain noninteractive and are not placed in the tab order."],
+            render: renderChip,
+            markup: chipMarkup
+        },
+        {
+            id: "sg-breadcrumb",
+            name: "Breadcrumb",
+            icon: "chevron-right",
+            category: "Navigation",
+            summary: "A compact navigation trail that preserves caller-owned links and marks the current location.",
+            description: "Location trail primitive",
+            keywords: "breadcrumb navigation trail links current page hierarchy chevron",
+            stageNote: "Links and destinations remain ordinary caller-owned markup",
+            defaults: { depth: "4" },
+            controls: [{ key: "depth", label: "Trail depth", type: "choice", options: [["2", "Two"], ["3", "Three"], ["4", "Four"]] }],
+            attributes: [["label", "string", "Accessible name for the navigation landmark."], ["child anchors / spans", "HTML", "Caller-owned destinations and current-page copy."]],
+            events: [],
+            a11y: ["Creates a named navigation landmark with an ordered list.", "The final item receives aria-current=page unless the caller already supplied it.", "Separators are hidden from assistive technology and long trails truncate visually."],
+            render: renderBreadcrumb,
+            markup: breadcrumbMarkup
+        },
+        {
+            id: "sg-pagination",
+            name: "Pagination",
+            icon: "chevron-right",
+            category: "Navigation",
+            summary: "A compact page-request control that exposes the requested page while leaving remote data ownership to scripts.",
+            description: "Page request primitive",
+            keywords: "pagination pages previous next current total siblings disabled navigation sg-change",
+            stageNote: "The component requests a page; the consuming script still owns loading and data",
+            defaults: { page: "6", total: "12", size: "md", disabled: false },
+            controls: [
+                { key: "page", label: "Current page", type: "choice", options: [["1", "1"], ["3", "3"], ["6", "6"], ["12", "12"]] },
+                { key: "total", label: "Total pages", type: "choice", options: [["4", "4"], ["12", "12"], ["24", "24"]] },
+                { key: "size", label: "Size", type: "choice", options: [["sm", "Small"], ["md", "Medium"], ["lg", "Large"]] },
+                { key: "disabled", label: "Disabled", type: "boolean" }
+            ],
+            attributes: [["page / total", "positive integer", "Current page and total available pages."], ["siblings", "0 | 1 | 2 | 3", "Number of neighboring pages around the current page."], ["size", "sm | md | lg", "Shared control sizing."], ["label", "string", "Accessible navigation landmark name."], ["disabled", "boolean", "Blocks all page requests."]],
+            events: [["sg-change", "{ page: number, previousPage: number }", "Bubbles when a different page is requested."]],
+            a11y: ["Uses a named navigation landmark and native buttons.", "The current page is identified with aria-current and readable button text.", "Previous and next actions disable at bounds; ellipses are noninteractive."],
+            render: renderPagination,
+            markup: paginationMarkup
+        },
+        {
             id: "sg-tabs",
             name: "Tabs",
             icon: "layers",
@@ -689,7 +863,7 @@
         document.getElementById("event-clear").addEventListener("click", clearEventLog);
         document.getElementById("event-copy").addEventListener("click", copyEventLog);
 
-        ["sg-activate", "sg-input", "sg-change", "sg-item-activate", "sg-dismiss", "sg-close"].forEach(function (eventName) {
+        ["sg-activate", "sg-input", "sg-change", "sg-item-activate", "sg-dismiss", "sg-close", "sg-remove"].forEach(function (eventName) {
             document.addEventListener(eventName, recordComponentEvent);
         });
 
@@ -1162,6 +1336,93 @@
         if (state.showValue) attributes.push("show-value");
         if (state.disabled) attributes.push("disabled");
         return "<sg-slider " + attributes.join(" ") + "></sg-slider>";
+    }
+
+    function renderCheckbox(state) {
+        return "<div class=\"stage-stack\">" + checkboxMarkup(state) + "<sg-checkbox label=\"Mixed selection\" indeterminate hint=\"Indeterminate is a visual state set by the script.\"></sg-checkbox></div>";
+    }
+
+    function checkboxMarkup(state) {
+        var attributes = ["label=\"Share radio location\"", "name=\"share-location\"", "value=\"enabled\"", "hint=\"Visible to members of your current channel.\""];
+        if (state.checked) attributes.push("checked");
+        if (state.indeterminate) attributes.push("indeterminate");
+        if (state.invalid) attributes.push("error=\"Confirm this choice before continuing.\"");
+        if (state.disabled) attributes.push("disabled");
+        return "<sg-checkbox " + attributes.join(" ") + "></sg-checkbox>";
+    }
+
+    function renderRadioGroup(state) {
+        return "<div class=\"stage-stack\">" + radioGroupMarkup(state) + "<p class=\"stage-caption\">Native radio semantics keep one channel selected at a time.</p></div>";
+    }
+
+    function radioGroupMarkup(state) {
+        var attributes = ["label=\"Duty channel\"", "name=\"duty-channel\"", "value=\"" + state.value + "\"", "orientation=\"" + state.orientation + "\"", "hint=\"Choose one active channel.\""];
+        if (state.invalid) attributes.push("error=\"Select an available duty channel.\"");
+        if (state.disabled) attributes.push("disabled");
+        return "<sg-radio-group " + attributes.join(" ") + ">\n" +
+            "  <span data-sg-option value=\"dispatch\">Dispatch</span>\n" +
+            "  <span data-sg-option value=\"patrol\">Patrol</span>\n" +
+            "  <span data-sg-option value=\"tactical\">Tactical</span>\n" +
+            "</sg-radio-group>";
+    }
+
+    function renderTextarea(state) {
+        return "<div class=\"stage-stack\">" + textareaMarkup(state) + "<p class=\"stage-caption\">The count updates locally while scripts decide when and where to store the note.</p></div>";
+    }
+
+    function textareaMarkup(state) {
+        var attributes = ["label=\"Dispatch note\"", "name=\"dispatch-note\"", "value=\"Unit en route to Pillbox Hill.\"", "rows=\"4\"", "maxlength=\"140\"", "hint=\"Include location and immediate risk.\""];
+        if (state.showCount) attributes.push("show-count");
+        if (state.invalid) attributes.push("error=\"Add a location before sending.\"");
+        if (state.readonly) attributes.push("readonly");
+        if (state.disabled) attributes.push("disabled");
+        return "<sg-textarea " + attributes.join(" ") + "></sg-textarea>";
+    }
+
+    function renderNumberStepper(state) {
+        return "<div class=\"stage-stack\">" + numberStepperMarkup(state) + "<p class=\"stage-caption\">Bounds disable unavailable actions without hiding the quantity.</p></div>";
+    }
+
+    function numberStepperMarkup(state) {
+        var attributes = ["label=\"Bandage quantity\"", "name=\"bandage-quantity\"", "value=\"" + state.value + "\"", "min=\"0\"", "max=\"12\"", "step=\"1\"", "unit=\"items\"", "hint=\"Available stack: 12.\""];
+        if (state.invalid) attributes.push("error=\"Quantity exceeds the available stack.\"");
+        if (state.readonly) attributes.push("readonly");
+        if (state.disabled) attributes.push("disabled");
+        return "<sg-number-stepper " + attributes.join(" ") + "></sg-number-stepper>";
+    }
+
+    function renderChip(state) {
+        return "<div class=\"stage-stack\"><div class=\"stage-row\">" + chipMarkup(state) + "<sg-chip tone=\"success\">On duty</sg-chip><sg-chip selectable value=\"medical\">Medical</sg-chip></div><p class=\"stage-caption\">Remove hides this specimen unless a consumer cancels sg-remove.</p></div>";
+    }
+
+    function chipMarkup(state) {
+        var attributes = ["value=\"weapons\"", "tone=\"" + state.tone + "\""];
+        if (state.selected) attributes.push("selected");
+        if (state.selectable) attributes.push("selectable");
+        if (state.removable) attributes.push("removable");
+        if (state.disabled) attributes.push("disabled");
+        return "<sg-chip " + attributes.join(" ") + ">Weapons</sg-chip>";
+    }
+
+    function renderBreadcrumb(state) {
+        return "<div class=\"stage-stack\">" + breadcrumbMarkup(state) + "<p class=\"stage-caption\">The current location is text; prior levels remain ordinary links.</p></div>";
+    }
+
+    function breadcrumbMarkup(state) {
+        var items = ["<a href=\"#overview\">Dashboard</a>", "<a href=\"#players\">Players</a>", "<a href=\"#jordan\">Jordan Carter</a>", "<span>Inventory</span>"];
+        var depth = Math.max(2, Math.min(4, Number(state.depth) || 4));
+        return "<sg-breadcrumb label=\"Current location\">\n  " + items.slice(items.length - depth).join("\n  ") + "\n</sg-breadcrumb>";
+    }
+
+    function renderPagination(state) {
+        return "<div class=\"stage-stack\">" + paginationMarkup(state) + "<p class=\"stage-caption\">A request event changes the local page marker; scripts fetch and render the actual results.</p></div>";
+    }
+
+    function paginationMarkup(state) {
+        var page = Math.min(Number(state.page) || 1, Number(state.total) || 1);
+        var attributes = ["label=\"Inventory pages\"", "page=\"" + page + "\"", "total=\"" + state.total + "\"", "siblings=\"1\"", "size=\"" + state.size + "\""];
+        if (state.disabled) attributes.push("disabled");
+        return "<sg-pagination " + attributes.join(" ") + "></sg-pagination>";
     }
 
     function renderTabs(state) {

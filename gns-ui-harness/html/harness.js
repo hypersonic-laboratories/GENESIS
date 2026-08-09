@@ -67,6 +67,10 @@ if (!window.customElements) {
             output.textContent = describeEvent(event);
         });
 
+        document.addEventListener("sg-remove", (event) => {
+            output.textContent = describeEvent(event);
+        });
+
         document.querySelector("#emit-test").addEventListener("sg-activate", (event) => {
             output.textContent = `sg-activate delivered - source: ${event.detail.source}`;
         });
@@ -76,7 +80,11 @@ if (!window.customElements) {
             const value = health.getAttribute("value") === "100%" ? "22%" : "100%";
             health.setAttribute("value", value);
             health.setAttribute("progress", value.replace("%", ""));
-            output.textContent = `Targeted attribute update delivered - health: ${value}`;
+            const stepper = document.querySelector("#unit-count");
+            stepper.value = stepper.value === 2 ? 6 : 2;
+            const chip = document.querySelector("#filter-chip");
+            chip.hidden = false;
+            output.textContent = `Targeted attribute update delivered - health: ${value}, units: ${stepper.value}`;
         });
 
         document.querySelector("#close-harness").addEventListener("sg-activate", requestClose);

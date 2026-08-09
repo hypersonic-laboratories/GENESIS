@@ -41,6 +41,27 @@ export interface SGToggleChangeDetail {
     name: string;
 }
 
+export interface SGCheckboxChangeDetail {
+    checked: boolean;
+    indeterminate: boolean;
+    value: string;
+    name: string;
+}
+
+export interface SGChipChangeDetail {
+    selected: boolean;
+    value: string;
+}
+
+export interface SGChipRemoveDetail {
+    value: string;
+}
+
+export interface SGPaginationChangeDetail {
+    page: number;
+    previousPage: number;
+}
+
 export class SGIcon extends HTMLElement {
     name: string;
     label?: string;
@@ -86,6 +107,43 @@ export class SGSlider extends HTMLElement {
     focus(options?: FocusOptions): void;
 }
 
+export class SGCheckbox extends HTMLElement {
+    checked: boolean;
+    indeterminate: boolean;
+    disabled: boolean;
+    focus(options?: FocusOptions): void;
+}
+
+export class SGRadioGroup extends HTMLElement {
+    value: string;
+    disabled: boolean;
+}
+
+export class SGTextarea extends HTMLElement {
+    value: string;
+    disabled: boolean;
+    focus(options?: FocusOptions): void;
+    select(): void;
+}
+
+export class SGNumberStepper extends HTMLElement {
+    value: number;
+    disabled: boolean;
+    focus(options?: FocusOptions): void;
+}
+
+export class SGChip extends HTMLElement {
+    selected: boolean;
+    disabled: boolean;
+}
+
+export class SGBreadcrumb extends HTMLElement {}
+
+export class SGPagination extends HTMLElement {
+    page: number;
+    readonly total: number;
+}
+
 export class SGTabs extends HTMLElement {
     value: string;
 }
@@ -120,8 +178,11 @@ declare global {
     interface HTMLElementTagNameMap {
         "sg-alert": SGAlert;
         "sg-badge": HTMLElement;
+        "sg-breadcrumb": SGBreadcrumb;
         "sg-button": SGButton;
         "sg-card": HTMLElement;
+        "sg-checkbox": SGCheckbox;
+        "sg-chip": SGChip;
         "sg-divider": HTMLElement;
         "sg-drawer": SGDrawer;
         "sg-icon": SGIcon;
@@ -130,12 +191,16 @@ declare global {
         "sg-item-slot": SGItemSlot;
         "sg-keybind": SGKeybind;
         "sg-modal": SGModal;
+        "sg-number-stepper": SGNumberStepper;
+        "sg-pagination": SGPagination;
         "sg-panel": HTMLElement;
+        "sg-radio-group": SGRadioGroup;
         "sg-segmented": SGSegmented;
         "sg-select": SGSelect;
         "sg-slider": SGSlider;
         "sg-stat": SGStat;
         "sg-tabs": SGTabs;
+        "sg-textarea": SGTextarea;
         "sg-toast": SGToast;
         "sg-toggle": SGToggle;
         "sg-tooltip": SGTooltip;
@@ -146,8 +211,9 @@ declare global {
         "sg-item-activate": CustomEvent<SGItemActivateDetail>;
         "sg-dismiss": CustomEvent<SGDismissDetail>;
         "sg-input": CustomEvent<SGValueDetail | SGSelectDetail>;
-        "sg-change": CustomEvent<SGValueDetail | SGSelectDetail | SGToggleChangeDetail | SGSelectionChangeDetail>;
+        "sg-change": CustomEvent<SGValueDetail | SGSelectDetail | SGToggleChangeDetail | SGCheckboxChangeDetail | SGChipChangeDetail | SGPaginationChangeDetail | SGSelectionChangeDetail>;
         "sg-close": CustomEvent<SGCloseDetail>;
+        "sg-remove": CustomEvent<SGChipRemoveDetail>;
     }
 
     interface Window {

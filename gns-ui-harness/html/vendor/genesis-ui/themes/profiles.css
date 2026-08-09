@@ -45,6 +45,17 @@
     min-height: var(--sg-control-height-sm);
 }
 
+[data-sg-density="compact"] .sg-number-stepper__frame {
+    min-height: var(--sg-control-height-sm);
+    grid-template-columns: var(--sg-control-height-sm) minmax(48px, 1fr) auto var(--sg-control-height-sm);
+}
+
+[data-sg-density="compact"] .sg-pagination__button,
+[data-sg-density="compact"] .sg-pagination__ellipsis {
+    width: 32px;
+    height: 32px;
+}
+
 [data-sg-density="compact"] .sg-modal__header,
 [data-sg-density="compact"] .sg-drawer__header,
 [data-sg-density="compact"] .sg-modal__body,

@@ -12,6 +12,9 @@ Implemented public elements:
 - `sg-icon-button`
 - `sg-input` and `sg-select`
 - `sg-toggle` and `sg-slider`
+- `sg-checkbox`, `sg-radio-group`, `sg-textarea`, and `sg-number-stepper`
+- `sg-chip`
+- `sg-breadcrumb` and `sg-pagination`
 - `sg-tabs` and `sg-segmented`
 - `sg-modal`, `sg-drawer`, and `sg-tooltip`
 - `sg-toast`
