@@ -1,0 +1,51 @@
+[data-sg-density="compact"] {
+    --sg-control-height-xs: 24px;
+    --sg-control-height-sm: 28px;
+    --sg-control-height-md: 34px;
+    --sg-control-height-lg: 40px;
+    --sg-control-height-xl: 44px;
+    --sg-panel-padding: 16px;
+    --sg-component-gap: 8px;
+}
+
+[data-sg-density="compact"] sg-stat {
+    min-width: 156px;
+    min-height: 62px;
+    padding: 8px 10px;
+}
+
+[data-sg-density="compact"] sg-item-slot {
+    width: 96px;
+    min-height: 124px;
+    grid-template-rows: 68px auto auto;
+}
+
+[data-sg-density="compact"] .sg-item-slot__label {
+    min-height: 30px;
+    font-size: 12px;
+}
+
+[data-sg-density="compact"] sg-keybind {
+    gap: 8px;
+    font-size: 13px;
+}
+
+[data-sg-density="compact"] sg-keybind kbd {
+    min-width: 30px;
+    height: 30px;
+    padding: 0 7px;
+    font-size: 13px;
+}
+
+[data-sg-effects="reduced"] {
+    --sg-effects-blur: 0px;
+    --sg-effects-glow-opacity: 0;
+    --sg-glow-cyan: none;
+}
+
+[data-sg-effects="reduced"] *,
+[data-sg-effects="reduced"] *::before,
+[data-sg-effects="reduced"] *::after {
+    backdrop-filter: none !important;
+    text-shadow: none !important;
+}

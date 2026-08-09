@@ -1,0 +1,27 @@
+{
+  "name": "@genesis-rp/shadowglass-ui",
+  "version": "0.1.0-alpha.0",
+  "license": "GPL-3.0-only",
+  "format": "framework-neutral-custom-elements",
+  "browserTarget": "Chromium 89+ compatibility baseline; HELIX runtime validation pending",
+  "runtimeDependencies": [],
+  "components": [
+    "sg-alert",
+    "sg-badge",
+    "sg-button",
+    "sg-card",
+    "sg-divider",
+    "sg-icon",
+    "sg-item-slot",
+    "sg-keybind",
+    "sg-panel",
+    "sg-stat"
+  ],
+  "files": {
+    "styles": "genesis-ui.css",
+    "module": "genesis-ui.js",
+    "helixScript": "genesis-ui.helix.js",
+    "types": "genesis-ui.d.ts",
+    "icons": "genesis-icons.svg"
+  }
+}

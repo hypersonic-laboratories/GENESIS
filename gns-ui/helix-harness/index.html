@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en" data-sg-theme="shadow">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Genesis UI - HELIX Package Harness</title>
+    <link rel="stylesheet" href="./vendor/genesis-ui/genesis-ui.css">
+    <script defer src="./vendor/genesis-ui/genesis-ui.helix.js"></script>
+    <script defer src="./harness.js"></script>
+    <style>
+        :root,
+        html,
+        body {
+            background: transparent !important;
+        }
+        * { box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            display: grid;
+            margin: 0;
+            padding: 32px;
+            font-family: var(--sg-font-body);
+            pointer-events: none;
+            place-items: center;
+        }
+        body.is-visible {
+            pointer-events: auto;
+        }
+        .harness {
+            display: none;
+            width: min(860px, 100%);
+        }
+        body.is-visible .harness {
+            display: block;
+        }
+        .harness-header,
+        .harness-grid,
+        .harness-actions {
+            display: flex;
+            gap: 12px;
+        }
+        .harness-header {
+            align-items: flex-start;
+            justify-content: space-between;
+        }
+        .harness-header p { margin: 8px 0 0; color: var(--sg-color-text-secondary); }
+        .harness-grid { flex-wrap: wrap; margin-top: 24px; }
+        .harness-actions { margin-top: 24px; }
+        output {
+            display: block;
+            min-height: 38px;
+            margin-top: 16px;
+            padding: 10px;
+            border-radius: var(--sg-radius-sm);
+            background: var(--sg-color-background);
+            color: var(--sg-color-text-secondary);
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <sg-panel class="harness">
+        <div class="harness-header">
+            <div>
+                <p class="sg-overline">Package-local consumer</p>
+                <h1 class="sg-heading sg-heading--2">HELIX compatibility harness</h1>
+                <p>The generated vendor folder matches the path a Genesis script will ship inside its own HTML directory.</p>
+            </div>
+            <sg-badge id="runtime-state" tone="warning">Checking</sg-badge>
+        </div>
+        <div class="harness-grid">
+            <sg-stat icon="heart" label="Health" value="100%" progress="100" tone="danger"></sg-stat>
+            <sg-stat icon="shield" label="Armor" value="75%" progress="75" tone="blue"></sg-stat>
+            <sg-stat icon="users" label="Online" value="128 / 250" progress="51"></sg-stat>
+        </div>
+        <div class="harness-actions">
+            <sg-button id="emit-test" variant="primary">Emit test event</sg-button>
+            <sg-button id="update-test">Update values</sg-button>
+            <sg-button id="close-harness" variant="ghost">Close harness</sg-button>
+        </div>
+        <output id="harness-output" aria-live="polite">Waiting for component registration. Press F10 or Escape to close.</output>
+    </sg-panel>
+</body>
+</html>

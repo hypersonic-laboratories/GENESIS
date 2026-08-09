@@ -29,3 +29,6 @@ secrets.lua
 # Lua build/tooling
 .luarc.json
 luacov.*.out
+gns-ui/IMPLEMENTATION_PLAN.md
+gns-ui/PRODUCT.md
+gns-ui/REFERENCE_INVENTORY.md
