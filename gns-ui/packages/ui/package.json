@@ -1,0 +1,25 @@
+{
+  "name": "@gns/ui",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Genesis UI component library for HELIX WebUIs",
+  "exports": {
+    ".": "./src/index.ts",
+    "./theme.css": "./src/styles/theme.css",
+    "./fonts.css": "./src/styles/fonts.css"
+  },
+  "dependencies": {
+    "@fontsource/oxanium": "^5.3.0",
+    "@fontsource/tomorrow": "^5.3.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.31.0",
+    "radix-ui": "^1.6.7",
+    "tailwind-merge": "^3.3.1"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
+}

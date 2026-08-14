@@ -1,0 +1,12 @@
+@import "tailwindcss";
+@import "@gns/ui/fonts.css";
+@import "@gns/ui/theme.css";
+
+@source "../src";
+@source "../../ui/src";
+
+/* The catalogue is an ordinary web page, so it owns an opaque canvas.
+ * In-game surfaces stay transparent and let the scene through instead. */
+body {
+  background-color: var(--color-canvas);
+}

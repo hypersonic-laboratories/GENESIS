@@ -1,0 +1,13 @@
+{
+  "name": "@gns/helix",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "HELIX WebUI runtime bridge — events, visibility and logging",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0"
+  }
+}

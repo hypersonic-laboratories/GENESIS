@@ -21,11 +21,11 @@
 - [ ] No credentials, tokens, keys, or webhook URLs
 - [ ] No unrelated formatting churn
 - [ ] WebUI uses `gns-ui` components where available
-- [ ] Genesis UI consumers are registered and synchronized
+- [ ] Genesis UI bundles rebuilt and committed
 
 ## Genesis UI impact
 
-<!-- If this changes gns-ui or a consuming WebUI: list synchronized packages and HELIX states tested. Otherwise write "Not applicable". -->
+<!-- If this changes gns-ui or a consuming WebUI: list the packages whose bundles were rebuilt and the HELIX states tested. Otherwise write "Not applicable". -->
 
 ## Risk
 

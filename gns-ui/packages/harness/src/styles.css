@@ -1,0 +1,16 @@
+@import "tailwindcss";
+@import "@gns/ui/fonts.css";
+@import "@gns/ui/theme.css";
+
+@source "../src";
+@source "../../ui/src";
+
+/* The page is composited over the running game. Anything opaque here would
+ * black out the viewport, so the document itself stays fully transparent and
+ * only the panels paint. */
+html,
+body,
+#root {
+  height: 100%;
+  background: transparent;
+}

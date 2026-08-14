@@ -1,0 +1,17 @@
+{
+  "name": "@gns/catalogue",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Browser workbench for the Genesis UI component library",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@gns/ui": "*",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  }
+}

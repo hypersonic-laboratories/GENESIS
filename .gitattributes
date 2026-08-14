@@ -26,6 +26,10 @@
 */html/*.min.js     linguist-vendored
 */html/*.min.css    linguist-vendored
 
+# Same for generated WebUI bundles. The source lives in gns-ui/packages/;
+# these are build output, committed so a cloned package runs as-is.
+*/html/build/**     linguist-generated
+
 # Git LFS is deliberately NOT enabled. See README for the reasoning. If asset churn
 # grows enough to justify it, uncomment these and run `git lfs migrate import`.
 # *.png    filter=lfs diff=lfs merge=lfs -text
