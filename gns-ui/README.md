@@ -1,130 +1,149 @@
-# Genesis Shadow Glass UI
+# Genesis UI
 
-Framework-neutral WebUI components for Genesis HELIX packages. The library is maintained with TypeScript tooling, but consumers use only compiled local files, native HTML, and DOM events.
+The interface language for Genesis HELIX packages: React 19, Vite, Tailwind v4,
+Radix primitives and Lucide icons, built to look like it belongs to the HELIX
+client rather than sitting on top of it.
 
-## Source of truth
+## Layout
 
-`gns-ui/src/` is the single source of truth for the Genesis interface language. Consuming resources do not fork component code or maintain their own copies by hand. They compose the public `sg-*` elements, provide their own data and assets, and connect the elements' DOM events to resource-owned gameplay logic.
-
-HELIX resources receive a package-local snapshot at `html/vendor/genesis-ui/`. This is deliberate: it keeps every WebUI self-contained and prevents an untested library edit from changing every live screen immediately. When a library update has passed the catalogue, automated checks, and the in-game harness, maintainers run one sync command to refresh every package registered in `consumers.json`:
-
-```powershell
-npm.cmd run sync
+```text
+gns-ui/                        Bun workspace root (not a HELIX package)
+  packages/
+    ui/          @gns/ui       components, theme tokens, self-hosted fonts
+    helix/       @gns/helix    Lua bridge: events, visibility, logging
+    catalogue/   @gns/catalogue browser workbench for building components
+    harness/     @gns/harness  the WebUI shipped by the gns-ui-harness package
+  _legacy/                     the previous web-component library, archived
 ```
 
-The result is centralized design ownership with controlled propagation. A changed component, such as `sg-interaction-prompt`, reaches all registered consumers after sync. A resource that is not registered, or that intentionally overrides public tokens, will not necessarily match the new default.
+`packages/harness` builds into `../gns-ui-harness/html/build/`. The HELIX package
+itself stays exactly what it was: a `client.lua` plus a `package.json` manifest.
+Generated output is never edited by hand.
 
-## Current status
+## Commands
 
-`0.1.0-alpha.0` is the Phase 1 foundation and consumer proof. It establishes the canonical tokens, build and distribution contract, package-local HELIX harness, rendering profiles, and representative components. It is not yet the first stable component release.
+Bun is the package manager and task runner; `bun.lock` is the lockfile and is
+committed. Vite, Tailwind and `tsc` all run unchanged underneath it — nothing
+in the build depends on Bun's runtime, so switching back would only mean
+rewriting these six scripts.
 
-Implemented public elements:
-
-- `sg-button`
-- `sg-icon-button`
-- `sg-input` and `sg-select`
-- `sg-toggle` and `sg-slider`
-- `sg-checkbox`, `sg-radio-group`, `sg-textarea`, and `sg-number-stepper`
-- `sg-chip`
-- `sg-interaction-prompt`, `sg-action-list`, and `sg-confirm-progress`
-- `sg-popover`, `sg-context-menu`, and `sg-radial-menu`
-- `sg-breadcrumb` and `sg-pagination`
-- `sg-progress`, `sg-meter`, and `sg-avatar`
-- `sg-list-row`, `sg-empty-state`, `sg-skeleton`, and `sg-data-table`
-- `sg-tabs` and `sg-segmented`
-- `sg-modal`, `sg-drawer`, and `sg-tooltip`
-- `sg-toast`
-- `sg-panel` and `sg-card`
-- `sg-badge`
-- `sg-icon`
-- `sg-stat`
-- `sg-item-slot`
-- `sg-alert`
-- `sg-keybind`
-- `sg-divider`
-
-The local catalogue is an integration workbench rather than a static style guide. It lets collaborators search the component registry, change supported attributes, inspect the exact markup and event contract, copy snippets, and observe emitted `sg-*` DOM events without adding a framework.
-
-## Maintainer workflow
-
-```powershell
-npm.cmd install
-npm.cmd run check
+```bash
+bun install
 ```
 
-The build creates `dist/` and refreshes the harness fixtures. Generated outputs are never edited directly; source files remain canonical.
-
-After approving a library change:
-
-```powershell
-npm.cmd run sync
-npm.cmd run sync:check
+```bash
+bun run dev
 ```
 
-`sync` builds the current library and replaces `html/vendor/genesis-ui/` in every package named in `consumers.json`. `sync:check` is read-only and fails when any registered consumer differs from the current distribution. Review and test the generated consumer diffs before committing them.
+Opens the catalogue on <http://localhost:5180>. Component edits hot-reload —
+`@gns/ui` is consumed as TypeScript source through the workspace link, so there
+is no library build step in the loop.
 
-## Five-minute consumer setup
-
-1. Add the consuming package name to `gns-ui/consumers.json`.
-2. From `gns-ui/`, run `npm.cmd run sync`. Contributors who do not maintain the library may instead obtain an approved release snapshot from a maintainer.
-3. Load the local files from the package HTML. Use the classic HELIX bundle in the embedded runtime:
-
-```html
-<link rel="stylesheet" href="./vendor/genesis-ui/genesis-ui.css">
-<script defer src="./vendor/genesis-ui/genesis-ui.helix.js"></script>
+```bash
+bun run watch:harness
 ```
 
-The ESM bundle remains available for ordinary browsers and module-based tooling:
+Rebuilds the in-game bundle on every save. Reload the WebUI in HELIX to pick it
+up. Use `bun run build:harness` for a one-off build.
 
-```html
-<link rel="stylesheet" href="./vendor/genesis-ui/genesis-ui.css">
-<script type="module" src="./vendor/genesis-ui/genesis-ui.js"></script>
+```bash
+bun run typecheck
 ```
 
-4. Compose components and connect their DOM events to the script-owned bridge:
+## Design
 
-```html
-<sg-button id="use-item" variant="primary">Use item</sg-button>
+The client is achromatic: a near-black canvas, surfaces made from low-alpha
+white, hairline borders, 4px corners, and uppercase type throughout. White is
+the action colour — the primary button is white on black, exactly as in the
+client's own chrome. Colour appears only when it carries meaning, and each hue
+keeps that meaning across every screen.
 
-<script>
-    document.querySelector('#use-item').addEventListener('sg-activate', () => {
-        hEvent('inventory:useItem', { itemId: 'medkit' });
-    });
-</script>
-```
+Two typefaces. **Tomorrow** carries interface text, as it does in the client
+itself; **Oxanium** carries the three headline steps. The split lives entirely
+in `--font-sans` and `--font-display`: `text-display`, `text-title` and
+`text-heading` are utilities that bring the display family with them, so no
+component has to ask for it by hand.
 
-`hEvent` and the event name above are examples owned by the consuming script. Genesis UI does not include a HELIX, QBCore, economy, permission, or gameplay bridge.
+Buttons and chips carry the client's clipped bottom-right corner. `corner-shape`
+would express it directly but needs Chrome 139, so the `chamfer` utility cuts it
+with `clip-path` and redraws the missing border segment with a rotated hairline.
 
-Do not edit files inside `html/vendor/genesis-ui/`. Changes there are generated and will be replaced by the next sync. Component fixes belong in `gns-ui/src/`; resource-specific composition and bridge logic belong in the consuming package.
+Where this departs from the client is depth. A flat alpha fill reads as a dead
+rectangle once it sits over a live 3D scene, so every raised surface gets three
+cheap cues: a top-lit gradient, a 1px inset highlight along its upper edge, and
+a shadow that separates it from whatever renders behind it. The `surface-*`
+utilities in `packages/ui/src/styles/theme.css` bundle that combination.
 
-See [CONTRIBUTOR_GUIDE.md](CONTRIBUTOR_GUIDE.md) for the complete adoption and upgrade workflow, [ARCHITECTURE.md](ARCHITECTURE.md) for the ownership boundary, and [HANDOFF.md](HANDOFF.md) for current project state.
+**Panels carry their own dark fill.** The surface that touches the game cannot
+be built from low-alpha white: over bright terrain it simply vanishes. Use
+`--color-panel` (or `tone="glass"`, which applies it) for any shell resting on
+the world, and reserve the `--color-surface` ramp for elements sitting *inside*
+one, where the panel is their backdrop.
 
-## Catalogue workflow
+Every token lives in that one file, emitted as CSS custom properties under
+`@theme static` so screens can reach them from hand-written CSS as well as from
+utilities.
 
-Serve the package root with any local static server, then open `catalogue/index.html`. The workbench supports hash-addressable component views and keeps rendering profiles scoped to the preview surface so testing compact or reduced-effects output does not alter the documentation shell.
+## Using it in another package
 
-The catalogue reports browser registration and HELIX validation separately. “Components registered” means the compiled custom elements loaded; “HELIX harness passed” records the successful package-local run in the current bleeding-edge client, not a permanent guarantee for future client builds.
+1. Add a workspace under `packages/` with its own `vite.config.ts`, pointing
+   `build.outDir` at `../../../<your-package>/html/build`.
+2. In its CSS entry:
 
-## Rendering profiles
+   ```css
+   @import "tailwindcss";
+   @import "@gns/ui/fonts.css";
+   @import "@gns/ui/theme.css";
 
-Profiles are opt-in attributes on any common ancestor:
+   @source "../src";
+   @source "../../ui/src";
+   ```
 
-```html
-<body data-sg-theme="shadow" data-sg-density="compact" data-sg-effects="reduced">
-```
+   The second `@source` is required: Tailwind only generates the utilities it
+   can see, and the library's class names live outside the app's own tree.
 
-- `data-sg-density="compact"` reduces control height, panel padding, and inventory geometry.
-- `data-sg-effects="reduced"` removes decorative glow and blur while preserving state contrast.
-- The operating-system `prefers-reduced-motion` setting is respected automatically.
+3. Wrap the root in `VisibilityProvider` from `@gns/helix`, then `TooltipProvider`
+   and `ToastProvider` from `@gns/ui`.
+4. Keep the page transparent. `html`, `body` and `#root` must paint nothing — a
+   background there blacks out the player's viewport.
 
-## Asset replacement
+## The client boundary
 
-Item imagery is caller-owned. Put an `<img>`, SVG, or another visual inside `sg-item-slot`; the component supplies geometry and state treatment. The default icon sprite path resolves relative to `genesis-ui.js`. An individual `sg-icon` can override it with the `src` attribute when required.
+`@gns/ui` owns presentation, focus, keyboard behaviour, and every component's
+empty, loading and disabled state. It does not know HELIX exists.
 
-The distribution self-hosts Inter and Exo 2 and includes their OFL 1.1 license files. The generated Lucide sprite includes its ISC license.
+`@gns/helix` owns the transport, and nothing above it: `emit`, `request`,
+`useHelixEvent`, `VisibilityProvider`, `log`.
 
-## Verification boundaries
+The consuming package owns everything else — screen composition, live data,
+permissions, economy rules, validation, and the HELIX event names themselves.
+If a behaviour is useful to every package and independent of gameplay, it
+belongs in the library. If it knows about a job, an item or a server event, it
+belongs to the package.
 
-The automated Phase 1 checks validate TypeScript, reproducible distribution contents, local-only runtime references, file budgets, the manifest, and the minimal consumer. Browser inspection validates component registration, layout, focus, and DOM-event behavior.
+## Runtime notes
 
-The current Chromium target is a conservative Chromium 89 baseline. The package-local harness has rendered successfully in the current HELIX bleeding-edge client; each release still requires an in-game smoke test because the embedded runtime can change independently.
+The client runs CEF 128, so the modern platform is available: `oklch`, `:has()`,
+container queries, `color-mix()` and `backdrop-filter` all work. Two constraints
+remain:
+
+- **Fonts are bundled.** No CDN request is made at runtime; both families ship
+  as latin-subset woff2 inside the build, and only in the weights the system
+  uses. Adding a weight to a component means adding its import to
+  `packages/ui/src/styles/fonts.css`, or the browser will synthesise it.
+- **`backdrop-filter` cannot blur the game.** It blurs what sits behind an
+  element *within the document*, and the scene is composited beneath the entire
+  page. Use it only where the thing being blurred is page content — a modal
+  scrim over the screen underneath. Everywhere else it costs a compositing pass
+  and buys nothing.
+
+Overlays use a fixed layer scale so two packages never fight over stacking
+order: modals and drawers `1300`, popovers and menus `1400`, toasts `1500`,
+tooltips `1600`.
+
+## Verification
+
+`packages/harness` is the in-game proof. It exercises the things that can break
+inside CEF but not in a browser: portalled overlays, backdrop filters, custom
+properties, pointer capture, and the `hEvent` round trip. Press <kbd>F10</kbd>
+in game to open it.

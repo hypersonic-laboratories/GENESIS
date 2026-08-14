@@ -1,0 +1,26 @@
+/*
+ * Self-hosted typefaces.
+ *
+ * HELIX WebUIs load from disk inside CEF; a runtime request to Google Fonts
+ * either stalls the first paint or fails outright. Every face therefore ships
+ * with the bundle. Latin-only subsets keep the payload small — add other
+ * subsets here if a script ever needs them.
+ *
+ * Tomorrow (OFL 1.1) carries interface text; it is the typeface HELIX itself
+ * uses. Oxanium (OFL 1.1) carries the three headline steps.
+ *
+ * Only the weights the system actually asks for are loaded. Adding a weight to
+ * a component means adding its import here too, or the browser will synthesise
+ * it and distort the glyphs.
+ */
+
+/* Interface: body, controls, labels, tables. */
+@import "@fontsource/tomorrow/latin-400.css";
+@import "@fontsource/tomorrow/latin-500.css";
+@import "@fontsource/tomorrow/latin-600.css";
+@import "@fontsource/tomorrow/latin-700.css";
+
+/* Display: `text-heading` (600), `text-title` and `text-display` (700). */
+@import "@fontsource/oxanium/latin-400.css";
+@import "@fontsource/oxanium/latin-600.css";
+@import "@fontsource/oxanium/latin-700.css";

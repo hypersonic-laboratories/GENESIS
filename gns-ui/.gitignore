@@ -1,3 +1,5 @@
 node_modules/
 dist/
-helix-harness/vendor/
+build/
+*.tsbuildinfo
+.DS_Store
