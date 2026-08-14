@@ -29,7 +29,9 @@ secrets.lua
 # Lua build/tooling
 .luarc.json
 luacov.*.out
-gns-ui/IMPLEMENTATION_PLAN.md
-gns-ui/PRODUCT.md
-gns-ui/REFERENCE_INVENTORY.md
-gns-ui/DISCORD_ANNOUNCEMENT.md
+
+# Node / Bun
+# Package bundles under <package>/html/build/ are committed on purpose, so a
+# freshly cloned package runs without a build step.
+node_modules/
+gns-ui/packages/*/dist/

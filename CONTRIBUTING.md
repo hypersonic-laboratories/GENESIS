@@ -130,16 +130,25 @@ GNS.Heists = {}
 
 ## WebUI contributions
 
-Genesis WebUIs use `gns-ui` as their component and design source of truth. Before adding resource-local UI CSS or behavior, check the component catalogue and [gns-ui/CONTRIBUTOR_GUIDE.md](gns-ui/CONTRIBUTOR_GUIDE.md).
+Genesis WebUIs are React, built from the `gns-ui` workspace. `@gns/ui` owns the components and
+design tokens, `@gns/helix` owns the Lua bridge, and every WebUI is a Vite app under
+`gns-ui/packages/` that builds into its own package's `html/build/`. See
+[gns-ui/README.md](gns-ui/README.md).
 
-- Compose existing `sg-*` elements using plain HTML and JavaScript.
-- Keep screen composition, data, permissions, server validation, and HELIX event names in the consuming resource.
-- Make reusable visual or generic interaction changes in `gns-ui`, not in generated vendor files.
-- Register every consumer in `gns-ui/consumers.json`.
-- Never edit `<resource>/html/vendor/genesis-ui/` by hand; `npm.cmd run sync` replaces it.
-- For a library change, run `npm.cmd run check`, `npm.cmd run verify:dist`, and `npm.cmd run sync`, then test affected screens in HELIX.
+- Compose the exported React components. Run `bun run dev` and check the catalogue before writing
+  screen-local CSS.
+- Keep screen composition, data, permissions, server validation, and HELIX event names in the
+  consuming package. `@gns/ui` does not know HELIX exists.
+- Make reusable visual or interaction changes in `@gns/ui`, never in a package's generated
+  `html/build/`.
+- A new WebUI is a new workspace under `gns-ui/packages/`, with `build.outDir` pointing at the
+  package that ships it.
+- For a library change, run `bun run typecheck` and `bun run build`, then test the affected screens
+  in HELIX.
 
-Library changes and their synchronized consumer snapshots belong in the same pull request unless the PR explicitly documents a staged migration. This keeps the canonical source and every declared consumer reviewably aligned.
+Generated bundles are committed, so a freshly cloned package runs without a build step. A library
+change and the rebuilt bundles of everything it affects belong in the same pull request — that is
+what keeps the source and the shipped output reviewably aligned.
 
 ## Commit messages
 
@@ -162,7 +171,7 @@ Types: `feat`, `fix`, `refactor`, `perf`, `docs`, `chore`.
 - [ ] New packages registered in the root `config.json`, after their dependencies
 - [ ] Events, exports, items and tables follow the prefixes above
 - [ ] WebUI uses `gns-ui` components where available
-- [ ] Genesis UI consumers are registered and `npm.cmd run sync:check` is clean
+- [ ] `bun run typecheck` and `bun run build` are clean, and rebuilt bundles are committed
 - [ ] No credentials, tokens, API keys, or webhook URLs — placeholders only
 - [ ] No unrelated formatting churn
 

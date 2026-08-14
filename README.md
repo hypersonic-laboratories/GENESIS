@@ -80,11 +80,11 @@ stay first — everything else depends on it.
 
 ## Shared WebUI components
 
-`gns-ui/` is the source of truth for Genesis WebUI design and common component behavior. New Genesis interfaces should compose its framework-neutral `sg-*` custom elements instead of recreating resource-local buttons, fields, prompts, menus, alerts, and status controls.
+`gns-ui/` is the source of truth for Genesis WebUI design and common component behavior. It is a Bun workspace: `@gns/ui` holds the React components and design tokens, `@gns/helix` holds the Lua bridge, and each WebUI is a Vite app under `gns-ui/packages/`. New Genesis interfaces should compose its components instead of recreating package-local buttons, fields, prompts, menus, alerts, and status controls.
 
-Each consuming resource keeps a generated package-local snapshot at `html/vendor/genesis-ui/`. This is not a fork and must not be edited manually. Maintainers register consumers in `gns-ui/consumers.json`, validate library changes in the catalogue and HELIX harness, then run `npm.cmd run sync` from `gns-ui/` to refresh every registered resource together.
+A WebUI builds into its own package's `html/build/`, and that output is committed so a freshly cloned package runs without a build step. It is generated — never edit it by hand. Run `bun run dev` from `gns-ui/` for the component catalogue, and `bun run build` to refresh the bundles.
 
-See [gns-ui/CONTRIBUTOR_GUIDE.md](gns-ui/CONTRIBUTOR_GUIDE.md) for adoption, [gns-ui/ARCHITECTURE.md](gns-ui/ARCHITECTURE.md) for ownership and synchronization, and [gns-ui/HANDOFF.md](gns-ui/HANDOFF.md) for current status.
+See [gns-ui/README.md](gns-ui/README.md) for the workspace layout, the design rules, and what belongs in the library versus in a consuming package.
 
 ## Formatting
 
